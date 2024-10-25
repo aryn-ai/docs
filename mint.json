@@ -6,6 +6,11 @@
     "light": "/logo/light.svg"
   },
   "favicon": "/aryn_favicon.svg",
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
   "colors": {
     "primary": "#417586",
     "light": "#417586",
@@ -29,13 +34,17 @@
     {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Example Code",
+      "url": "api-reference"
     }
   ],
   "anchors": [
     {
-      "name": "Documentation",
+      "name": "Sycamore Documentation",
       "icon": "book-open-cover",
-      "url": "https://docs.aryn.ai"
+      "url": "https://sycamore.readthedocs.io/en/stable/"
     },
     {
       "name": "Community",
@@ -60,7 +69,7 @@
     {
       "group": "Essentials",
       "pages": [
-        "essentials/markdown",
+        "essentials/aryn_sdk",
         "essentials/code",
         "essentials/images",
         "essentials/settings",
