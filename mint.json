@@ -37,7 +37,7 @@
     },
     {
       "name": "Example Code",
-      "url": "api-reference"
+      "url": "example-code"
     }
   ],
   "anchors": [
@@ -81,6 +81,12 @@
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
+      ]
+    },
+    {
+      "group": "Example Code",
+      "pages": [
+        "example-code/introduction"
       ]
     },
     {
