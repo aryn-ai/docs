@@ -23,23 +23,23 @@ For more information, see the [Aryn SDK documentation](./aryn_docparse/aryn_sdk.
 Aryn DocParse (formerly known as the Aryn Partitioning Service) is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
 
 ```python
-    aryn_api_key = "PUT API KEY HERE"
+aryn_api_key = "PUT API KEY HERE"
 
-    ctx = sycamore.init()
-    pdf_docset = context.read.binary(work_dir, binary_format="pdf")
-    partitioned_docset = pdf_docset.partition(ArynPartitioner(aryn_api_key=aryn_api_key))
+ctx = sycamore.init()
+pdf_docset = context.read.binary(work_dir, binary_format="pdf")
+partitioned_docset = pdf_docset.partition(ArynPartitioner(aryn_api_key=aryn_api_key))
 ```
 Alternatively, we can store our Aryn API key in ``~/.aryn/config.yaml`` like so:
 
 ```yaml
-    aryn_token: "PUT API KEY HERE"
+aryn_token: "PUT API KEY HERE"
 ```
 Which makes our Sycamore script the following:
 
 ```python
-    ctx = sycamore.init()
-    pdf_docset = context.read.binary(work_dir, binary_format="pdf")
-    partitioned_docset = pdf_docset.partition(ArynPartitioner())
+ctx = sycamore.init()
+pdf_docset = context.read.binary(work_dir, binary_format="pdf")
+partitioned_docset = pdf_docset.partition(ArynPartitioner())
 ```
 
 If you are processing a large PDF with OCR, you might benefit from using the ``pages_per_call`` option. This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch.
@@ -51,7 +51,7 @@ We recommend using the Aryn SDK, but you can also use ``curl`` to access the Ary
 ``curl`` an example document to use with the partitioning service if you do not have one already.
 
 ```bash
-    curl http://arxiv.org/pdf/1706.03762 -o document.pdf
+curl http://arxiv.org/pdf/1706.03762 -o document.pdf
 ```
 Change ``PUT API KEY HERE`` below to your Aryn API key. If you have a different document, change ``@document.pdf`` to ``@/path/to/your/document.pdf`` below.
 
@@ -68,12 +68,12 @@ cat document.json
 ### Different File Formats
 
 ```bash
-    export ARYN_API_KEY="PUT API KEY HERE"
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.docx" | tee document.json
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.doc" | tee document.json
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pptx" | tee document.json
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.ppt" | tee document.json
+export ARYN_API_KEY="PUT API KEY HERE"
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.docx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.doc" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pptx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.ppt" | tee document.json
 ```
 
 ## More examples

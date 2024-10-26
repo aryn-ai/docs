@@ -9,16 +9,16 @@ icon: 'terminal'
 We recommend installing the Aryn SDK library using `pip`:
 
 ```python
-   pip install aryn-sdk
+pip install aryn-sdk
 ```
 
 ## Partitioning a Document
 Partition a document like so:
 
 ```python
-    from aryn_sdk.partition import partition_file
-    with open("mydocument.pdf", "rb") as f:
-        data = partition_file(f)
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f)
 ```
 
 ``partition_file`` takes the same options as curl, except as keyword arguments. You can find a list of these options [here](options_deep_dive.mdx).
@@ -28,43 +28,43 @@ Partition a document like so:
 By default, ``aryn-sdk`` looks for Aryn API keys first in the environment variable ``ARYN_API_KEY``, and then in ``~/.aryn/config.yaml``. You can override this behavior by specifying a key directly or a different path to the Aryn config file:
 
 ```python
-  from aryn_sdk.partition import partition_file
-  from aryn_sdk.config import ArynConfig
-  with open("mydocument.pdf", "rb") as f:
-      data = partition_file(f, aryn_api_key="YOUR-API-KEY")
-  with open("mydocument.pdf", "rb") as f:
-      data = partition_file(f, aryn_config=ArynConfig(aryn_config_path="~/dotfiles/.aryn/config.yaml"))
+from aryn_sdk.partition import partition_file
+from aryn_sdk.config import ArynConfig
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, aryn_api_key="YOUR-API-KEY")
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, aryn_config=ArynConfig(aryn_config_path="~/dotfiles/.aryn/config.yaml"))
 ```
 ## Helper Functions
 
 ``aryn_sdk`` provides some helper functions to make working with and visualizing the output of ``partition_file`` easier.
 
 ```python
-    from aryn_sdk.partition import partition_file, table_elem_to_dataframe, draw_with_boxes
-    with open("mydocument.pdf", "rb") as f:
-        data = partition_file(f, extract_table_structure=True, use_ocr=True, extract_images=True, threshold=0.35)
+from aryn_sdk.partition import partition_file, table_elem_to_dataframe, draw_with_boxes
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, extract_table_structure=True, use_ocr=True, extract_images=True, threshold=0.35)
 
-    # Produce a pandas DataFrame representing one of the extracted tables
-    table_elements = [elt for elt in data['elements'] if elt['type'] == 'table']
-    dataframe = table_elem_to_dataframe(table_elements[0])
+# Produce a pandas DataFrame representing one of the extracted tables
+table_elements = [elt for elt in data['elements'] if elt['type'] == 'table']
+dataframe = table_elem_to_dataframe(table_elements[0])
 
-    # Draw the detected bounding boxes on the pages. requires poppler
-    images = draw_with_boxes("mydocument.pdf", data)
+# Draw the detected bounding boxes on the pages. requires poppler
+images = draw_with_boxes("mydocument.pdf", data)
 ```
 ## Different File Formats
 
 It is easy to process files with different formats using the aryn-sdk:
 
 ```python
-    from aryn_sdk.partition import partition_file
-    with open("mydocument.pdf", "rb") as f:
-        data = partition_file(f)
-    with open("mydocument.docx", "rb") as f:
-        data = partition_file(f)
-    with open("mypresentation.doc", "rb") as f:
-        data = partition_file(f)
-    with open("mypresentation.pptx", "rb") as f:
-        data = partition_file(f)
-    with open("mypresentation.ppt", "rb") as f:
-        data = partition_file(f)
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f)
+with open("mydocument.docx", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.doc", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.pptx", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.ppt", "rb") as f:
+   data = partition_file(f)
 ```
