@@ -14,15 +14,15 @@ description: 'Welcome to Aryn!'
   alt="Hero Dark"
 />
 
-Aryn is an LLM-powered data preparation, processing, and analytics system for complex, unstructured documents like PDFs, HTML, presentations, and more. With Aryn, you can prepare data for GenAI and RAG applications, power high-quality document processing workflows, and run analytics on large document collections with natural language. It includes two components: The Aryn Partitioning Service and Sycamore.
+Aryn is an LLM-powered data preparation, processing, and analytics system for complex, unstructured documents like PDFs, HTML, presentations, and more. With Aryn, you can prepare data for GenAI and RAG applications, power high-quality document processing workflows, and run analytics on large document collections with natural language. It includes two components: Aryn DocParse and Sycamore.
 
-The Aryn Partitioning Service (APS) is a serverless, GPU-powered API for segmenting and labeling PDF documents, doing OCR, and extracting tables and images. It returns the output in JSON. APS runs the Aryn Partitioner and its state-of-the-art, open source
+Aryn DocParse (ADP) formerly known as the Aryn Partitioning Service, is a serverless, GPU-powered API for segmenting and labeling PDF documents, doing OCR, and extracting tables and images. It returns the output in JSON. APS runs the Aryn Partitioner and its state-of-the-art, open source
 [deep learning AI model](https://huggingface.co/Aryn/deformable-detr-DocLayNet) trained on 80k+ enterprise documents. 
 You can use it to partition documents and extract information directly in your code, or use it with Sycamore for additional processing. [Sign-up here for free](https://www.aryn.ai/get-started)_ to get an API Key and use the [Aryn Playground](https://play.aryn.cloud/partitioning) to visually see how it segments and processes your own documents. 
-Or, watch the Aryn Partitioning Service in action in [this video](https://www.aryn.ai/?name=ArynPartitioningService_Intro).
+Or, watch Aryn DocParse in action in [this video](https://www.aryn.ai/?name=ArynPartitioningService_Intro).
 
 
-**Key Features**
+## Key Features
 
 * **Powerful and accurate document segmentation for complex documents with tables, images, text, infographics, and more.**  Aryn's vision-based segmentation models provide 11+ class labels, and are up to 6x better in mean average precision (mAP) and 4x better in mean average recall (mAR) than existing solutions.
 
@@ -34,22 +34,15 @@ Or, watch the Aryn Partitioning Service in action in [this video](https://www.ar
 
 ## Setting up
 
-[Sign-up here for free] (https://www.aryn.ai/get-started) to get started with an API Key.
+[Sign-up here for free](https://www.aryn.ai/get-started) to get started with an API Key. Note, this is the documentation for Aryn DocParse. For Sycamore, please visit the [Sycamore documentation](https://www.aryn.ai/sycamore).
 
 <CardGroup cols={2}>
   <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
+    title="Quickstart"
+    icon="play"
+    href="quickstart"
   >
-    Preview your changes before you push to make sure they're perfect
-  </Card>
-    <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
-  >
-    Preview your changes before you push to make sure they're perfect
+    Get Started with Aryn DocParse
   </Card>
   <Card
     title="Use the Aryn-SDK"
@@ -58,12 +51,19 @@ Or, watch the Aryn Partitioning Service in action in [this video](https://www.ar
   >
     Query the Service using Aryn SDK
   </Card>
-  <Card
-    title="Preview Changes"
-    icon="image"
-    href="https://mintlify.com/docs/development"
+    <Card
+    title="Use Aryn Playground"
+    icon="palette"
+    href="https://play.aryn.cloud/choose"
   >
-    Preview your changes before you push to make sure they're perfect
+    Access Aryn's Playground to visualize how your documents will be partitioned
+  </Card>
+  <Card
+    title="Website"
+    icon="globe"
+    href="https://www.aryn.ai/"
+  >
+    Head to Aryn's website for more information
   </Card>
 </CardGroup>
 

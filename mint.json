@@ -2,15 +2,17 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Aryn Documentation",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/aryn_logo_full.png",
+    "light": "/logo/aryn_logo_full.png"
   },
-  "favicon": "/aryn_favicon.svg",
+  "favicon": "aryn_logo.png",
   "feedback": {
     "thumbsRating": true,
     "suggestEdit": true,
     "raiseIssue": true
   },
+  "theme": "prism",
+  "background": {"style": "windows"},
   "colors": {
     "primary": "#417586",
     "light": "#417586",
@@ -62,19 +64,19 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart",
-        "development"
+        "quickstart"
       ]
     },
     {
-      "group": "Essentials",
+      "group": "Aryn DocParse Essentials",
       "pages": [
-        "essentials/aryn_sdk",
-        "essentials/code",
-        "essentials/images",
-        "essentials/settings",
-        "essentials/navigation",
-        "essentials/reusable-snippets"
+        "aryn_docparse/aryn_sdk",
+        "aryn_docparse/tables",
+        "aryn_docparse/images",
+        "aryn_docparse/formats_supported",
+        "aryn_docparse/output",
+        "aryn_docparse/options_deep_dive",
+        "aryn_docparse/aryn_cloud"
       ]
     },
     {
@@ -102,5 +104,8 @@
     "x": "https://x.com/ArynInc",
     "github": "https://github.com/aryn-ai",
     "linkedin": "https://www.linkedin.com/company/aryn-ai/mycompany/"
-  }
+  },
+  "seo": {
+  "indexHiddenPages": true
+}
 }
