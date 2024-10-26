@@ -1,101 +1,87 @@
 ---
 title: 'Quickstart'
-description: 'Get Started with the Aryn Partitioning Service'
+description: 'Get Started with Aryn DocParse'
 ---
 
+You can use Aryn DocParse to easily chunk and extract data from complex documents. DocParse accepts PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and more. It can extract paragraphs, tables and images. It returns detailed information about the components it has just identified in a JSON object.  The following two sections will walk you through two examples where we segment PDF documents and extract a table and an image from those documents using the python aryn-sdk.
 
-You can use the Aryn Partitioning Service to segment documents into labeled bounding boxes identifying titles, tables, table rows and columns, images, and regular text. The service can segment PDFs, Microsoft Word (.docx and .doc) documents, Microsoft PowerPoint (.pptx and .ppt), and many more file formats. 
+- [Table Extraction From PDF](./aryn_docparse/tables.mdx)
+- [Image Extraction From PDF](./aryn_docparse/images.mdx)
 
-It is often used to [extract structured table data](https://www.npmjs.com/package/mintlify)
-:doc:`extract structured table data </aryn_cloud/get_started_Table_Extraction>`. Bounding boxes are returned as JSON with their associated text for easy use. It leverages `Aryn's purpose-built AI model for document segmentation and labelling <https://huggingface.co/Aryn/deformable-detr>`_ that was trained using DocLayNet – an open source, human-annotated document layout segmentation dataset containing tens of thousands of pages from a broad variety of document sources.
+There are three ways to use the Aryn Partitioning Service: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
 
+To follow along below, we will need an Aryn Cloud API key, which we can get for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). You will recieve the API key in your email inbox.
 
-If you'd like to experiment with the service, you can use the UI in the `Aryn Playground <https://play.aryn.cloud/partitioning>`_ to visualize how your documents will be partitioned. To get started with the Aryn Partitoning Service, please check out the following pages:
+## Using the ``Aryn-SDK``
 
+The ``aryn-sdk`` client is a thin python library that calls the Aryn Partitioning Service and provides a few utility methods around it. It is the easiest way to add the Aryn Partitioning Service to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
 
-We recommend installing the Aryn SDK library using pip:
+For more information, see the [Aryn SDK documentation](./aryn_docparse/aryn_sdk.mdx).
 
+## Using Sycamore's Partition transform
 
+Aryn DocParse (formerly known as the Aryn Partitioning Service) is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
 
+```python
+    aryn_api_key = "PUT API KEY HERE"
 
-## 
+    ctx = sycamore.init()
+    pdf_docset = context.read.binary(work_dir, binary_format="pdf")
+    partitioned_docset = pdf_docset.partition(ArynPartitioner(aryn_api_key=aryn_api_key))
+```
+Alternatively, we can store our Aryn API key in ``~/.aryn/config.yaml`` like so:
 
-Learn how to update your docs locally and deploy them to the public.
+```yaml
+    aryn_token: "PUT API KEY HERE"
+```
+Which makes our Sycamore script the following:
 
-### Edit and preview
+```python
+    ctx = sycamore.init()
+    pdf_docset = context.read.binary(work_dir, binary_format="pdf")
+    partitioned_docset = pdf_docset.partition(ArynPartitioner())
+```
 
-<AccordionGroup>
-  <Accordion icon="image" title="Clone your docs locally">
-    During the onboarding process, we created a repository on your Github with
-    your docs content. You can find this repository on our
-    [dashboard](https://dashboard.mintlify.com). To clone the repository
-    locally, follow these
-    [instructions](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-    in your terminal.
-  </Accordion>
-  <Accordion icon="table" title="Preview changes">
-    Previewing helps you make sure your changes look as intended. We built a
-    command line interface to render these changes locally. 1. Install the
-    [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the
-    documentation changes locally with this command: ``` npm i -g mintlify ```
-    2. Run the following command at the root of your documentation (where
-    `mint.json` is): ``` mintlify dev ```
-  </Accordion>
-</AccordionGroup>
+If you are processing a large PDF with OCR, you might benefit from using the ``pages_per_call`` option. This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch.
 
-### Deploy your changes
+## Using ``curl``
 
-<AccordionGroup>
+We recommend using the Aryn SDK, but you can also use ``curl`` to access the Aryn Partitioning Service directly.
 
-<Accordion icon="message-bot" title="Install our Github app">
-  Our Github app automatically deploys your changes to your docs site, so you
-  don't need to manage deployments yourself. You can find the link to install on
-  your [dashboard](https://dashboard.mintlify.com). Once the bot has been
-  successfully installed, there should be a check mark next to the commit hash
-  of the repo.
-</Accordion>
-<Accordion icon="rocket" title="Push your changes">
-  [Commit and push your changes to
-  Git](https://docs.github.com/en/get-started/using-git/pushing-commits-to-a-remote-repository#about-git-push)
-  for your changes to update in your docs site. If you push and don't see that
-  the Github app successfully deployed your changes, you can also manually
-  update your docs through our [dashboard](https://dashboard.mintlify.com).
-</Accordion>
+``curl`` an example document to use with the partitioning service if you do not have one already.
 
-</AccordionGroup>
+```bash
+    curl http://arxiv.org/pdf/1706.03762 -o document.pdf
+```
+Change ``PUT API KEY HERE`` below to your Aryn API key. If you have a different document, change ``@document.pdf`` to ``@/path/to/your/document.pdf`` below.
 
-## Update your docs
+```bash
+export ARYN_API_KEY="PUT API KEY HERE"
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
+```
+Your results have been saved to ``document.json``.
 
-Add content directly in your files with MDX syntax and React components. You can use any of our components, or even build your own.
+```bash
+cat document.json
+```
 
-<CardGroup>
+### Different File Formats
 
-<Card title="Style Your Docs" icon="paintbrush" href="/settings/global">
-  Add flair to your docs with personalized branding.
-</Card>
+```bash
+    export ARYN_API_KEY="PUT API KEY HERE"
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.docx" | tee document.json
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.doc" | tee document.json
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pptx" | tee document.json
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.ppt" | tee document.json
+```
 
-<Card
-  title="Add API Endpoints"
-  icon="square-code"
-  href="/api-playground/configuration"
->
-  Implement your OpenAPI spec and enable API user interaction.
-</Card>
+## More examples
 
-<Card
-  title="Integrate Analytics"
-  icon="chart-mixed"
-  href="/analytics/supported-integrations"
->
-  Draw insights from user interactions with your documentation.
-</Card>
+### Using the Partitioning Service with Sycamore
 
-<Card
-  title="Host on a Custom Domain"
-  icon="browser"
-  href="/settings/custom-domain/subdomain"
->
-  Keep your docs on your own website's subdomain.
-</Card>
+You can  checkout a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb) to learn how to use the partitioning service with Aryn's Sycamore analytics engine. This notebook walks through an example where you can use Sycamore to transform your data and load it into a vector database.
 
-</CardGroup>
+### Using the Partitioning Service with Langchain
+
+You can  checkout a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb) to learn how to use the partitioning service with Langchain.
