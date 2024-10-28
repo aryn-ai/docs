@@ -1,32 +1,9 @@
-# ArynAI Docs
+# Aryn DocParse Documentation
 
-Click on `Use this template` to copy the Mintlify starter kit. The starter kit contains examples including
+This is the documentation for Aryn DocParse, and contains the API and SDK based docs for each of them. It was created to host the API docs for the Aryn DocParse service in a public repository that both can receive contributions and ensures internal code is secure.
 
-- Guide pages
-- Navigation
-- Customizations
-- API Reference pages
-- Use of popular components
+For the Sycamore documentation code: please refer to https://github.com/aryn-ai/sycamore/tree/main/docs.
 
-### Development
+## Contributions
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mintlify) to preview the documentation changes locally. To install, use the following command
-
-```
-npm i -g mintlify
-```
-
-Run the following command at the root of your documentation (where mint.json is)
-
-```
-mintlify dev
-```
-
-### Publishing Changes
-
-Install our Github App to auto propagate changes from your repo to your deployment. Changes will be deployed to production automatically after pushing to the default branch. Find the link to install on your dashboard. 
-
-#### Troubleshooting
-
-- Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
-- Page loads as a 404 - Make sure you are running in a folder with `mint.json`
+We welcome all contributions to these docs in case of any typos or errors! Please add an issue detailing you problem or better yet, a pull request fixing the problem.

@@ -38,7 +38,7 @@
       "url": "api-reference"
     },
     {
-      "name": "Example Code",
+      "name": "Recipes",
       "url": "example-code"
     }
   ],
@@ -86,7 +86,7 @@
       ]
     },
     {
-      "group": "Example Code",
+      "group": "Recipes",
       "pages": [
         "example-code/introduction"
       ]
@@ -94,14 +94,14 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/partition"
+        "api-reference/endpoint/parse"
       ]
     }
   ],
   "footerSocials": {
     "x": "https://x.com/ArynInc",
     "github": "https://github.com/aryn-ai",
-    "linkedin": "https://www.linkedin.com/company/aryn-ai/mycompany/"
+    "linkedin": "https://www.linkedin.com/company/aryn-ai"
   },
   "seo": {
   "indexHiddenPages": true

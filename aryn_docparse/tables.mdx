@@ -1,6 +1,6 @@
 ---
 title: 'Table Extraction from PDFs'
-description: 'Extract structured table data from PDFs using the Aryn Partitioning Service'
+description: 'Extract structured table data from PDFs using Aryn DocParse'
 icon: 'table'
 ---
 
@@ -16,7 +16,7 @@ from io import BytesIO
 file = open('my-document.pdf', 'rb')
 aryn_api_key = 'YOUR-KEY-HERE'
 
-## Make a call to the Aryn Partitioning Service (APS) 
+## Make a call to Aryn DocParse (ADP) 
 ## param extract_table_structure (boolean): extract tables and their structural content. default: False
 ## param use_ocr (boolean): extract text using an OCR model instead of extracting embedded text in PDF. default: False
 ## returns: JSON object with elements representing information inside the PDF
