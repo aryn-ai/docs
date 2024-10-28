@@ -4,7 +4,7 @@ info:
   description: "DocParse API"
   version: 0.1.0
 servers:
-  url: "https://api.aryn.cloud"
+- url: "https://api.aryn.cloud"
 paths:
   /v1/document/partition:
     post:
