@@ -1,0 +1,155 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI Aryn DocParse
+  description: "DocParse API"
+  version: 0.1.0
+servers:
+  url: "https://api.aryn.cloud"
+paths:
+  /v1/document/partition:
+    post:
+      summary: 'Partition Document Async'
+      operationId: _partition_pdf_async_v1_document_partition_post
+      security:
+        - HTTPBearer: []
+      parameters:
+        - name: user-agent
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: User-Agent
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body__partition_pdf_async_v1_document_partition_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Body__partition_pdf_async_v1_document_partition_post:
+      properties:
+        pdf:
+          type: string
+          format: binary
+          title: Pdf
+        options:
+          anyOf:
+            - type: string
+              format: binary
+            - type: 'null'
+          title: Options
+      type: object
+      required:
+        - pdf
+      title: Body__partition_pdf_async_v1_document_partition_post
+    Element:
+      properties:
+        type:
+          type: string
+          title: Type
+        bbox:
+          items:
+            type: number
+          type: array
+          title: Bbox
+        properties:
+          type: object
+          title: Properties
+        text_representation:
+          type: string
+          title: Text Representation
+        binary_representation:
+          anyOf:
+            - type: string
+              format: binary
+            - type: 'null'
+          title: Binary Representation
+      type: object
+      required:
+        - type
+        - bbox
+        - properties
+        - text_representation
+        - binary_representation
+      title: Element
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PartitionerResponse:
+      properties:
+        status:
+          items:
+            type: string
+          type: array
+          title: Status
+        error:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Error
+        elements:
+          anyOf:
+            - items:
+                $ref: '#/components/schemas/Element'
+              type: array
+            - type: 'null'
+          title: Elements
+        markdown:
+          anyOf:
+            - type: string
+            - type: 'null'
+          title: Markdown
+      type: object
+      required:
+        - status
+        - error
+        - elements
+        - markdown
+      title: PartitionerResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+              - type: string
+              - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+      type: object
+      required:
+        - loc
+        - msg
+        - type
+      title: ValidationError
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
