@@ -8,19 +8,19 @@ You can use Aryn DocParse to easily chunk and extract data from complex document
 - [Table Extraction From PDF](./aryn_docparse/tables.mdx)
 - [Image Extraction From PDF](./aryn_docparse/images.mdx)
 
-There are three ways to use the Aryn Partitioning Service: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
+There are three ways to use Aryn DocParse: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
 
 To follow along below, we will need an Aryn Cloud API key, which we can get for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). You will recieve the API key in your email inbox.
 
 ## Using the ``Aryn-SDK``
 
-The ``aryn-sdk`` client is a thin python library that calls the Aryn Partitioning Service and provides a few utility methods around it. It is the easiest way to add the Aryn Partitioning Service to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
+The ``aryn-sdk`` client is a thin python library that calls the Aryn DocParse and provides a few utility methods around it. It is the easiest way to add Aryn DocParse to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
 
 For more information, see the [Aryn SDK documentation](./aryn_docparse/aryn_sdk.mdx).
 
 ## Using Sycamore's Partition transform
 
-Aryn DocParse (formerly known as the Aryn Partitioning Service) is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
+Aryn DocParse (formerly known as the Aryn DocParse) is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
 
 ```python
 aryn_api_key = "PUT API KEY HERE"
@@ -46,7 +46,7 @@ If you are processing a large PDF with OCR, you might benefit from using the ``p
 
 ## Using ``curl``
 
-We recommend using the Aryn SDK, but you can also use ``curl`` to access the Aryn Partitioning Service directly.
+We recommend using the Aryn SDK, but you can also use ``curl`` to access Aryn DocParse directly.
 
 ``curl`` an example document to use with the partitioning service if you do not have one already.
 
