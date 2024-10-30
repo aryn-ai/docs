@@ -68,7 +68,7 @@
       ]
     },
     {
-      "group": "Aryn DocParse Essentials",
+      "group": "Aryn Partitioning Service Essentials",
       "pages": [
         "aryn_docparse/aryn_sdk",
         "aryn_docparse/tables",

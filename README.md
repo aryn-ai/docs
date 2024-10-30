@@ -1,6 +1,6 @@
-# Aryn DocParse Documentation
+# Aryn Partitioning Service Documentation
 
-This is the documentation for Aryn DocParse, and contains the API and SDK based docs for each of them. It was created to host the API docs for the Aryn DocParse service in a public repository that both can receive contributions and ensures internal code is secure.
+This is the documentation for Aryn Partitioning Service, and contains the API and SDK based docs for each of them. It was created to host the API docs for the Aryn Partitioning Service in a public repository that both can receive contributions and ensures internal code is secure.
 
 For the Sycamore documentation code: please refer to https://github.com/aryn-ai/sycamore/tree/main/docs.
 

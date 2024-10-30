@@ -14,12 +14,12 @@ description: 'Welcome to Aryn!'
   alt="Hero Dark"
 />
 
-Aryn is an LLM-powered data preparation, processing, and analytics system for complex, unstructured documents like PDFs, HTML, presentations, and more. With Aryn, you can prepare data for GenAI and RAG applications, power high-quality document processing workflows, and run analytics on large document collections with natural language. It includes two components: Aryn DocParse and Sycamore.
+Aryn is an LLM-powered data preparation, processing, and analytics system for complex, unstructured documents like PDFs, HTML, presentations, and more. With Aryn, you can prepare data for GenAI and RAG applications, power high-quality document processing workflows, and run analytics on large document collections with natural language. It includes two components: Aryn Partitioning Service and Sycamore.
 
-Aryn DocParse (ADP) formerly known as the Aryn Partitioning Service, is a serverless, GPU-powered API for segmenting and labeling PDF documents, doing OCR, and extracting tables and images. It returns the output in JSON. ADP runs the Aryn Partitioner and its state-of-the-art, open source
+Aryn Partitioning Service (APS), is a serverless, GPU-powered API for segmenting and labeling PDF documents, doing OCR, and extracting tables and images. It returns the output in JSON. ADP runs the Aryn Partitioner and its state-of-the-art, open source
 [deep learning AI model](https://huggingface.co/Aryn/deformable-detr-DocLayNet) trained on 80k+ enterprise documents. 
 You can use it to partition documents and extract information directly in your code, or use it with Sycamore for additional processing. [Sign-up here for free](https://www.aryn.ai/get-started) to get an API Key and use the [Aryn Playground](https://play.aryn.cloud/partitioning) to visually see how it segments and processes your own documents. 
-Or, watch Aryn DocParse in action in [this video](https://www.aryn.ai/?name=ArynPartitioningService_Intro).
+Or, watch Aryn Partitioning Service in action in [this video](https://www.aryn.ai/?name=ArynPartitioningService_Intro).
 
 
 ## Key Features
@@ -34,7 +34,7 @@ Or, watch Aryn DocParse in action in [this video](https://www.aryn.ai/?name=Aryn
 
 ## Setting up
 
-[Sign-up here for free](https://www.aryn.ai/get-started) to get started with an API Key. Note, this is the documentation for Aryn DocParse. For Sycamore, please visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).
+[Sign-up here for free](https://www.aryn.ai/get-started) to get started with an API Key. Note, this is the documentation for Aryn Partitioning Service. For Sycamore, please visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).
 
 <CardGroup cols={2}>
   <Card
@@ -42,14 +42,14 @@ Or, watch Aryn DocParse in action in [this video](https://www.aryn.ai/?name=Aryn
     icon="play"
     href="quickstart"
   >
-    Get Started with Aryn DocParse
+    Get Started with Aryn Partitioning Service
   </Card>
   <Card
     title="Use the Aryn-SDK"
     icon="rectangle-terminal"
-    href="aryn_docparse/aryn_sdk"
+    href="aryn_partitioning/aryn_sdk"
   >
-    Query the DocParse Service using Aryn SDK
+    Query the Partitioning Service using Aryn SDK
   </Card>
     <Card
     title="Use Aryn Playground"
