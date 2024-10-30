@@ -4,11 +4,11 @@ description: 'The navigation field in mint.json defines the pages that go in the
 icon: 'map'
 ---
 
-There are several options you can specify when calling DocParse. For example, we can extract the table structure from our document with the following curl command.
+There are several options you can specify when calling the Partitioning Service. For example, we can extract the table structure from our document with the following curl command.
 
 ```bash
 export ARYN_API_KEY="PUT API KEY HERE"
-    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" -F 'options={"extract_table_structure": true}' | tee document.json
+    curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"extract_table_structure": true}' | tee document.json
 ```
 
 All of the available options are listed below:
@@ -27,7 +27,7 @@ Here is an example of how you can use these options in a curl command or in Pyth
 
 ```bash curl
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" -F 'options={"extract_table_structure": true, "threshold": 0.2}' | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"extract_table_structure": true, "threshold": 0.2}' | tee document.json
 ```
 
 ```python aryn_sdk.py

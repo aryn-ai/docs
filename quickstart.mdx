@@ -1,26 +1,26 @@
 ---
 title: 'Quickstart'
-description: 'Get Started with Aryn DocParse'
+description: 'Get Started with Aryn Partitioning Service'
 ---
 
-You can use Aryn DocParse to easily chunk and extract data from complex documents. DocParse accepts PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](aryn_docparse/formats_supported). It can extract paragraphs, tables and images. It returns detailed information about the components it has just identified in a JSON object.  The following two sections will walk you through two examples where we segment PDF documents and extract a table and an image from those documents using the python aryn-sdk.
+You can use Aryn Partitioning Service to easily chunk and extract data from complex documents. The Partitioning Service accepts PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](aryn_docparse/formats_supported). It can extract paragraphs, tables and images. It returns detailed information about the components it has just identified in a JSON object.  The following two sections will walk you through two examples where we segment PDF documents and extract a table and an image from those documents using the python aryn-sdk.
 
 - [Table Extraction From PDF](./aryn_docparse/tables.mdx)
 - [Image Extraction From PDF](./aryn_docparse/images.mdx)
 
-There are three ways to use Aryn DocParse: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
+There are three ways to use Aryn Partitioning Service: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
 
 To follow along below, we will need an Aryn Cloud API key, which we can get for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). You will recieve the API key in your email inbox.
 
 ## Using the ``Aryn-SDK``
 
-The ``aryn-sdk`` client is a thin python library that calls the Aryn DocParse and provides a few utility methods around it. It is the easiest way to add Aryn DocParse to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
+The ``aryn-sdk`` client is a thin python library that calls the Aryn Partitioning Service and provides a few utility methods around it. It is the easiest way to add the Aryn Partitioning Service to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
 
 For more information, see the [Aryn SDK documentation](./aryn_docparse/aryn_sdk.mdx).
 
 ## Using Sycamore's Partition transform
 
-Aryn DocParse (formerly known as the Aryn DocParse) is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
+Aryn Partitioning Service is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
 
 ```python
 aryn_api_key = "PUT API KEY HERE"
@@ -46,7 +46,7 @@ If you are processing a large PDF with OCR, you might benefit from using the ``p
 
 ## Using ``curl``
 
-We recommend using the Aryn SDK, but you can also use ``curl`` to access Aryn DocParse directly.
+We recommend using the Aryn SDK, but you can also use ``curl`` to access the Aryn Partitioning Service directly.
 
 ``curl`` an example document to use with the partitioning service if you do not have one already.
 
@@ -57,7 +57,7 @@ Change ``PUT API KEY HERE`` below to your Aryn API key. If you have a different 
 
 ```bash
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
 ```
 Your results have been saved to ``document.json``.
 
@@ -69,19 +69,19 @@ cat document.json
 
 ```bash
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pdf" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.docx" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.doc" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.pptx" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "pdf=@document.ppt" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.docx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.doc" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pptx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.ppt" | tee document.json
 ```
 
 ## More examples
 
-### Using DocParse with Sycamore
+### Using the Partitioning Service with Sycamore
 
-You can  check out a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb) to learn how to use DocParse with Aryn's Sycamore analytics engine. This notebook walks through an example where you can use Sycamore to transform your data and load it into a vector database.
+You can  check out a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb) to learn how to use the Partitioning Service with Aryn's Sycamore analytics engine. This notebook walks through an example where you can use Sycamore to transform your data and load it into a vector database.
 
-### Using DocParse with Langchain
+### Using the Partitioning Service with Langchain
 
-You can  check out a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb) to learn how to use DocParse with Langchain.
+You can  check out a notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb) to learn how to use the Partitioning Service with Langchain.
