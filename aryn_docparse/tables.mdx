@@ -4,8 +4,13 @@ description: 'Extract structured table data from PDFs using Aryn DocParse'
 icon: 'table'
 ---
 
-In [this example](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing), we'll use the DocPerse to extract the “Supplemental Income” table (shown below) from the 10k financial document  of 3M, and turn it into a pandas dataframe. 
+In [this example](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing), we'll use the DocPerse to extract the “Supplemental Income” table (shown below) from the 10k financial document  of 3M (given below), and turn it into a pandas dataframe. 
 
+<Frame>
+  <img src="../images/3m_supplemental_income.png" />
+</Frame>
+
+## Extracting Table Call from DocParse
 
 ```python table_demo.py
 import aryn_sdk
@@ -82,6 +87,8 @@ In particular let's look at the `cells` field  which is an array of cell objects
 
 ```
 
+## Displaying the Table
+
 Here we've detected the first cell, its bounding box (which indicates the coordinates of the cell in the PDF), whether it's a header cell and its contents. You can then process this JSON however you'd like for further analysis. In [the notebook](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing)  we use the tables_to_pandas function to turn the JSON into a pandas dataframe and then perform some analysis on it:
 
 ```python display_table.py
@@ -96,12 +103,14 @@ for elt, dataframe in pandas:
 supplemental_income = tables[0]
 display(supplemental_income)
 ```
+The output is given below:
 
-```markdown output.md
 | (Millions) | 2018 | 2017 | 2016 |
 | --- | --- | --- | --- |
 | Interest expense | 350 | 322 | 199 |
 | Interest income | (70) | (50) | (29) |
 | Pension and postretirement net periodic benefits | (73) | (128) | (196) |
 | Total | 207 | 144 | (26) |
-```
+{/* ```markdown output.md
+
+``` */}
