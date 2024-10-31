@@ -1,14 +1,14 @@
 ---
 title: 'Image Extraction from PDFs'
-description: 'Use the Aryn Partitioning Service to extract an image from a battery manual'
+description: 'Use Aryn DocParse to extract an image from a battery manual'
 icon: 'image'
 ---
 
 ## Introduction
 
-In [this example](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing), we'll use the Partitioning Service to extract an image from a battery manual.  We'll go through the important code snippets below to see what's going on (Try it out in  [colab](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing)  yourself! )
+In [this example](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing), we'll use DocParse to extract an image from a battery manual.  We'll go through the important code snippets below to see what's going on (Try it out in  [colab](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing)  yourself! )
 
-Let's focus on the following code that makes a call to the Aryn Partitioning Service (APS) API to extract the image from the PDF.: 
+Let's focus on the following code that makes a call to Aryn DocParse (APS) API to extract the image from the PDF.: 
   
 ```python add_document.py
 import aryn_sdk
@@ -19,7 +19,7 @@ from io import BytesIO
 file = open('my-document.pdf', 'rb')
 aryn_api_key = 'YOUR-KEY-HERE'
 
-## Make a call to the Aryn Partitioning Service (APS) 
+## Make a call to Aryn DocParse (APS) 
 ## param use_ocr (boolean): extract text using an OCR model instead of extracting embedded text in PDF. default: False
 ## param extract_images (boolean):  extract image contents. default: False
 ## returns: JSON object with elements representing information inside the PDF

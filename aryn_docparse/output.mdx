@@ -1,9 +1,9 @@
 ---
 title: 'Output Structure'
-description: 'The output format of Aryn Partitioning Service'
+description: 'The output format of Aryn DocParse'
 icon: 'brackets-curly'
 ---
-The default output format of the Aryn Partitioning Service is JSON.
+The default output format of Aryn DocParse is JSON.
 
 ```text
 { "status": in-progress updates,
@@ -13,7 +13,7 @@ The default output format of the Aryn Partitioning Service is JSON.
 
 ## Element Format
 
-It is often useful to process different parts of a document separately. For example, you might want to process tables differently than text paragraphs, and typically small chunks of text are embedded separately for vector search. In the Aryn Partitioning Service, these chunks are called elements.
+It is often useful to process different parts of a document separately. For example, you might want to process tables differently than text paragraphs, and typically small chunks of text are embedded separately for vector search. In Aryn DocParse, these chunks are called elements.
 
 Elements follow the following format:
 
@@ -41,7 +41,7 @@ An example element is given below:
       "score": 0.9369918704032898,
       "page_number": 1
     },
-    "text_representation": "It is often useful to process different parts of a document separately. For example you\nmight want to process tables differently than text paragraphs, and typically small chunks\nof text are embedded separately for vector search. In the Aryn Partitioning Service, these\nchunks are called elements.\n"
+    "text_representation": "It is often useful to process different parts of a document separately. For example you\nmight want to process tables differently than text paragraphs, and typically small chunks\nof text are embedded separately for vector search. In Aryn DocParse, these\nchunks are called elements.\n"
 }
 ```
 
@@ -101,7 +101,7 @@ When `extract_images` is set to True, Images include a `binary_representation` t
 
 ## Markdown Format
 
-If the request to the Aryn Partitioning Service has the `output_format` option set to `markdown`, a successful response will look like this:
+If the request to Aryn DocParse has the `output_format` option set to `markdown`, a successful response will look like this:
 
 ```text
 { "status": ...,

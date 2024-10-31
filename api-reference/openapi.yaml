@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
-  title: OpenAPI Aryn Partitioning Service
-  description: "Partitioning Service API"
+  title: OpenAPI Aryn DocParse
+  description: "DocParse API"
   version: 0.1.0
 servers:
 - url: "https://api.aryn.cloud"
