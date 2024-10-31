@@ -68,14 +68,14 @@
       ]
     },
     {
-      "group": "Aryn Partitioning Service Essentials",
+      "group": "Aryn DocParse Essentials",
       "pages": [
         "aryn_docparse/aryn_sdk",
         "aryn_docparse/tables",
         "aryn_docparse/images",
         "aryn_docparse/formats_supported",
         "aryn_docparse/output",
-        "aryn_docparse/options_deep_dive",
+        "aryn_docparse/parameters_deep_dive",
         "aryn_docparse/aryn_cloud"
       ]
     },

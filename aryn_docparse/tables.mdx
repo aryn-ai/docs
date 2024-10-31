@@ -1,16 +1,16 @@
 ---
 title: 'Table Extraction from PDFs'
-description: 'Extract structured table data from PDFs using the Aryn Partitioning Service'
+description: 'Extract structured table data from PDFs using Aryn DocParse'
 icon: 'table'
 ---
 
-In [this example](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing), we'll use the Partitioning Service to extract a cash flow table (shown below) from the 10k financial document  of 3M, and turn it into a pandas dataframe. 
+In [this example](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing), we'll use DocParse to extract a cash flow table (shown below) from the 10k financial document  of 3M, and turn it into a pandas dataframe. 
 
 <Frame>
   <img src="../images/3m_10k_extract.png" />
 </Frame>
 
-## Extracting Table Call from the Partitioning Service
+## Extracting Table Call from DocParse
 
 ```python table_demo.py
 import aryn_sdk
@@ -21,7 +21,7 @@ from io import BytesIO
 file = open('my-document.pdf', 'rb')
 aryn_api_key = 'YOUR-KEY-HERE'
 
-## Make a call to Aryn Partitioning Service (APS) 
+## Make a call to Aryn DocParse (ADP) 
 ## param extract_table_structure (boolean): extract tables and their structural content. default: False
 ## param use_ocr (boolean): extract text using an OCR model instead of extracting embedded text in PDF. default: False
 ## returns: JSON object with elements representing information inside the PDF
