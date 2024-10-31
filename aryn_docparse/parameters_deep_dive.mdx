@@ -1,6 +1,6 @@
 ---
-title: 'Options Deep Dive'
-description: 'The navigation field in mint.json defines the pages that go in the navigation menu'
+title: 'Parameters Deep Dive'
+description: 'Learn about the parameters you can use with Aryn DocParse'
 icon: 'map'
 ---
 
@@ -21,7 +21,7 @@ All of the available options are listed below:
 * `pages_per_call`: This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch (number of pages). This is useful when running OCR on large documents. 
 * `output_format`:  Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
 
-Here is an example of how you can use these options in a curl command or in Python code with the [Aryn SDK](aryn_sdk.mdx).
+Here is an example of how you can use these options in a curl command or in Python code with the [Aryn SDK](aryn_sdk).
 
 <CodeGroup>
 

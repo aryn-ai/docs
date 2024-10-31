@@ -1,16 +1,16 @@
 ---
 title: 'Quickstart'
-description: 'Get Started with Aryn DocParse'
+description: 'Getting Started with Aryn DocParse'
 ---
 
-You can use Aryn DocParse to easily chunk and extract data from complex documents. The DocParse accepts PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](aryn_docparse/formats_supported). It can extract paragraphs, tables and images. It returns detailed information about the components it has just identified in a JSON object.  The following two sections will walk you through two examples where we segment PDF documents and extract a table and an image from those documents using the python aryn-sdk.
+You can use Aryn DocParse to easily chunk and extract data from complex documents. The DocParse accepts PDF, Microsoft Word (.docx and .doc), Microsoft PoyourPoint (.pptx and .ppt) and [more](aryn_docparse/formats_supported). It can extract paragraphs, tables and images. It returns detailed information about the components it has just identified in a JSON object.  The following two sections will walk you through two examples where you segment PDF documents and extract a table and an image from those documents using the python aryn-sdk.
 
 - [Table Extraction From PDF](./aryn_docparse/tables.mdx)
 - [Image Extraction From PDF](./aryn_docparse/images.mdx)
 
-There are three ways to use Aryn DocParse: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the HTTP service.
+There are three ways to use Aryn DocParse: through the ``aryn-sdk`` client, through the ``ArynPartitioner`` in Sycamore, and directly from the [playground](https://play.aryn.cloud/choose).
 
-To follow along below, we will need an Aryn Cloud API key, which we can get for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). You will recieve the API key in your email inbox.
+To follow along below, you will need an Aryn Cloud API key, which you can get for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). You will recieve the API key in your email inbox.
 
 ## Using the ``Aryn-SDK``
 
@@ -20,7 +20,7 @@ For more information, see the [Aryn SDK documentation](./aryn_docparse/aryn_sdk.
 
 ## Using Sycamore's Partition transform
 
-Aryn DocParse is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of pdfs located at the path stored in ``work_dir``. We partition these documents with the code snippet below:
+Aryn DocParse is the default option when specifying the Aryn Partitioner in a Sycamore script. Say you have a set of documents located at the path stored in ``work_dir``. You partition these documents with the code snippet below:
 
 ```python
 aryn_api_key = "PUT API KEY HERE"
@@ -29,7 +29,7 @@ ctx = sycamore.init()
 pdf_docset = context.read.binary(work_dir, binary_format="pdf")
 partitioned_docset = pdf_docset.partition(ArynPartitioner(aryn_api_key=aryn_api_key))
 ```
-Alternatively, we can store our Aryn API key in ``~/.aryn/config.yaml`` like so:
+Alternatively, you can store our Aryn API key in ``~/.aryn/config.yaml`` like so:
 
 ```yaml
 aryn_token: "PUT API KEY HERE"
@@ -42,11 +42,11 @@ pdf_docset = context.read.binary(work_dir, binary_format="pdf")
 partitioned_docset = pdf_docset.partition(ArynPartitioner())
 ```
 
-If you are processing a large PDF with OCR, you might benefit from using the ``pages_per_call`` option. This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch.
+If you are processing a large document with OCR, you might benefit from using the ``pages_per_call`` option. This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch.
 
 ## Using ``curl``
 
-We recommend using the Aryn SDK, but you can also use ``curl`` to access Aryn DocParse directly.
+You recommend using the Aryn SDK, but you can also use ``curl`` to access Aryn DocParse directly.
 
 ``curl`` an example document to use with DocParse if you do not have one already.
 

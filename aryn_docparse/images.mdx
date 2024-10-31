@@ -8,7 +8,7 @@ icon: 'image'
 
 In [this example](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing), we'll use DocParse to extract an image from a battery manual.  We'll go through the important code snippets below to see what's going on (Try it out in  [colab](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing)  yourself! )
 
-Let's focus on the following code that makes a call to Aryn DocParse (APS) API to extract the image from the PDF.: 
+Let's focus on the following code that makes a call to Aryn DocParse (ADP) API to extract the image from the PDF.: 
   
 ```python add_document.py
 import aryn_sdk
@@ -19,7 +19,7 @@ from io import BytesIO
 file = open('my-document.pdf', 'rb')
 aryn_api_key = 'YOUR-KEY-HERE'
 
-## Make a call to Aryn DocParse (APS) 
+## Make a call to Aryn DocParse (ADP) 
 ## param use_ocr (boolean): extract text using an OCR model instead of extracting embedded text in PDF. default: False
 ## param extract_images (boolean):  extract image contents. default: False
 ## returns: JSON object with elements representing information inside the PDF
@@ -95,7 +95,7 @@ In particular let's look at the element which highlights the Image that has been
     }
 ```
 
-## Extracting Image
+## Extracting the Image
 
 This JSON object represents one of the images in the PDF. You'll notice that the image's binary representation, its bounding box (which indicates the coordinates of the image in the PDF), and certain other properties (image_mode, image_size etc.) are returned back. You can then process this JSON however you'd like for further analysis. In the notebook, we use the Pillow Image module from python to display the extracted image on its own. 
 

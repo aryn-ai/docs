@@ -75,7 +75,7 @@
         "aryn_docparse/images",
         "aryn_docparse/formats_supported",
         "aryn_docparse/output",
-        "aryn_docparse/options_deep_dive",
+        "aryn_docparse/parameters_deep_dive",
         "aryn_docparse/aryn_cloud"
       ]
     },
