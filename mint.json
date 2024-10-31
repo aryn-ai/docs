@@ -44,19 +44,14 @@
   ],
   "anchors": [
     {
-      "name": "Sycamore Documentation",
-      "icon": "book-open-cover",
-      "url": "https://sycamore.readthedocs.io/en/stable/"
-    },
-    {
-      "name": "Community",
-      "icon": "slack",
-      "url": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
-    },
-    {
-      "name": "Blog",
+      "name": "Aryn Blog",
       "icon": "newspaper",
       "url": "https://www.aryn.ai/blog"
+    },
+    {
+      "name": "Slack Community",
+      "icon": "slack",
+      "url": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
     }
   ],
   "navigation": [
@@ -68,15 +63,15 @@
       ]
     },
     {
-      "group": "Aryn DocParse Essentials",
+      "group": "DocParse",
       "pages": [
-        "aryn_docparse/aryn_sdk",
-        "aryn_docparse/tables",
-        "aryn_docparse/images",
-        "aryn_docparse/formats_supported",
-        "aryn_docparse/output",
-        "aryn_docparse/parameters_deep_dive",
-        "aryn_docparse/aryn_cloud"
+        "docparse/aryn_sdk",
+        "docparse/tables",
+        "docparse/images",
+        "docparse/formats_supported",
+        "docparse/output",
+        "docparse/parameters_deep_dive",
+        "docparse/aryn_cloud"
       ]
     },
     {
