@@ -1,0 +1,157 @@
+---
+title: 'Partition'
+description: 'Documentation for Aryn SDK Partition'
+---
+
+Please find the documentation for Aryn SDK Partition below.
+
+## convert_image_element
+
+Convert an image element to a more usable format. If no format is specified, create a PIL Image object. If a format is specified, output the bytes of the image in that format. If b64encode is set to True, base64-encode the bytes and return them as a string.
+
+**Parameters:**
+
+- **elem**: An image element from the `elements` field of a `partition_file` response.
+- **format**: An optional format to output bytes of. Default is 'PIL'.
+- **b64encode**: Base64-encode the output bytes. Format must be set to use this.
+
+**Example:**
+
+```python
+from aryn_sdk.partition import partition_file, convert_image
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        extract_images=True
+    )
+image_elts = [e for e in data['elements'] if e['type'] == 'Image']
+
+pil_img = convert_image(image_elts[0])
+jpg_bytes = convert_image(image_elts[1], format='JPEG')
+png_str = convert_image(image_elts[2], format="PNG", b64encode=True)
+```
+
+
+## draw_with_boxes
+
+Create a list of images from the provided PDF, one for each page, with bounding boxes detected by the partitioner drawn on.
+
+**Parameters:**
+
+- **pdf_file**: An open file or path to a PDF file upon which to draw.
+- **partitioning_data**: The output from `aryn_sdk.partition.partition_file`.
+- **draw_table_cells**: Whether to draw individually detected cells of tables. Default is False.
+
+**Returns:**
+
+A list of images of pages of the PDF, each with bounding boxes drawn on.
+
+**Example:**
+
+```python
+from aryn_sdk.partition import partition_file, draw_with_boxes
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-TOKEN",
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+pages = draw_with_boxes("my-favorite-pdf.pdf", data, draw_table_cells=True)
+```
+## partition_file
+
+Sends file to the Aryn Partitioning Service and returns a dict of its document structure and text.
+
+**Parameters:**
+
+- **file**: pdf file to partition
+- **aryn_api_key**: aryn api key, provided as a string
+- **aryn_config**: ArynConfig object, used for finding an api key. If aryn_api_key is set it will override this. Default: The default ArynConfig looks in the env var ARYN_API_KEY and the file ~/.aryn/config.yaml
+- **threshold**: value to specify the cutoff for detecting bounding boxes. Must be set to "auto" or a floating point value between 0.0 and 1.0. Default: None (APS will choose)
+- **use_ocr**: extract text using an OCR model instead of extracting embedded text in PDF. Default: False
+- **ocr_images**: attempt to use OCR to generate a text representation of detected images. Default: False
+- **extract_table_structure**: extract tables and their structural content. Default: False
+- **table_extraction_options**: Specify options for table extraction, currently only supports boolean 'include_additional_text': if table extraction is enabled, attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for tables with missing or misaligned text, and is False by default. Default: {}
+- **extract_images**: extract image contents. Default: False
+- **selected_pages**: list of individual pages (1-indexed) from the pdf to partition. Default: None
+- **aps_url**: url of the Aryn Partitioning Service endpoint. Default: "https://api.aryn.cloud/v1/document/partition"
+- **ssl_verify**: verify ssl certificates. In databricks, set this to False to fix ssl incompatibilities.
+- **output_format**: controls output representation; can be set to markdown. Default: None (JSON elements)
+
+**Returns:**
+
+A dictionary containing "status" and "elements". If output_format is markdown, dictionary of "status" and "markdown".
+
+**Example:**
+
+```python
+from aryn_sdk.partition import partition_file
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-TOKEN",
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+elements = data['elements']
+```
+
+## table_elem_to_dataframe
+
+Create a pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, return None instead.
+
+**Parameters:**
+
+- **elem**: An element from the 'elements' field of a `partition_file` response.
+
+**Example:**
+
+```python
+from aryn_sdk.partition import partition_file, table_elem_to_dataframe
+
+with open("partition-me.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+
+# Find the first table and convert it to a dataframe
+df = None
+for element in data['elements']:
+    if element['type'] == 'table':
+        df = table_elem_to_dataframe(element)
+        break
+```
+
+
+## tables_to_pandas
+
+For every table element in the provided partitioning response, create a pandas DataFrame representing the tabular data. Return a list containing all the elements, with tables paired with their corresponding DataFrames.
+
+**Parameters:**
+
+- **data**: a response from `partition_file`
+
+**Example:**
+
+```python
+from aryn_sdk.partition import partition_file, tables_to_pandas
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-TOKEN",
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+elts_and_dataframes = tables_to_pandas(data)
+```
