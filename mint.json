@@ -87,6 +87,12 @@
       ]
     },
     {
+      "group": "Aryn SDK Reference",
+      "pages": [
+        "api-reference/aryn-sdk/partition"
+      ]
+    },
+    {
       "group": "Endpoint Examples",
       "pages": [
         "api-reference/endpoint/parse"
