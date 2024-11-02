@@ -95,7 +95,7 @@
     {
       "group": "Endpoint Examples",
       "pages": [
-        "api-reference/endpoint/parse"
+        "api-reference/endpoint/partition"
       ]
     }
   ],
