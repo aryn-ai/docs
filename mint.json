@@ -8,8 +8,7 @@
   "favicon": "aryn_logo.png",
   "feedback": {
     "thumbsRating": true,
-    "suggestEdit": true,
-    "raiseIssue": true
+    "suggestEdit": true
   },
   "theme": "prism",
   "background": {"style": "windows"},
@@ -33,6 +32,10 @@
     "url": "https://www.aryn.ai/"
   },
   "tabs": [
+    {
+      "name": "SDK Reference",
+      "url": "sdk-reference"
+    },
     {
       "name": "API Reference",
       "url": "api-reference"
@@ -89,7 +92,7 @@
     {
       "group": "Aryn SDK Reference",
       "pages": [
-        "api-reference/aryn-sdk/partition"
+        "sdk-reference/partition"
       ]
     },
     {
