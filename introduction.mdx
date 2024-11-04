@@ -35,7 +35,7 @@ Or, watch Aryn DocParse in action in [this video](https://www.aryn.ai/?name=Aryn
 
 ## Aryn DocParse
 
-You can use Aryn DocParse to segment documents into labeled bounding boxes identifying titles, tables, table rows and columns, images, and regular text. The service can segment PDFs, Microsoft Word (.docx and .doc) documents, and Microsoft PowerPoint (.pptx and .ppt) file formats. It is often used to [extract structured table data]("./aryn_docparse/tables"). Bounding boxes are returned as JSON with their associated text for easy use. It leverages [Aryn's purpose-built AI model for document segmentation and labelling](https://huggingface.co/Aryn/deformable-detr) that was trained using DocLayNet - an open source, human-annotated document layout segmentation dataset containing tens of thousands of pages from a broad variety of document sources.
+You can use Aryn DocParse to segment documents into labeled bounding boxes identifying titles, tables, table rows and columns, images, and regular text. The service can segment PDFs, Microsoft Word (.docx and .doc) documents, and Microsoft PowerPoint (.pptx and .ppt) file formats. It is often used to [extract structured table data](docparse/tables). Bounding boxes are returned as JSON with their associated text for easy use. It leverages [Aryn's purpose-built AI model for document segmentation and labelling](https://huggingface.co/Aryn/deformable-detr) that was trained using DocLayNet - an open source, human-annotated document layout segmentation dataset containing tens of thousands of pages from a broad variety of document sources.
 
 
 If you'd like to experiment with the service, you can use the UI in the [Aryn Playground](https://play.aryn.cloud/partitioning) to visualize how your documents will be partitioned. To get started with Aryn DocParse, please refer to the [Quickstart](quickstart) guide.
@@ -56,7 +56,7 @@ If you'd like to experiment with the service, you can use the UI in the [Aryn Pl
   <Card
     title="Use the Aryn-SDK"
     icon="rectangle-terminal"
-    href="aryn_partitioning/aryn_sdk"
+    href="docparse/aryn_sdk"
   >
     Using the Aryn-SDK to call DocParse
   </Card>
@@ -73,6 +73,27 @@ If you'd like to experiment with the service, you can use the UI in the [Aryn Pl
     href="https://www.aryn.ai/"
   >
     Head to Aryn's website for more information
+  </Card>
+    <Card
+    title="Slack Community"
+    icon="slack"
+    href="https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
+  >
+    Join the Slack community for any questions
+  </Card>
+    <Card
+    title="API Reference"
+    icon="webhook"
+    href="api-reference/introduction"
+  >
+    Aryn DocParse API Reference
+  </Card>
+    <Card
+    title="Aryn SDK Reference"
+    icon="python"
+    href="sdk-reference/partition"
+  >
+    Aryn Python SDK Reference
   </Card>
 </CardGroup>
 

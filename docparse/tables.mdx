@@ -82,7 +82,7 @@ In particular let's look at the `cells` field  which is an array of cell objects
 
 ## Displaying the Table
 
-Here we've detected the first cell, its bounding box (which indicates the coordinates of the cell in the PDF), whether it's a header cell and its contents. You can then process this JSON however you'd like for further analysis. In [the notebook](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing)  we use the tables_to_pandas function to turn the JSON into a pandas dataframe and then perform some analysis on it:
+Here we've detected the first cell, its bounding box (which indicates the coordinates of the cell in the PDF), whether it's a header cell and its contents. You can then process this JSON however you'd like for further analysis. In [the notebook](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing)  we use the `tables_to_pandas` function to turn the JSON into a pandas dataframe and then perform some analysis on it:
 
 ```python display_table.py
 pandas = tables_to_pandas(partitioned_file)
