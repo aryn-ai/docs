@@ -69,12 +69,12 @@
       "group": "DocParse",
       "pages": [
         "docparse/aryn_sdk",
+        "docparse/output",
+        "docparse/processing_options",
         "docparse/tables",
         "docparse/images",
-        "docparse/formats_supported",
-        "docparse/output",
-        "docparse/parameters_deep_dive",
         "docparse/aryn_cloud"
+        "docparse/formats_supported",
       ]
     },
     {
