@@ -45,14 +45,12 @@ We use the `partition_file` function from `aryn_sdk.partition` to extract text a
    'properties': {'score': 0.873895525932312,
     'image_size': [1324, 1003],
     'image_mode': 'RGB',
-    'image_format': None,
-    '_element_index': 1,
     'page_number': 2},
    'binary_representation': ...
  }
 ```
 
-Above, you can see the JSON output from the call to Aryn DocParse. The output is a JSON object with a `status` field that shows the status of the call and an `elements` field that contains a list of elements extracted from the document. Each element has a `type`, `bbox`, `properties`, and `text_representation` field. The `type` field indicates the type of the element (e.g. text, image, table, etc.), the `bbox` field contains the coordinates of the bounding box around the element, the `properties` field contains additional information about the element (e.g. confidence score, page number, etc.), and the `text_representation` field contains the text content of the element. The call ID has been redacted for privacy reasons.
+Above, you can see the JSON output from the call to Aryn DocParse. The output is a JSON object with a `status` field that shows the status of the call and an `elements` field that contains a list of elements extracted from the document. Each element has a `type`, `bbox`, `properties`, and `text_representation` field. The `type` field indicates the type of the element (e.g. text, image, table, etc.), the `bbox` field contains the coordinates of the bounding box around the element, the `properties` field contains additional information about the element (e.g. confidence score, page number, etc.), and the `text_representation` field contains the text content of the element. The `score` tag represents the confidence score in the label assignment (`Text`, `Image`, `Table`, etc.). The call ID has been redacted for privacy reasons.
 
 ## Examining Individual Elements
 
@@ -69,8 +67,6 @@ Above, you can see the JSON output from the call to Aryn DocParse. The output is
  'properties': {'score': 0.873895525932312,
   'image_size': [1324, 1003],
   'image_mode': 'RGB',
-  'image_format': None,
-  '_element_index': 1,
   'page_number': 2},
  'binary_representation': ...
 }
@@ -87,7 +83,6 @@ The first element we see is an image. We get back a bounding box and a binary re
   0.8386106244255515,
   0.5634380548650568],
  'properties': {'score': 0.6033732891082764,
-  '_element_index': 3,
   'page_number': 2},
  'text_representation': 'Figure 1. Accident airplane as it came to rest (Source: Federal Aviation Administration)\n'}
 ```
@@ -102,7 +97,6 @@ The second element we see is a caption. We get back a bounding box and the text 
   0.5373964197495404,
   0.5928012917258523],
  'properties': {'score': 0.589328944683075,
-  '_element_index': 5,
   'page_number': 2},
  'text_representation': 'The wreckage was retained for further examination. \n'}
 ```
@@ -122,7 +116,6 @@ The third element we see is a text element. We get back a bounding box and the t
   'title': None,
   'columns': None,
   'rows': None,
-  '_element_index': 2,
   'page_number': 2},
  'text_representation': None,
  'table': {'cells': [{'content': 'Aircraft Make:',
