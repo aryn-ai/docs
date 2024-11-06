@@ -3,6 +3,10 @@ title: 'Output Structure'
 description: 'The output format of Aryn DocParse'
 icon: 'brackets-curly'
 ---
+## Overall Format
+
+### JSON Format
+
 The default output format of Aryn DocParse is JSON.
 
 ```text
@@ -11,20 +15,33 @@ The default output format of Aryn DocParse is JSON.
   "elements": a list of elements }
 ```
 
+### Markdown Format
+
+If the request to Aryn DocParse has the `output_format` option set to `markdown`, a successful response will look like this:
+
+```text
+{ "status": ...,
+  "markdown": "# Title\ndolorem ipsum, quia dolor sit amet consectetur..." }
+```
+
 ## Element Format
+
+### General Structure
 
 It is often useful to process different parts of a document separately. For example, you might want to process tables differently than text paragraphs, and typically small chunks of text are embedded separately for vector search. In Aryn DocParse, these chunks are called elements.
 
 Elements follow the following format:
 
 ```text
-{"type": type of element,
-"bbox": Coordinates of bounding box around element,
-"properties": { "score": confidence score,
-                "page_number": page number element occurs on},
-"text_representation: for elements with associated text,
-"binary_representation: for Image elements when extract_table_structure is enabled }
+{"type": type of element (str),
+"bbox": Coordinates of bounding box around element (float),
+"properties": { "score": confidence score (float),
+                "page_number": page number element occurs on (int)},
+"text_representation: for elements with associated text (str),
+"binary_representation: for Image elements when extract_table_structure is enabled (bytes)}
 ```
+
+Each element always has a `type`, `bbox`, `properties`, and `text_representation` field. The `type` field indicates the type of the element (e.g. text, image, table, etc.), the `bbox` field contains the coordinates of the bounding box around the element, the `properties` field contains additional information about the element (e.g. confidence score, page number, etc.), and the `text_representation` field contains the text content of the element. The `score` tag represents the confidence score in the label assignment (`Text`, `Image`, `Table`, etc.). The `page_number` is the 1-indexed page number the element occurs on.
 
 An example element is given below:
 
@@ -45,7 +62,7 @@ An example element is given below:
 }
 ```
 
-### Element Type
+#### Element Type
 
 ```text
 "type": one of the element types below
@@ -65,47 +82,95 @@ An example element is given below:
 | Section-header | Medium-sized text marking a section. |
 | table | A grid of text. See the `extract_table_structure` option to extract information from the table rather than just detecting its presence. |
 
-### Bounding Box
+#### Bounding Box
 
 ```text
 "bbox": coordinates of the bounding box around the element contents
 ```
 Takes the format `[x1, y1, x2, y2]` where each coordinate is given as the proportion of how far down or across the screen the element is. For instance, an element that is 100 pixels from the left border of a document 400 pixels wide would have an x1 coordinate of 0.25.
 
-### Properties
+#### Properties
 
 ```text
 "properties":
-    { "score": confidence (between 0 and 1, with 1 being the most confident 
-                that this element type and bounding box coordinates are correct.),
-      "page_number": 1-indexed page number the element occurs on }
+    { "score": confidence between 0 and 1, with 1 being the most confident 
+                that this element type and bounding box coordinates are correct (float),
+      "page_number": 1-indexed page number the element occurs on (int) }
 ```
 
 The `score` is the model's "confidence" in its prediction for that particular bounding box. By default, we automatically select bounding boxes to achieve good coverage with high prediction accuracy, but the user can control this by using the `threshold` parameter (defaults to "auto"). If the user specifies a numeric value between 0 and 1, only Elements with a confidence score higher than the specified threshold value will be kept.
 
-### Text Representation
+#### Text Representation
 
 ```text
-"text_representation": text associated with this element
+"text_representation": text associated with this element (str)
 ```
 
 Text elements contain `\n` when the text includes a line return.
 
-### Binary Representation
+#### Binary Representation
 
-When `extract_images` is set to True, Images include a `binary_representation` tag which contains a base64 encoded ppm image file of the pdf cropped to the bounds of the detected image. When `extract_images` is false, the bounding box of the Image is still returned.
-
-```text
-"binary_representation": base64 encoded ppm image file of the pdf cropped to the image
-```
-
-## Markdown Format
-
-If the request to Aryn DocParse has the `output_format` option set to `markdown`, a successful response will look like this:
+When `extract_images` is set to True, Images include a `binary_representation` tag which contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. When `extract_images` is false, the bounding box of the Image is still returned.
 
 ```text
-{ "status": ...,
-  "markdown": "# Title\ndolorem ipsum, quia dolor sit amet consectetur..." }
+"binary_representation": base64 encoded ppm image file of the pdf cropped to the image (bytes)
 ```
+
+For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./output_walkthrough) page.
+
+### Table Structure
+
+Tables are represented as a list of cells, where each cell is a dictionary with the following attributes:
+
+```json
+
+{
+  "type": "table",
+  "bbox": [int, int, int, int],
+  "properties": {
+    "score": float,
+    "title": str,
+    "columns": int,
+    "rows": int,
+    "page_number": int
+  },
+  "text_representation": str,
+  "table": {
+    "cells": [
+      {
+        "content": str,
+        "rows": list[int],
+        "cols": list[int],
+        "is_header": bool,
+        "bbox": [int, int, int, int],
+        "properties": dict
+      }
+    ]
+  }
+}
+```
+A table also contains a `table` tag with individual `cells`. Each cell has 6 attributes: `content`, `rows`, `cols`, `is_header`, `bbox`, and `properties`. The `content` attribute contains the text content of the cell, the `rows` attribute contains the row index of the cell, the `cols` attribute contains the column index of the cell, the `is_header` attribute indicates whether the cell is a header cell and is optional, the `bbox` attribute contains the bounding box of the cell, and the `properties` attribute contains additional properties of the cell.
+
+The `text_representation` tag contains the text content of the table, and is either not specified or is the CSV representation of the table. In the `properties` dictionary, the `title` tag represents the string table title if specified, `columns` is an integer representing the number of columns in the table, and `rows` is an integer representing the number of rows. They may all not be specified.
+
+### Image Structure
+
+```json
+{ 
+  {
+    "type": "Image",
+    "bbox": [int, int, int, int],
+    "properties": {
+      "score": float,
+      "image_size": [int, int],
+      "image_mode": str,
+      "page_number": int
+    },
+    "binary_representation": bytes
+  }
+}
+```
+
+For an image, the `binary_representation` tag contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes `image_size`, which represents [`width`, `height`] of the image, `image_mode`, which represents the color mode of the image.
 
 For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./output_walkthrough) page.

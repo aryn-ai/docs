@@ -21,7 +21,7 @@ with open(file_name, 'rb') as file:
   ## Make a call to the partitioning service and set extract_images to true.
   partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, use_ocr=False, selected_pages=[2])
 ```
-We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The `aryn_api_key` is your API key from Aryn. Set `extract_images` and `extract_table_structure` to `True` to extract images and tables. Set `use_ocr` to `False` to avoid OCR and use embedded text. We use `selected_pages=[2]` to focus on page 2.
+We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The `aryn_api_key` is your API key from Aryn. In this example, we set `use_ocr` to `False` to avoid OCR and use embedded text, and set `extract_images` and `extract_table_structure` to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2.
 
 ### Viewing the JSON Output
 
@@ -50,14 +50,13 @@ We use the `partition_file` function from `aryn_sdk.partition` to extract text a
  }
 ```
 
-Above, you can see the JSON output from the call to Aryn DocParse. The output is a JSON object with a `status` field that shows the status of the call and an `elements` field that contains a list of elements extracted from the document. Each element has a `type`, `bbox`, `properties`, and `text_representation` field. The `type` field indicates the type of the element (e.g. text, image, table, etc.), the `bbox` field contains the coordinates of the bounding box around the element, the `properties` field contains additional information about the element (e.g. confidence score, page number, etc.), and the `text_representation` field contains the text content of the element. The `score` tag represents the confidence score in the label assignment (`Text`, `Image`, `Table`, etc.). The call ID has been redacted for privacy reasons.
+Above, you can see the JSON output from the call to Aryn DocParse. The output is a JSON object with a `status` field that shows the status of the call and an `elements` field that contains a list of elements extracted from the document. The call ID has been redacted for privacy reasons.
 
 ## Examining Individual Elements
 
 ### Extracting an Image from the Document
 
 ```json image.json
-
 { 
   type': 'Image',
  'bbox': [0.0873676793715533,
@@ -71,7 +70,7 @@ Above, you can see the JSON output from the call to Aryn DocParse. The output is
  'binary_representation': ...
 }
 ```
-The first element we see is an image. We get back a bounding box and a binary representation of the image, which we can use to display the image. The bouning boxes are given in the format [x1, y1, x2, y2], where (x1, y1) is the top-left corner and (x2, y2) is the bottom-right corner of the bounding box.
+The first element we see is an image. We get back a bounding box and a binary representation of the image, which we can use to display the image. The bounding boxes are given in the format `[x1, y1, x2, y2]`, where `(x1, y1)` is the top-left corner and `(x2, y2)` is the bottom-right corner of the bounding box.
 
 ### Extracting Captions from the Document
 
@@ -138,7 +137,7 @@ The third element we see is a text element. We get back a bounding box and the t
     'properties': {}},...
 }
 ```
-The fourth  element we see is an table. We get back a bounding box and the table structure, which includes the cells of the table and their properties.
+The fourth element we see is an table. We get back a bounding box and the table structure, which includes the cells of the table and their properties.
 
 Walking through the first cell above, we see that there are 6 attributes: `content`, `rows`, `cols`, `is_header`, `bbox`, and `properties`. The `content` attribute contains the text content of the cell, the `rows` attribute contains the row index of the cell, the `cols` attribute contains the column index of the cell, the `is_header` attribute indicates whether the cell is a header cell and is optional, the `bbox` attribute contains the bounding box of the cell, and the `properties` attribute contains additional properties of the cell.
 
