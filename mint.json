@@ -78,6 +78,12 @@
       ]
     },
     {
+      "group": "DocPrep",
+      "pages": [
+        "docprep/getting_started"
+      ]
+    },
+    {
       "group": "API Documentation",
       "pages": [
         "api-reference/introduction"
