@@ -62,7 +62,8 @@
       "group": "Get Started",
       "pages": [
         "introduction",
-        "quickstart"
+        "quickstart",
+        "aryn_cloud"
       ]
     },
     {
@@ -71,15 +72,14 @@
         "docparse/aryn_sdk",
         "docparse/output_structure",
         "docparse/processing_options",
-        "docparse/tables",
-        "docparse/images",
-        "docparse/aryn_cloud",
         "docparse/formats_supported",
-        "docparse/output_walkthrough"
+        "docparse/output_walkthrough",
+        "docparse/tables",
+        "docparse/images"
       ]
     },
     {
-      "group": "DocPrep_structure",
+      "group": "DocPrep",
       "pages": [
         "docprep/getting_started"
       ]
