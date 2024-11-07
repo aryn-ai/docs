@@ -33,12 +33,12 @@
   },
   "tabs": [
     {
-      "name": "SDK Reference",
-      "url": "sdk-reference"
-    },
-    {
       "name": "API Reference",
       "url": "api-reference"
+    },
+    {
+      "name": "Python SDK Reference",
+      "url": "sdk-reference"
     },
     {
       "name": "Recipes",
@@ -69,16 +69,17 @@
       "group": "DocParse",
       "pages": [
         "docparse/aryn_sdk",
-        "docparse/output",
+        "docparse/output_structure",
         "docparse/processing_options",
         "docparse/tables",
         "docparse/images",
-        "docparse/aryn_cloud"
+        "docparse/aryn_cloud",
         "docparse/formats_supported",
+        "docparse/output_walkthrough"
       ]
     },
     {
-      "group": "DocPrep",
+      "group": "DocPrep_structure",
       "pages": [
         "docprep/getting_started"
       ]
@@ -102,7 +103,7 @@
       ]
     },
     {
-      "group": "Endpoint Examples",
+      "group": "Endpoints",
       "pages": [
         "api-reference/endpoint/partition"
       ]
