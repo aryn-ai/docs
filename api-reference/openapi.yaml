@@ -44,19 +44,43 @@ components:
   schemas:
     Body__partition_pdf_async_v1_document_partition_post:
       properties:
-        pdf:
+        file:
           type: string
           format: binary
-          title: Pdf
+          title: file
         options:
-          anyOf:
-            - type: string
-              format: binary
-            - type: 'null'
-          title: Options
+          type: object
+          # additionalProperties: true
+          properties:
+            selected_pages:
+              type: array
+              items:
+                type: integer
+              title: Selected Pages
+            extract_images:
+              type: boolean
+              title: Extract Images
+            extract_table_structure:
+              type: boolean
+              title: Extract Table Structure
+            use_ocr:
+              type: boolean
+              title: Use OCR
+            threshold:
+              anyOf:
+              - type: string
+                enum: ['auto']
+              - type: number
+                minimum: 0
+                maximum: 1
+              title: Threshold
+            output_format:
+              type: string
+              enum: ['json', 'markdown']
+              title: Output Format
       type: object
       required:
-        - pdf
+        - file
       title: Body__partition_pdf_async_v1_document_partition_post
     Element:
       properties:
