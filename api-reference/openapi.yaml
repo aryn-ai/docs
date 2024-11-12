@@ -68,12 +68,18 @@ components:
             extract_images:
               type: boolean
               title: Extract Images
+              description: |
+                A boolean value indicating whether to extract images from the document.
             extract_table_structure:
               type: boolean
               title: Extract Table Structure
+              description: |
+                A boolean value indicating whether to extract table structure from the document.
             use_ocr:
               type: boolean
               title: Use OCR
+              description: |
+                A boolean value indicating whether to use OCR or not on the document.
             threshold:
               anyOf:
               - type: string
@@ -82,10 +88,14 @@ components:
                 minimum: 0
                 maximum: 1
               title: Threshold
+              description: |
+                A number between 0 and 1 indicating the threshold for document segmentation. Defaults to auto, which uses an automatic threshold.
             output_format:
               type: string
               enum: ['json', 'markdown']
               title: Output Format
+              description: |
+                The format of the output. Defaults to json.
       type: object
       required:
         - file
@@ -95,23 +105,33 @@ components:
         type:
           type: string
           title: Type
+          description: |
+            The type of the element.
         bbox:
           items:
             type: number
           type: array
           title: Bbox
+          description: |
+            The bounding box of the element.
         properties:
           type: object
           title: Properties
+          description: |
+            The properties of the element.
         text_representation:
           type: string
           title: Text Representation
+          description: |
+            The text representation of the element.
         binary_representation:
           anyOf:
             - type: string
               format: binary
             - type: 'null'
           title: Binary Representation
+          description: |
+            The binary representation of the element.
       type: object
       required:
         - type
