@@ -28,7 +28,7 @@ Here is an example of how you can use these options in a curl command or in Pyth
 
 ```bash curl
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"extract_table_structure": true, "threshold": 0.2}' | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"use_ocr": true, "extract_table_structure": true, "threshold": 0.2}' | tee document.json
 ```
 
 ```python aryn_sdk.py
@@ -37,7 +37,12 @@ import json
 from aryn_sdk.partition import partition_file
 os.environ["ARYN_API_KEY"] = "PUT API KEY HERE"
 with open("document.pdf", "rb") as f:
-    ans = partition_file(file=f, use_ocr=True,extract_table_structure=True, extract_images=True)
+    ans = partition_file(
+        file=f,
+        use_ocr=True,
+        extract_table_structure=True,
+        threshold=0.2
+        )
 with open("document.json", "w") as f:
     json.dump(ans, f)
 ```
