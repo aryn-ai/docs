@@ -118,7 +118,7 @@ components:
                   type: boolean
                   title: Merge Across Pages
                   description: |
-                    A boolean value indicating whether to merge chunks across pages. Defaults to false. Not supported for the marked strategy.
+                    A boolean value indicating whether to merge chunks across pages. Defaults to false. Not supported for the 'marked' strategy.
               title: Chunking Options
               description: |
                 The options for chunking the document. If not specified, then chunking will not be performed.
