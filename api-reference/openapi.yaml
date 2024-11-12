@@ -46,7 +46,7 @@ components:
       properties:
         file:
           type: string
-          format: binary
+          format: base64
           title: file
         options:
           type: object
@@ -55,8 +55,16 @@ components:
             selected_pages:
               type: array
               items:
-                type: integer
+                oneOf:
+                  - type: integer
+                  - type: array
+                    items:
+                      type: integer
+              minItems: 2
+              maxItems: 2
               title: Selected Pages
+              description: |
+                An array containing single integers (e.g., 1) or arrays with exactly two integers representing a range (e.g., [1, 10]).
             extract_images:
               type: boolean
               title: Extract Images
