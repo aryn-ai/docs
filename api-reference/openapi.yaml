@@ -60,8 +60,8 @@ components:
                   - type: array
                     items:
                       type: integer
-              minItems: 2
-              maxItems: 2
+                    minItems: 2
+                    maxItems: 2
               title: Selected Pages
               description: |
                 An array containing single integers (e.g., 1) or arrays with exactly two integers representing a range (e.g., [1, 10]).
