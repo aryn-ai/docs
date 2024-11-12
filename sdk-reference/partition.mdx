@@ -89,7 +89,7 @@ Sends file to the Aryn Partitioning Service and returns a dict of its document s
         For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. Elements returned do not have a `type`. The `marked` merger always breaks across pages.
         - Behavior of `greedy_text_element` merger:
         Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
-    - `max_tokens`: An integer specifying cutoff for splitting chunks that are too large.
+    - `max_tokens`: An integer specifying cutoff for splitting chunks that are too large. Default value is 512.
     - `tokenizer`: Valid values are 'openai_tokenizer', 'character_tokenizer', and 'huggingface_tokenizer'. The tokenizer for determining how characters in a chunk are grouped. Defaults to openai_tokenizer.
     - `tokenizer_options`: A tree specifying the options for the chosen tokenizer. For openai_tokenizer, the options include model_name, which can be set to text-embedding-3-small.
         - Available options for `openai_tokenizer`:
