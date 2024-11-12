@@ -81,7 +81,7 @@ Sends file to the Aryn Partitioning Service and returns a dict of its document s
 - **aps_url**: url of the Aryn Partitioning Service endpoint. Default: "https://api.aryn.cloud/v1/document/partition"
 - **ssl_verify**: verify ssl certificates. In databricks, set this to False to fix ssl incompatibilities.
 - `chunking_options`: A tree of options for specifying chunking behavior. Chunking is only performed when this option is present, and the default options are chosen when chunking_options is specified as just `{}`. The full options are available in the [OpenAPI spec](../api-reference/endpoint/partition).
-    - `merging_strategy`: Strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'. The default and recommended merger is 'header_augmenter'.
+    - `merging_strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'. The default and recommended merger is 'header_augmenter'.
         - Behavior of `header_augmenter`:
         Combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
         - Behavior of `marked` merger:
@@ -89,14 +89,14 @@ Sends file to the Aryn Partitioning Service and returns a dict of its document s
         - Behavior of `greedy_text_element` merger:
         Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
     - `max_tokens`: An integer specifying cutoff for splitting chunks that are too large. Default value is 512.
-    - `tokenizer`: Valid values are 'openai_tokenizer', 'character_tokenizer', and 'huggingface_tokenizer'. The tokenizer for determining how characters in a chunk are grouped. Defaults to openai_tokenizer.
+    - `tokenizer`: A string specifying the tokenizer to use when determining how characters in a chunk are grouped. Valid values are 'openai_tokenizer', 'character_tokenizer', and 'huggingface_tokenizer'. Defaults to openai_tokenizer.
     - `tokenizer_options`: A tree specifying the options for the chosen tokenizer. Defaults to 'model_name': 'text-embedding-3-small', which works with the OpenAI tokenizer.
         - Available options for `openai_tokenizer`:
             - `model_name`: Accepts all models supported by OpenAI's [tiktoken tokenizer](https://github.com/openai/tiktoken). Default is "text-embedding-3-small"
         - Available options for `HuggingFaceTokenizer`:
             - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers)
         - `character_tokenizer` does not take any options.
-    - `merge_across_pages`: Boolean. Whether the chunker should attempt to merge chunks on different pages. Defaults to `True`.
+    - `merge_across_pages`: A boolean that determines whether the chunker should attempt to merge chunks on different pages. Defaults to `True`. Does not apply to the 'marked' merger, which never merges across pages.
 - **output_format**: controls output representation; can be set to markdown. Default: None (JSON elements)
 
 **Returns:**
