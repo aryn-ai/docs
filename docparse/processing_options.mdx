@@ -23,7 +23,7 @@ All of the available options are listed below:
     * `merging_strategy`: Strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'.
         * Behavior of `header_augmenter`:
         This is the default and recommended merger.
-        Combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
+        Combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `false`.
         * Behavior of `marked` merger:
         For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. The `marked` merger always breaks across pages.
         * Behavior of `greedy_text_element` merger:
