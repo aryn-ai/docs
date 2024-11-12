@@ -20,9 +20,8 @@ All of the available options are listed below:
 * `selected_pages`: You can specify a page (like `[11]` ), a page range (like `[[25,30]]` ), or a combination of both (like ``[11, [25,30]]`` ) of your PDF to process. The first page of the PDF is `1`, not `0`.
 * `pages_per_call`: This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch (number of pages). This is useful when running OCR on large documents. 
 * `chunking_options`: A tree of options for specifying chunking behavior. Chunking is only performed when this option is present, and the default options are chosen when chunking_options is specified as just `{}`. The full options are available in the [OpenAPI spec](../api-reference/endpoint/partition).
-    * `merging_strategy`: Strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'.
+    * `merging_strategy`: Strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'. The default and recommended merger is 'header_augmenter'.
         * Behavior of `header_augmenter`:
-        This is the default and recommended merger.
         Combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `false`.
         * Behavior of `marked` merger:
         For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. Elements returned do not have a `type`. The `marked` merger always breaks across pages.
@@ -30,13 +29,13 @@ All of the available options are listed below:
         Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
     * `max_tokens`: An integer specifying cutoff for splitting chunks that are too large. Default value is 512.
     * `tokenizer`: Valid values are 'openai_tokenizer', 'character_tokenizer', and 'huggingface_tokenizer'. The tokenizer for determining how characters in a chunk are grouped. Defaults to openai_tokenizer.
-    * `tokenizer_options`: A tree specifying the options for the chosen tokenizer. For openai_tokenizer, the options include model_name, which can be set to text-embedding-3-small.
+    * `tokenizer_options`: A tree specifying the options for the chosen tokenizer. Defaults to 'model_name': 'text-embedding-3-small', which works with the OpenAI tokenizer.
         * Available options for `openai_tokenizer`:
             * `model_name`: Accepts all models supported by OpenAI's [tiktoken tokenizer](https://github.com/openai/tiktoken). Default is "text-embedding-3-small"
         * Available options for `HuggingFaceTokenizer`:
             * `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers)
         * `character_tokenizer` does not take any options.
-    * `merge_across_pages`: Boolean. Whether the chunker should attempt to merge chunks on different pages.
+    * `merge_across_pages`: Boolean. Whether the chunker should attempt to merge chunks on different pages. Defaults to `true`.
 * `output_format`:  Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
 
 Here is an example of how you can use some of these options in a curl command or in Python code with the [Aryn SDK](./aryn_sdk).
