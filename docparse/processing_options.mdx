@@ -42,7 +42,7 @@ with open("document.pdf", "rb") as f:
         use_ocr=True,
         extract_table_structure=True,
         threshold=0.2
-        )
+    )
 with open("document.json", "w") as f:
     json.dump(ans, f)
 ```
