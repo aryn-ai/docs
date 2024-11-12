@@ -108,7 +108,7 @@ components:
                 tokenizer_options:
                   type: object
                   description: |
-                    The options for the tokenizer. For openai_tokenizer, the options include model_name, which can be set to text-embedding-3-small.
+                    The options for the tokenizer. See the [full documentation here](processing_options)
                 max_tokens:
                   type: integer
                   title: Max Tokens
