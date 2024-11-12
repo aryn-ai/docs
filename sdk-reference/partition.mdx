@@ -80,7 +80,7 @@ Sends file to the Aryn Partitioning Service and returns a dict of its document s
 - **selected_pages**: list of individual pages (1-indexed) from the pdf to partition. Default: None
 - **aps_url**: url of the Aryn Partitioning Service endpoint. Default: "https://api.aryn.cloud/v1/document/partition"
 - **ssl_verify**: verify ssl certificates. In databricks, set this to False to fix ssl incompatibilities.
-- `chunking_options`: A tree of options for specifying chunking behavoir. Chunking is only performed when this option is present, and the default options are chosen when chunking_options is specified as just `{}`. The full options are available in the [OpenAPI spec](../api-reference/endpoint/partition).
+- `chunking_options`: A tree of options for specifying chunking behavior. Chunking is only performed when this option is present, and the default options are chosen when chunking_options is specified as just `{}`. The full options are available in the [OpenAPI spec](../api-reference/endpoint/partition).
     - `merging_strategy`: Strategy to use to combine and split chunks. Valid values are 'header_augmenter', 'greedy_text_element', and 'marked'.
         - Behavior of `header_augmenter`:
         This is the default and recommended merger.
