@@ -79,7 +79,7 @@ with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, chunking_options={})
 ```
 
-Here is an example specifying certain options:
+Here is an example specifying certain chunking options:
 
 ```python
 from aryn_sdk.partition import partition_file
@@ -93,8 +93,8 @@ with open("mydocument.pdf", "rb") as f:
          },
          "merge_across_pages": True,
          "max_tokens": 512,
-      })
-print(data)
+      }
+   )
 ```
 
 The full chunking options are specified in the [OpenAPI spec](../api-reference/endpoint/partition).
