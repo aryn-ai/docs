@@ -43,9 +43,9 @@ Create a list of images from the provided PDF, one for each page, with bounding 
 
 **Parameters:**
 
-- **pdf_file**: An open file or path to a PDF file upon which to draw.
-- **partitioning_data**: The output from `aryn_sdk.partition.partition_file`.
-- **draw_table_cells**: Whether to draw individually detected cells of tables. Default is False.
+- **pdf_file**: Required. A BinaryIO (e.g. from a file opened in "b" mode) of a PDF or a path to a PDF file expressed as a str or a PathLike object upon which to draw.
+- **partitioning_data**: Required. The output from `aryn_sdk.partition.partition_file`.
+- **draw_table_cells**: Optional. A boolean that when True, makes the function draw individually detected cells of tables. When False, the bounding boxes of table cells are not drawn but the outer bounding boxes of tables and the bounding boxes of all other elements are still drawn. Default is False.
 
 **Returns:**
 
