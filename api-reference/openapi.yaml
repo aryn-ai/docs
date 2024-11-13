@@ -90,6 +90,38 @@ components:
               title: Threshold
               description: |
                 A number between 0 and 1 indicating the threshold for document segmentation. Defaults to auto, which uses an automatic threshold.
+            chunking_options:
+              type: object
+              properties:
+                merging_strategy:
+                  type: string
+                  enum: ['context_rich', 'mixed_multi_column', 'maximize_within_limit']
+                  title: Strategy
+                  description: |
+                    The strategy to use for merging chunks. Defaults to header_augmenter.
+                tokenizer:
+                  type: string
+                  enum: ['openai_tokenizer', 'character_tokenizer', 'huggingface_tokenizer']
+                  title: Tokenizer
+                  description: |
+                    The tokenizer to use for chunking. Defaults to openai_tokenizer.
+                tokenizer_options:
+                  type: object
+                  description: |
+                    The options for the tokenizer. See the [full documentation here](processing_options)
+                max_tokens:
+                  type: integer
+                  title: Max Tokens
+                  description: |
+                    The maximum number of tokens per chunk. Defaults to 512.
+                merge_across_pages:
+                  type: boolean
+                  title: Merge Across Pages
+                  description: |
+                    A boolean value indicating whether to merge chunks across pages. Defaults to false. Not supported for the 'marked' strategy.
+              title: Chunking Options
+              description: |
+                The options for chunking the document. If not specified, then chunking will not be performed.
             output_format:
               type: string
               enum: ['json', 'markdown']

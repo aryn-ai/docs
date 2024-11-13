@@ -69,4 +69,34 @@ with open("mypresentation.ppt", "rb") as f:
    data = partition_file(f)
 ```
 
+## Chunking a document
+
+Chunking support has been added in v0.1.9. You can enable the default chunking options by specifying an empty dict:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, chunking_options={})
+```
+
+Here is an example specifying certain chunking options:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, 
+      chunking_options={
+         "merging_strategy": "header_augmenter",
+         "tokenizer": "openai_tokenizer",
+         "tokenizer_options": {
+            "model_name": "text-embedding-3-small"
+         },
+         "merge_across_pages": True,
+         "max_tokens": 512,
+      }
+   )
+```
+
+The full chunking options are documented [here](./processing_options).
+
 For more information, see the [Aryn SDK documentation](../sdk-reference/partition).
