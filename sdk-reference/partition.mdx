@@ -14,8 +14,8 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
 
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object specifying where the file to parse is.
-<PartitionOptions/>
-- `aps_url`: A `string` specifying the URL of the Aryn DocParse endpoint. Default URL: "https://api.aryn.cloud/v1/document/partition".
+<PartitionOptions />
+<ul> <li> `aps_url`: A `string` specifying the URL of the Aryn DocParse endpoint. Default URL: "https://api.aryn.cloud/v1/document/partition". </li> </ul>
 - `ssl_verify`: A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and and then in your environment variables (`ARYN_API_KEY` by default))).
 - `aryn_config`: An ArynConfig object (defined in [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY` and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your environment variables, and then in ~/.aryn/config.yaml).
