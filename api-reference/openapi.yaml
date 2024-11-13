@@ -93,12 +93,12 @@ components:
             chunking_options:
               type: object
               properties:
-                merging_strategy:
+                strategy:
                   type: string
                   enum: ['context_rich', 'mixed_multi_column', 'maximize_within_limit']
                   title: Strategy
                   description: |
-                    The strategy to use for merging chunks. Defaults to header_augmenter.
+                    The strategy to use for merging chunks. Defaults to context_rich.
                 tokenizer:
                   type: string
                   enum: ['openai_tokenizer', 'character_tokenizer', 'huggingface_tokenizer']
@@ -118,7 +118,7 @@ components:
                   type: boolean
                   title: Merge Across Pages
                   description: |
-                    A boolean value indicating whether to merge chunks across pages. Defaults to false. Not supported for the 'marked' strategy.
+                    A boolean value indicating whether to merge chunks across pages. Defaults to false. Not supported for the 'mixed_multi_column' strategy.
               title: Chunking Options
               description: |
                 The options for chunking the document. If not specified, then chunking will not be performed.
