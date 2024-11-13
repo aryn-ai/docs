@@ -95,7 +95,7 @@ components:
               properties:
                 merging_strategy:
                   type: string
-                  enum: ['header_augmenter', 'greedy_text_element', 'marked']
+                  enum: ['context_rich', 'mixed_multi_column', 'maximize_within_limit']
                   title: Strategy
                   description: |
                     The strategy to use for merging chunks. Defaults to header_augmenter.
