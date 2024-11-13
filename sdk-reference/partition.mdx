@@ -85,18 +85,18 @@ Sends file to Aryn DocParse and returns a dict of its document structure and tex
 - **aps_url**: Optional. A string specifying the url of the Aryn DocParse endpoint. Default: "https://api.aryn.cloud/v1/document/partition"
 - **ssl_verify**: Optional. A boolean that controls whether the client verifies the ssl certificate of the chosen DocParse server. In databricks, set this to False to fix ssl incompatibilities. ssl_verify is True by default, enforcing ssl verification.
 - `chunking_options`: Optional. A tree of options for specifying chunking behavior. Chunking is only performed when this option is present, and the default options are chosen when chunking_options is specified as just `{}`.
-    - `strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are 'ContextRich', 'MaximizeWithinLimit', and 'MixedMultiColumn'. The default and recommended chunker is 'ContextRich'.
-        - Behavior of `ContextRich` chunker:
+    - `strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are 'context_rich', 'mixed_multi_column', and 'maximize_within_limit'. The default and recommended chunker is 'context_rich'.
+        - Behavior of `context_rich` chunker:
 
-        The goal of this strategy is to add context to evenly-sized chunks. This is most useful for retrieval based GenAI applications. ContextRich chunking combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
+        The goal of this strategy is to add context to evenly-sized chunks. This is most useful for retrieval based GenAI applications. context_rich chunking combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
 
-        - Behavior of `MixedMultiColumn` chunker:
+        - Behavior of `mixed_multi_column` chunker:
 
-        MixedMultiColumn performs well on journal articles and documents layouts that contain one or two columns. For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. Elements returned do not have a `type`. The `marked` merger always breaks across pages.
+        `mixed_multi_column` performs well on journal articles and documents layouts that contain one or two columns. For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. Elements returned do not have a `type`. The `marked` merger always breaks across pages.
 
-        - Behavior of `MaximizeWithinLimit` chunker:
+        - Behavior of `maximize_within_limit` chunker:
 
-        The goal of the MaximizeWithinLimit chunker is to make the chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
+        The goal of the `maximize_within_limit` chunker is to make the chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
     - `max_tokens`: Optional. An integer specifying the cutoff for splitting chunks that are too large. Default value is 512.
     - `tokenizer`: Optional. A string specifying the tokenizer to use when determining how characters in a chunk are grouped. Valid values are 'openai_tokenizer', 'character_tokenizer', and 'huggingface_tokenizer'. Defaults to 'openai_tokenizer'.
     - `tokenizer_options`: Optional. A tree with string keys specifying the options for the chosen tokenizer. Defaults to `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
