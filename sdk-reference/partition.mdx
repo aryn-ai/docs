@@ -2,7 +2,7 @@
 title: 'Partition'
 description: 'Documentation for Aryn SDK Partition'
 ---
-import MySnippet from '/snippets/partition_options.mdx';
+import PartitionOptions from '/snippets/partition_options.mdx';
 
 Please find the documentation for the Aryn SDK Partition module below. All parameters are optional unless specified otherwise.
 
@@ -14,7 +14,7 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
 
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object specifying where the file to parse is.
-<MySnippet/>
+<PartitionOptions/>
 - `aps_url`: A `string` specifying the URL of the Aryn DocParse endpoint. Default URL: "https://api.aryn.cloud/v1/document/partition".
 - `ssl_verify`: A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and and then in your environment variables (`ARYN_API_KEY` by default))).
