@@ -11,9 +11,13 @@ Convert an image element to a more usable format. If no format is specified, cre
 
 **Parameters:**
 
-- **elem**: An image element from the `elements` field of a `partition_file` response.
-- **format**: An optional format to output bytes of. Default is 'PIL'.
-- **b64encode**: Base64-encode the output bytes. Format must be set to use this.
+- **elem**: Required. An image element from the `elements` field of a `partition_file` response.
+- **format**: Optional. A string specifying the format to output bytes to. Default is 'PIL'.
+- **b64encode**: Optional. A boolean that when set to True enables base64-encoding of the output bytes of this function. Format cannot be 'PIL' when this option is True.
+
+**Returns:**
+
+Either a PIL Image object, bytes of an image, or a base64-encoded image as a str.
 
 **Example:**
 
