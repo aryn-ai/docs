@@ -86,7 +86,7 @@ from aryn_sdk.partition import partition_file
 with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, 
       chunking_options={
-         "merging_strategy": "header_augmenter",
+         "strategy": "context_rich",
          "tokenizer": "openai_tokenizer",
          "tokenizer_options": {
             "model_name": "text-embedding-3-small"
