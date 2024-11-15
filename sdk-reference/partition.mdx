@@ -37,7 +37,7 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
         - Available options for `HuggingFaceTokenizer`:
             - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
         - `character_tokenizer` does not take any options.
-    - `merge_across_pages`: A boolean that, when True, the selected chunker will attempt to merge chunks across  pages boundaries. Does not apply to the 'marked' merger, which never merges across pages. Defaults to `True`. 
+    - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to `True`. 
 - `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
 - `aps_url`: A `string` specifying the URL of the Aryn DocParse endpoint. Default URL: "https://api.aryn.cloud/v1/document/partition".
 - `ssl_verify`: A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
