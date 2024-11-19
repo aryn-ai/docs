@@ -1,0 +1,87 @@
+---
+title: 'Chunking Tutorial'
+description: 'Diving deep into each of the chunking strategies supported by Aryn DocParse'
+icon: 'brackets-curly'
+---
+
+In this tutorial we will walk through each of the chunking strategies supported by DocParse and provide examples of how to use them. 
+
+## Context-Rich
+
+The context rich chunking strategy combines adjacent elements with one another and adds the last seen section header or title to each outputted chunk. For example, let's take the fifth page of the [following document](http://arxiv.org/pdf/1706.03762): 
+ 
+ <Frame>
+  <img src="../images/transformers_image.png" />
+</Frame>
+
+The bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want to easily be able to retrieve certain formulas and ask questions such as “What linear transforms were used for Position-wise Feed-Forward Networks?” This would require the Section-Header “Position-wise Feed-Forward Networks,” to be in the same chunk as the formula (2) “FFN(x)=…”. Calling DocParse with the following chunking options will group the two chunks together: 
+
+```
+chunking_options={
+  "strategy": "context_rich",
+  "tokenizer": "openai_tokenizer",
+  "tokenizer_options": {
+    "model_name": "text-embedding-3-small"
+  },
+  "merge_across_pages": True,
+  "max_tokens": 512,
+}
+
+with open("transformers.pdf", "rb") as f:
+  data = partition_file(f, aryn_api_key, chunking_options=chunking_options)
+  
+
+```
+
+If you inspect the return value, you’ll notice that the section header and the formula are all chunked together:
+
+```python
+{
+"properties": {
+"score": 0.9430291056632996,
+"page_number": 5,
+"page_numbers": [
+5
+]
+},
+"type": "Text",
+"binary_representation": null,
+"text_representation": 
+"**3.3 Position-wise Feed-Forward Networks**\n\nIn addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully\nconnected feed-forward network, which is applied to each position separately and identically. This\nconsists of two linear transformations with a ReLU activation in between.\n\n
+**FFN(x) = max(0, xW1 + b1)W2 + b2**\n (2)\n\nWhile the linear transformations are the same across different positions, they use different parameters\nfrom layer to layer. Another way of describing this is as two convolutions with kernel size 1.\nThe dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality\ndf f = 2048.\n",
+"bbox": [
+0.17546135397518384,
+0.6537761896306818,
+0.8272261316636029,
+0.8000078790838068
+],
+"_header": "3.3 Position-wise Feed-Forward Networks\n"
+}
+```
+
+## Maximize Within Limit
+
+The Maximize within limit strategy is meant to be used when you want to merge several consecutive elements together into a large chunk. Take the following example: 
+
+<Frame>
+  <img src="../images/intro_algorithms.png" />
+</Frame>
+
+
+the bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into 1 chunk to improve the quality of your embedding. Calling DocParse with the following chunking options will group the entire list into 1 chunk: 
+
+```
+chunking_options={
+  "strategy": "maximize_within_limit",
+  "tokenizer": "openai_tokenizer",
+  "tokenizer_options": {
+    "model_name": "text-embedding-3-small"
+  },
+  "merge_across_pages": True,
+  "max_tokens": 512,
+}
+
+with open("transformers.pdf", "rb") as f:
+  data = partition_file(f, aryn_api_key, chunking_options=chunking_options)
+
+```

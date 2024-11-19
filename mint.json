@@ -71,6 +71,8 @@
       "pages": [
         "docparse/aryn_sdk",
         "docparse/output_structure",
+        "docparse/chunking_strategies",
+        "docparse/chunking_tutorial",
         "docparse/processing_options",
         "docparse/formats_supported",
         "docparse/output_walkthrough",
