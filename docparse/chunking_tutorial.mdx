@@ -1,7 +1,7 @@
 ---
 title: 'Chunking Tutorial'
-description: 'Diving deep into each of the chunking strategies supported by Aryn DocParse'
-icon: 'brackets-curly'
+description: 'Dive deep into each of the chunking strategies supported by Aryn DocParse'
+icon: 'chess-board'
 ---
 
 In this tutorial we will walk through each of the chunking strategies supported by DocParse and provide examples of how to use them. 
@@ -11,7 +11,7 @@ In this tutorial we will walk through each of the chunking strategies supported 
 The context rich chunking strategy combines adjacent elements with one another and adds the last seen section header or title to each outputted chunk. For example, let's take the fifth page of the [following document](http://arxiv.org/pdf/1706.03762): 
  
  <Frame>
-  <img src="../images/transformers_image.png" />
+  <img src="/images/transformers_image.png" />
 </Frame>
 
 The bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want to easily be able to retrieve certain formulas and ask questions such as “What linear transforms were used for Position-wise Feed-Forward Networks?” This would require the Section-Header “Position-wise Feed-Forward Networks,” to be in the same chunk as the formula (2) “FFN(x)=…”. Calling DocParse with the following chunking options will group the two chunks together: 
@@ -33,7 +33,7 @@ with open("transformers.pdf", "rb") as f:
 
 ```
 
-If you inspect the return value, you’ll notice that the section header and the formula are all chunked together:
+If you inspect the return value, you’ll notice that the `Section Header` and the `Formula` are all chunked together:
 
 ```python
 {
@@ -61,14 +61,14 @@ If you inspect the return value, you’ll notice that the section header and the
 
 ## Maximize Within Limit
 
-The Maximize within limit strategy is meant to be used when you want to merge several consecutive elements together into a large chunk. Take the following example: 
+The maximize_within_limit strategy is meant to be used when you want to merge several consecutive elements together into a large chunk. Take the following example: 
 
 <Frame>
-  <img src="../images/intro_algorithms.png" />
+  <img src="/images/intro_algorithms.png" />
 </Frame>
 
 
-the bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into 1 chunk to improve the quality of your embedding. Calling DocParse with the following chunking options will group the entire list into 1 chunk: 
+the bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into one chunk to improve the quality of your embedding. Calling DocParse with the following chunking options will group the entire list into one chunk: 
 
 ```
 chunking_options={
