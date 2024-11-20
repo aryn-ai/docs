@@ -61,14 +61,14 @@ If you inspect the return value, you’ll notice that the `Section Header` and t
 
 ## Maximize Within Limit
 
-The maximize_within_limit strategy is meant to be used when you want to merge several consecutive elements together into a large chunk. Take the following example: 
+The `maximize_within_limit` strategy is meant to be used when you want to merge several consecutive elements together into a large chunk. Take the following example: 
 
 <Frame>
   <img src="/images/intro_algorithms.png" />
 </Frame>
 
 
-the bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into one chunk to improve the quality of your embedding. Calling DocParse with the following chunking options will group the entire list into one chunk: 
+The bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into one chunk to improve the quality of your embeddings. Calling DocParse with the following chunking options will group the entire list into one chunk: 
 
 ```
 chunking_options={
