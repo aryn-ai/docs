@@ -35,12 +35,11 @@ with open("mydocument.pdf", "rb") as f:
 ## Options 
 The options that you can specify in the `dict` include the following: 
 
- - `strategy`: A string specifying the strategy to use to for chunking. Valid values are `context_rich`, `mixed_multi_column`, and `maximize_within_limit`. The default and recommended chunker is `context_rich` as `{'strategy': 'context_rich'}`.
+ - `strategy`: A string specifying the strategy to use to for chunking. Valid values are `context_rich` and `maximize_within_limit`. The default and recommended chunker is `context_rich` as `{'strategy': 'context_rich'}`.
         - Behavior of `context_rich` chunker: The goal of this strategy is to add context to chunks. Creates chunks by combining adjacent elements until the chunk reaches the length of the max-token limit specified. Each chunk will contain the copy of the most recently seen section header or title. Section headers or titles that are back to back will be grouped together as one large section header during chunking. 
 
         - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. All elements that are a result of mergers are assigned the type 'Section'. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
 
-         - Behavior of `mixed_multi_column` chunker: `mixed_multi_column` performs well on documents with text spread across multiple columns such as newspaper and journal articles. The mixed_multi_column chunking strategy correctly identifies and orders elements in columns. This strategy also drops elements that are only one token in size and drops elements in the top and bottom margins of the page (anything in the top and bottom 5% is dropped). The mixed_multi_column strategy always breaks across pages.
 - `max_tokens`: An integer specifying the maximum token limit for a chunk. Default value is 512.
 - `tokenizer`: A string specifying the tokenizer to use when converting text into tokens. Valid values are `openai_tokenizer`, `character_tokenizer`, and `huggingface_tokenizer`. Defaults to `openai_tokenizer`.
 - `tokenizer_options`: A tree with string keys specifying the options for the chosen tokenizer. Defaults to `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
@@ -49,7 +48,7 @@ The options that you can specify in the `dict` include the following:
     - Available options for `HuggingFaceTokenizer`:
         - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
     - `character_tokenizer` does not take any options.
-- `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to `True`.
+- `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`.
 
 
 ## Output 
