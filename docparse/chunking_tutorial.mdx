@@ -16,7 +16,7 @@ The context rich chunking strategy combines adjacent elements with one another a
 
 The bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want to easily be able to retrieve certain formulas and ask questions such as “What linear transforms were used for Position-wise Feed-Forward Networks?” This would require the `Section Header` “Position-wise Feed-Forward Networks,” to be in the same chunk as the `Formula` (2) “FFN(x)=…”. Calling DocParse with the following chunking options will group the two chunks together: 
 
-```
+```python
 chunking_options={
   "strategy": "context_rich",
   "tokenizer": "openai_tokenizer",
@@ -70,7 +70,7 @@ The `maximize_within_limit` strategy is meant to be used when you want to merge 
 
 The bounding boxes shown above are the result of calling DocParse without any chunking options specified. Let’s say for your question/answering RAG application, you want all the list items to be grouped together into one chunk to improve the quality of your embeddings. Calling DocParse with the following chunking options will group the entire list into one chunk: 
 
-```
+```python
 chunking_options={
   "strategy": "maximize_within_limit",
   "tokenizer": "openai_tokenizer",
