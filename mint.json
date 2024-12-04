@@ -75,6 +75,7 @@
         "docparse/processing_options",
         "docparse/formats_supported",
         "docparse/output_walkthrough",
+        "docparse/output_label_options_walkthrough",
         "docparse/tables",
         "docparse/images",
         "docparse/chunking_tutorial"

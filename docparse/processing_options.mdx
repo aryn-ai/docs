@@ -36,7 +36,12 @@ All of the available options are listed below, and are optional unless specified
     - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`. 
 - `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
 - `pages_per_call`: This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch (number of pages). This is useful when running OCR on large documents.
+- `output_label_options`: A dictionary of options to specify which heuristic to apply to enforce certain label outputs.
+    - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output.
+    - `title_candidate_elements`:  A list of strings that are candidate elements to be promoted to title. 
+
 Here is an example of how you can use some of these options in a curl command or in Python code with the [Aryn SDK](./aryn_sdk).
+
 
 <CodeGroup>
 
