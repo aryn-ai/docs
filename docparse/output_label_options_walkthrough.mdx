@@ -4,8 +4,8 @@ description: 'Applying heuristics to tweak the output'
 icon: 'toolbox'
 ---
 
-Sometimes the output you get from Aryn DocParse isn't exactly what you want. You can mitigate this by specifying the `output_label_options` which will apply simple heuristics to correct the output. Currently the only heuristic we support is 
-`promote_title` which will check if there's no title in the output and then intelligently choose one of other elements in the output to promote to title.     
+Sometimes the output you get from Aryn DocParse isn't exactly what you want. You can mitigate this by specifying the `output_label_options` option which will apply simple heuristics to correct the output. Currently the only heuristic we support is 
+`promote_title` which will check if there's no title in the output and then intelligently choose one of other elements in the output to promote to title.
 ## Example 
 
 Let's look at the example below: 
@@ -14,11 +14,11 @@ Let's look at the example below:
   <img src="/images/ntsb_incorrect_caption.png" />
 </Frame>
 
-You'll notice that the "Aviation Investigation Final Report" is incorrectly detected as a "Caption" here. To fix this, you can call `partition_file` with the `output_label_options` parameter:  
+You'll notice that the "Aviation Investigation Final Report" is incorrectly detected as a "Caption" here. To fix this when using the `aryn-sdk`, you can call `partition_file` with the `output_label_options` parameter:  
 
 
 ```python
-output_label_options = {"promote_title": True ,  "title_candidate_elements":["Section-header", "Caption"]}
+output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]}
 partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, use_ocr=False, selected_pages=[1] , output_label_options=output_label_options)
 ```
 
@@ -28,7 +28,7 @@ This will return the following output:
   <img src="/images/ntsb_correct_title.png" />
 </Frame>
 
-The heuristic chooses to promote the element whose type is in the `title_candidate_elements` list and has the largest font size to the title element. 
+The heuristic chooses to promote an element on the first page whose type is in the `title_candidate_elements` list and has the largest font size. 
 
 ## Specify Output Label Options using curl 
 
@@ -36,9 +36,9 @@ This is how you can use curl to specify these options:
 
 ```python
 curl -v -v -s -N "https://api.aryn.cloud/v1/document/partition"
--H "Authorization: Bearer $ARYN_TOKEN_1" 
--F "pdf=<YOUR-FILE_HERE>" 
--F 'options={"output_label_options": {"promote_title": true,  "title_candidate_elements":["Section-header", "Caption"]}}'
+-H "Authorization: Bearer $ARYN_API_KEY" 
+-F "file=<YOUR-FILE_HERE>" 
+-F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"]}}'
 ```
 
 ## Specify Output Label Options through Sycamore 
@@ -47,10 +47,8 @@ This is how you can specify these options through sycamore:
 
 ```python
 partitioner = ArynPartitioner(
-        threshold="auto",
-        use_partitioning_service=True,
-        output_label_options = {"promote_title": True ,  "title_candidate_elements":["Section-header", "Caption"]}
-        )
+        ...
+        output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]})
 ```
 
 
