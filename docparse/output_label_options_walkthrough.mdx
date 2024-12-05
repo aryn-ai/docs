@@ -1,0 +1,60 @@
+---
+title: 'Output Label Options'
+description: 'Applying heuristics to tweak the output'
+icon: 'toolbox'
+---
+
+Sometimes the output you get from Aryn DocParse isn't exactly what you want. You can mitigate this by specifying the `output_label_options` option which will apply simple heuristics to correct the output. Currently the only heuristic we support is 
+`promote_title` which will check if there's no title on the first page of the document and then intelligently choose one of other elements on the first page to promote to title.
+## Example 
+
+Let's look at the example below: 
+
+<Frame>
+  <img src="/images/ntsb_incorrect_caption.png" />
+</Frame>
+
+You'll notice that the "Aviation Investigation Final Report" is incorrectly detected as a "Caption" here. To fix this when using the `aryn-sdk`, you can call `partition_file` with the `output_label_options` parameter:
+
+
+```python
+output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]}
+partitioned_file = partitioned_file = partition_file(
+    file,
+    aryn_api_key,
+    extract_table_structure=True,
+    output_label_options=output_label_options
+)
+```
+
+This will return the following output:
+
+ <Frame>
+  <img src="/images/ntsb_correct_title.png" />
+</Frame>
+
+The heuristic chooses to promote an element on the first page whose type is in the `title_candidate_elements` list and has the largest font size. 
+
+## Specify Output Label Options using curl 
+
+This is how you can use curl to specify these options:
+
+```python
+curl -v -v -s -N "https://api.aryn.cloud/v1/document/partition"
+-H "Authorization: Bearer $ARYN_API_KEY" 
+-F "file=@path/to/your/file"
+-F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"]}}'
+```
+
+## Specify Output Label Options through Sycamore 
+
+This is how you can specify these options through sycamore:
+
+```python
+partitioner = ArynPartitioner(
+        ...
+        output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]})
+```
+
+
+
