@@ -42,7 +42,7 @@ This is how you can use curl to specify these options:
 ```python
 curl -v -v -s -N "https://api.aryn.cloud/v1/document/partition"
 -H "Authorization: Bearer $ARYN_API_KEY" 
--F "file=<YOUR-FILE_HERE>" 
+-F "file=@path/to/your/file"
 -F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"]}}'
 ```
 
