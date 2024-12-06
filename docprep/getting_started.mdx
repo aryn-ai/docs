@@ -12,7 +12,7 @@ Go to the DocPrep wizard in the [Aryn Console](https://console.aryn.cloud/docpre
 
 Select the location and format of your input file(s) for your pipeline. The wizard supports Amazon S3, local, and Google Colab storage. If you plan to run the pipeline locally, you can choose a local file path. If you plan to use Google Colab, the output script will contain a notebook cell to run that opens a file uploader window to add a local file to Google Colab storage.
 
-Next, choose the vector embedding model for your data. If you choose a local embedding model instead of a service (e.g. OpenAI), there is are additional dependencies that need to be downloaded (which can take a few minutes). Under "Partitioning and chunking configuration," you can optionally change your DocParse settings and chunking strategy.
+Next, choose the vector embedding model for your data. If you choose a local embedding model instead of a service (e.g. OpenAI), there are additional dependencies that need to be downloaded (which can take a few minutes). Under "Partitioning and chunking configuration," you can optionally change your DocParse settings and chunking strategy.
 
 Finally, choose the vector database you want to load. Each option has different configuration that you need to provide. DocPrep will also configure the indexes with the proper number of dimensions from the embedding model you selected in a prior step.
 
@@ -23,7 +23,7 @@ Then, click "Generate pipeline" to create your ETL pipeline code. On the next pa
 
 You can easily run your DocPrep ETL pipeline in a Google Colab notebook to test and experiment by clicking the "Open in Colab" button. 
 
-First, set the secrets required to run the notebook. In the second notebook cell, you will see the secrets required by the pipline, such as an API key for Aryn Cloud for DocParse and API key for OpenAI if you selected it for vector embeddings. To set the secrets, click the key icon in the left navigation panel, add the secrets using the case-sensitive variable name in the ETL pipeline, and move the slider for each secret to enable "Notebook access."
+First, set the secrets required to run the notebook. In the second notebook cell, you will see the secrets required by the pipeline, such as an API key for Aryn Cloud for DocParse and API key for OpenAI if you selected it for vector embeddings. To set the secrets, click the key icon in the left navigation panel, add the secrets using the case-sensitive variable name in the ETL pipeline, and move the slider for each secret to enable "Notebook access."
 
 Next, start running each cell. If you chose a local embedding model, you will need to wait a few extra minutes while the dependencies are downloaded. 
 
@@ -36,7 +36,7 @@ The final cell in the notebook runs a query to confirm that your data was loaded
 
 You can download and run your DocPrep ETL pipeline in a Jupyer notebook by clicking the "Download notebook." 
 
-Set the secrets required to run the notebook. In the second notebook cell, you will see the secrets required by the pipline, such as an API key for Aryn Cloud for DocParse and API key for OpenAI if you selected it for vector embeddings. Either configure these as environmental variables and restart your Jupyter notebook kernel, or add them in your notebook.
+Set the secrets required to run the notebook. In the second notebook cell, you will see the secrets required by the pipeline, such as an API key for Aryn Cloud for DocParse and API key for OpenAI if you selected it for vector embeddings. Either configure these as environmental variables and restart your Jupyter notebook kernel, or add them in your notebook.
 
 The final cell in the notebook runs a query to confirm that your data was loaded. 
 
@@ -46,4 +46,3 @@ The final cell in the notebook runs a query to confirm that your data was loaded
 * Customize your ETL pipeline with additional data transforms and data enrichment. DocPrep creates pipelines using the open source [Sycamore document ETL library](https://github.com/aryn-ai/sycamore). 
 
 * Experiment with DocParse settings for document partitioning using the DocParse UI in the Aryn [Console](https://console.aryn.cloud/docparse/) or [Playground](https://play.aryn.cloud).
-
