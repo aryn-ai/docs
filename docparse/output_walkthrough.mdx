@@ -147,7 +147,7 @@ Here we display the table in clean markdown format below. We clean the column he
 ```python display_table.py
 import pandas as pd
 pandas = tables_to_pandas(partitioned_file)
-# Let's display the pandas dataframe
+# Let's display the pandas DataFrame
 table = pandas[4][1]
 table = pd.concat([pd.DataFrame([table.columns], columns=table.columns), table], ignore_index=True)
 
@@ -165,4 +165,3 @@ The output is given below:
 |  3 | Operator:                 | M12 AVIATION LLC | Operating Certificate(s)  | None     |
 |    |                           |                  | Held:                     |          |
 |  4 | Operator Designator Code: |                  |                           |          |
-

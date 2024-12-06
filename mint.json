@@ -11,7 +11,9 @@
     "suggestEdit": true
   },
   "theme": "prism",
-  "background": {"style": "windows"},
+  "background": {
+    "style": "windows"
+  },
   "colors": {
     "primary": "#417586",
     "light": "#417586",
@@ -118,6 +120,6 @@
     "linkedin": "https://www.linkedin.com/company/aryn-ai"
   },
   "seo": {
-  "indexHiddenPages": true
-}
+    "indexHiddenPages": true
+  }
 }
