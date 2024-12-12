@@ -19,7 +19,7 @@ You'll notice that the "Aviation Investigation Final Report" is incorrectly dete
 
 ```python
 output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]}
-partitioned_file = partitioned_file = partition_file(
+partitioned_file = partition_file(
     file,
     aryn_api_key,
     extract_table_structure=True,
@@ -55,6 +55,3 @@ partitioner = ArynPartitioner(
         ...
         output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]})
 ```
-
-
-
