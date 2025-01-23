@@ -4,11 +4,10 @@ description: 'The chunking strategies supported by Aryn DocParse'
 icon: 'hive'
 ---
 
-
-
 When calling DocParse, you can specify a chunking strategy to the `partition_file` call. You can enable the default chunking options by specifying an empty `dict`:
 
 ```python
+# Enable default chunking with empty options
 from aryn_sdk.partition import partition_file
 with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, chunking_options={})
@@ -17,11 +16,12 @@ with open("mydocument.pdf", "rb") as f:
 Here is an example specifying a particular chunking option:
 
 ```python
+# Specify custom chunking options with context-rich strategy
 from aryn_sdk.partition import partition_file
 with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, 
       chunking_options={
-         "strategy": "context_rich",
+         "strategy": "context-rich",
          "tokenizer": "openai_tokenizer",
          "tokenizer_options": {
             "model_name": "text-embedding-3-small"
@@ -35,8 +35,8 @@ with open("mydocument.pdf", "rb") as f:
 ## Options 
 The options that you can specify in the `dict` include the following: 
 
- - `strategy`: A string specifying the strategy to use for chunking. Valid values are `context_rich` and `maximize_within_limit`. The default and recommended chunker is `context_rich` as `{'strategy': 'context_rich'}`.
-        - Behavior of `context_rich` chunker: The goal of this strategy is to add context to chunks. It creates chunks by combining adjacent elements until the chunk reaches the length of the max-token limit specified. Each chunk will contain a copy of the most recently seen section header or title. Section headers or titles that are back to back will be grouped together as one large section header during chunking. 
+ - `strategy`: A string specifying the strategy to use for chunking. Valid values are `context-rich` and `maximize_within_limit`. The default and recommended chunker is `context-rich` as `{'strategy': 'context-rich'}`.
+        - Behavior of `context-rich` chunker: The goal of this strategy is to add context to chunks. It creates chunks by combining adjacent elements until the chunk reaches the length of the max-token limit specified. Each chunk will contain a copy of the most recently seen section header or title. Section headers or titles that are back-to-back will be grouped together as one large section header during chunking. 
 
         - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the chunks as large as possible. It merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. All elements that are a result of mergers are assigned the type 'Section'. It merges elements on different pages, unless `merge_across_pages` is set to `False`.
 
@@ -48,7 +48,7 @@ The options that you can specify in the `dict` include the following:
     - Available options for `HuggingFaceTokenizer`:
         - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
     - `character_tokenizer` does not take any options.
-- `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`.
+- `merge_across_pages`: A `boolean` that, when `True`, the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`.
 
 
 ## Output 
@@ -84,4 +84,4 @@ An example element is given below:
 }
 ```
 
-To see examples of how to use these chunking strategies please read [here](/docparse/chunking_tutorial).
+To see examples of how to use these chunking strategies, please read [here](/docparse/chunking_tutorial).

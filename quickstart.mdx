@@ -30,7 +30,7 @@ For more information, see the [Aryn SDK documentation](docparse/aryn_sdk) or [AP
 
 We recommend using the ``aryn-sdk``, but you can also use ``curl`` to access Aryn DocParse directly.
 
-``curl`` an example document to use with DocParse, if you do not have one already.
+First, curl an example document to use with DocParse if you do not have one already:
 
 ```bash
 curl http://arxiv.org/pdf/1706.03762 -o document.pdf
@@ -39,7 +39,7 @@ Change ``PUT API KEY HERE`` below to your Aryn Cloud API key. If you have a diff
 
 ```bash
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json.
 ```
 Your results have been saved to ``document.json``.
 
@@ -60,7 +60,7 @@ curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authori
 
 ## Next steps
 
-* To load your parsed documents into a vector database, use [DocPrep](docprep/getting_started) to create a document ETL pipeline in Python for additional processing and loading. It leverages [Sycamore](https://github.com/aryn-ai/sycamore), a scalable, open source document ETL library.
+* To load your parsed documents into a vector database, use [DocPrep](docprep/getting_started) to create a document ETL pipeline in Python for additional processing and loading. It leverages [Sycamore](https://github.com/aryn-ai/sycamore), a scalable, open-source document ETL library.
 
 * To use DocParse with Langchain, you can check out [this example notebook here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb).
 

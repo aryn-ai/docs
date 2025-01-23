@@ -65,7 +65,9 @@
       "pages": [
         "introduction",
         "quickstart",
-        "aryn_playground_cloud_console"
+        "aryn_playground_cloud_console",
+        "quickstart",
+        "snippets/partition_options"
       ]
     },
     {
@@ -80,7 +82,10 @@
         "docparse/output_walkthrough",
         "docparse/tables",
         "docparse/images",
-        "docparse/chunking_tutorial"
+        "docparse/chunking_tutorial",
+        "docparse/chunking_strategies",
+        "docparse/output_structure",
+        "docparse/tables"
       ]
     },
     {

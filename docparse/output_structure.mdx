@@ -78,7 +78,7 @@ An example element is given below:
 | List-item | Part of a list |
 | Page-footer | Small text at bottom of page |
 | Page-header | Small text at top of page |
-| Image | A picture or diagram. When `extract_images` is set to `true`, this element includes a `binary_representation` tag which contains a base64 encoded ppm image file. When `extract_images` is false, the bounding box of the Image is still returned |
+| Image | A picture or diagram. When `extract_images` is set to `true`, this element includes a `binary_representation` tag which contains a base64-encoded ppm image file. When `extract_images` is false, the bounding box of the Image is still returned |
 | Section-header | Medium-sized text marking a section |
 | table | A grid of text. See the `extract_table_structure` option to extract information from the table rather than just detecting its presence |
 
@@ -110,10 +110,10 @@ Text elements contain `\n` when the text includes a line return.
 
 #### Binary Representation
 
-When `extract_images` is set to True, Images include a `binary_representation` tag which contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. When `extract_images` is false, the bounding box of the Image is still returned.
+When `extract_images` is set to True, Images include a `binary_representation` tag which contains a base64-encoded `ppm` image file of the pdf cropped to the bounds of the detected image. When `extract_images` is false, the bounding box of the Image is still returned.
 
 ```text
-"binary_representation": base64 encoded ppm image file of the pdf cropped to the image (bytes)
+"binary_representation": base64-encoded ppm image file of the pdf cropped to the image (bytes)
 ```
 
 For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./output_walkthrough) page.
@@ -123,7 +123,6 @@ For a tutorial on how to use the output of Aryn DocParse, see the [output walkth
 Tables are represented as a list of cells, where each cell is a dictionary with the following attributes:
 
 ```json
-
 {
   "type": "table",
   "bbox": [int, int, int, int],
@@ -171,6 +170,6 @@ The `text_representation` tag contains the text content of the table and is eith
 }
 ```
 
-For an image, the `binary_representation` tag contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes: `image_size`, which represents [`width`, `height`] of the image, and `image_mode`, which represents the color mode of the image.
+For an image, the `binary_representation` tag contains a base64-encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes: `image_size`, which represents [`width`, `height`] of the image, and `image_mode`, which represents the color mode of the image.
 
 For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./output_walkthrough) page.
