@@ -9,7 +9,7 @@
   "feedback": {
     "thumbsRating": true,
     "suggestEdit": true,
-    "":
+    "raiseIssue": true
   },
   "theme": "prism",
   "background": {
