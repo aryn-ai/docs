@@ -8,7 +8,8 @@
   "favicon": "aryn_logo.png",
   "feedback": {
     "thumbsRating": true,
-    "suggestEdit": true
+    "suggestEdit": true,
+    "raiseIssue": true
   },
   "theme": "prism",
   "background": {
