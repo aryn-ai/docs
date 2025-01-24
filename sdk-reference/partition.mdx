@@ -266,3 +266,39 @@ print(result)
 </Accordion>
 
 </AccordionGroup>
+
+## cancel_async_partition_job
+
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+- `job_id` Required. str of the job id to cancel
+- `aryn_async_url` url of the endpoint to submit the cancellation request to
+- `aryn_api_key` str of the Aryn API key to use with the cancellation request
+- `aryn_config` an ArynConfig object to use to set the Aryn API key to use.
+- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
+
+</Accordion>
+
+
+<Accordion title="Return Value">
+
+A `bool` which is true on sucess. Asynchronous jobs may only be sucesfully cancelled once. Once a job has been cancelled, partition_file_result_async calls against that job's id will return JobStatus.NO_SUCH_JOB shortly though not immediately.
+
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file_submit_async, cancel_async_partition_job
+job_id = partition_file_submit_async(
+            "path/to/file.pdf",
+            use_ocr=True,
+            extract_table_structure=True,
+        )["job_id"]
+
+cancel_async_partition_job(job_id)
+```
+</Accordion>
+
+</AccordionGroup>
