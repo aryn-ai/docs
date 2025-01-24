@@ -122,6 +122,30 @@ components:
               title: Chunking Options
               description: |
                 The options for chunking the document. If not specified, then chunking will not be performed.
+            output_label_options:
+              type: object
+              properties:
+                title_candidate_elements:
+                  type: array
+                  items:
+                    type: string
+                  title: title_candidate_elements
+                  description: |
+                    An array of strings representing the elements that should be considered as title candidates. Defaults to ["Section-header", "Caption"]
+                promote_title: 
+                  type: boolean
+                  title: promote_title
+                  description: |
+                    A boolean that specifies whether to promote an element to title. Defaults to false.
+                orientation_correction:
+                  type: boolean
+                  title:  orientation_correction
+                  description: |
+                    A boolean value indicating whether to correct the orientation of the pages. Defaults to false.
+              title: Output Label Options
+              description: |
+                A dictionary of options to specify which heuristic to apply to enforce certain label outputs.
+              
             output_format:
               type: string
               enum: ['json', 'markdown']

@@ -4,8 +4,9 @@ description: 'Applying heuristics to tweak the output'
 icon: 'toolbox'
 ---
 
-Sometimes the output you get from Aryn DocParse isn't exactly what you want. You can mitigate this by specifying the `output_label_options` option which will apply simple heuristics to correct the output. Currently the only heuristic we support is 
-`promote_title` which will check if there's no title on the first page of the document and then intelligently choose one of other elements on the first page to promote to title.
+Sometimes the output you get from Aryn DocParse isn't exactly what you want. You can mitigate this by specifying the `output_label_options` option which will apply simple heuristics to correct the output. Currently the two heuristics we support are `promote_title` and `orientation_correction`.
+1. `promote_title` which will check if there's no title on the first page of the document and then intelligently choose one of other elements on the first page to promote to title. 
+2. `orientation_correction` will correct the orientation of rotated pages during the preprocessing step.
 ## Example 
 
 Let's look at the example below: 
@@ -18,7 +19,7 @@ You'll notice that the "Aviation Investigation Final Report" is incorrectly dete
 
 
 ```python
-output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]}
+output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": False}
 partitioned_file = partition_file(
     file,
     aryn_api_key,
@@ -43,7 +44,7 @@ This is how you can use curl to specify these options:
 curl -v -v -s -N "https://api.aryn.cloud/v1/document/partition"
 -H "Authorization: Bearer $ARYN_API_KEY" 
 -F "file=@path/to/your/file"
--F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"]}}'
+-F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": false}}'
 ```
 
 ## Specify Output Label Options through Sycamore 
@@ -53,5 +54,5 @@ This is how you can specify these options through sycamore:
 ```python
 partitioner = ArynPartitioner(
         ...
-        output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"]})
+        output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": False})
 ```
