@@ -36,6 +36,10 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
         - `character_tokenizer` does not take any options.
     - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to `True`. 
 - `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON. If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
+- `output_label_options`: A dictionary of options to specify which heuristic to apply to enforce certain label outputs. If this option is not specified, no heuristic is applied. The options the dictionary supports are listed below.
+    - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output. 
+    - `title_candidate_elements`: A list of strings that are candidate elements to be promoted to title.
+    - `orientation_correction`: A boolean value that specifies whether to correct the orientation of rotated pages during the preprocessing step.
 - `aps_url`: A `string` specifying the URL of the Aryn DocParse endpoint. Default URL: "https://api.aryn.cloud/v1/document/partition".
 - `ssl_verify`: A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and then in your environment variables (`ARYN_API_KEY` by default))).
