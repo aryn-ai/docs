@@ -226,9 +226,14 @@ elts_and_dataframes = tables_to_pandas(data)
 ## partition_file_async_submit
 <AccordionGroup>
 <Accordion title="Parameters">
-- Note `partition_file_async_submit` accepts all parameters `partition_file` accepts in the same order and in addition includes the parameters below:
-- `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done": [{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
-- `async_submit_url`: str. By default, `partition_file_async_submit` will automatically change the specified DocParse API url to the async endpoint, unless `async_submit_url` is set to True. When False, `partition_file_async_submit` will use the exact `docparse_url` or `aps_url` provided.
+- Note `partition_file_async_submit` accepts all parameters `partition_file` accepts in the same order and in addition
+includes the parameters below:
+- `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done":
+[{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
+- `async_submit_url`: str. If `async_submit_url` is specified, `partition_file_async_submit` will submit async requests
+to this endpoint. When `async_submit_url` is not specified, `partition_file_async_submit` will intrepret the specified
+`docparse_url` or `aps_url` parameter as the synchronous endpoint and translate it to the proper asynchronous one. If
+no urls are specified, then it will use the default async Aryn endpoint.
 </Accordion>
 
 <Accordion title="Return Value">
