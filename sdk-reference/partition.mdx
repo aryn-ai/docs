@@ -222,32 +222,26 @@ elts_and_dataframes = tables_to_pandas(data)
 
 </AccordionGroup>
 
-## partition_file_submit_async
 
-
+## partition_file_async_submit
 <AccordionGroup>
-
 <Accordion title="Parameters">
-- Note `partition_file_submit_async` accepts all parameters `partition_file` accepts in the same order and in addition includes the parameters below:
+- Note `partition_file_async_submit` accepts all parameters `partition_file` accepts in the same order and in addition includes the parameters below:
 - `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done": [{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
-- `force_async_url`: bool not for normal use. `partition_file_submit_async` automatically changes the specified DocParse API url to the async endpoint, unless `force_async_url` is set to True. When False, `partition_file_submit_async` will use the exact `docparse_url` or `aps_url` provided.
-
+- `async_submit_url`: str. By default, `partition_file_async_submit` will automatically change the specified DocParse API url to the async endpoint, unless `async_submit_url` is set to True. When False, `partition_file_async_submit` will use the exact `docparse_url` or `aps_url` provided.
 </Accordion>
 
-
 <Accordion title="Return Value">
-
 A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the job_id of the submitted request.
-
 </Accordion>
 
 <Accordion title="Example">
 ```python
 import time
-from aryn_sdk.partition import partition_file_submit_async, partition_file_result_async, JobStatus
+from aryn_sdk.partition import partition_file_async_submit, partition_file_result_async, JobStatus
 
 with open("my-favorite-pdf.pdf", "rb") as f:
-    job = partition_file_submit_async(
+    job = partition_file_async_submit(
         f,
         use_ocr=True,
         extract_table_structure=True,
