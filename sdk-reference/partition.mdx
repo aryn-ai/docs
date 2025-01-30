@@ -224,6 +224,7 @@ elts_and_dataframes = tables_to_pandas(data)
 
 
 ## partition_file_async_submit
+Submit a document for asynchronous partitioning and get its `job_id`. Meant to be used with `partition_file_async_result`.
 <AccordionGroup>
 <Accordion title="Parameters">
 - Note `partition_file_async_submit` accepts all parameters `partition_file` accepts in the same order and in addition
@@ -243,27 +244,25 @@ A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the job_id
 <Accordion title="Example">
 ```python
 import time
-from aryn_sdk.partition import partition_file_async_submit, partition_file_result_async, JobStatus
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
 
 with open("my-favorite-pdf.pdf", "rb") as f:
-    job = partition_file_async_submit(
+    response = partition_file_async_submit(
         f,
         use_ocr=True,
         extract_table_structure=True,
     )
 
-job_id = job["job_id"]
+job_id = response["job_id"]
 
 # Poll for the results
-result = partition_file_result_async(job_id)
-while result.status == JobStatus.IN_PROGRESS:
+while True:
+    result = partition_file_async_result(job_id)
+    if result["status"] != "pending":
+        break
     time.sleep(5)
-    result = partition_file_result_async(job_id)
-
-print(result)
 ```
 </Accordion>
-
 </AccordionGroup>
 
 
