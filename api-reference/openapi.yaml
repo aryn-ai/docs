@@ -91,9 +91,6 @@ paths:
                 properties:
                   detail:
                     type: string
-                    title: Detail
-                    description: |
-                      The detail of the error.
                     examples:
                       - "Not authenticated"
   /v1/async/result/{job_id}:
@@ -184,19 +181,27 @@ paths:
                   jobs:
                     type: object
                     description: A map of job ids to job details.
-                    properties:
-                      path:
-                        type: string
-                        description: The path of the Aryn API the async job was submitted to.
-                      state:
-                        type: string
-                        description: The state of the async job.
-                        enum:
-                          - "done"
-                          - "abort"
-                          - "cancel"
-                          - "run"
-                          - "queue"
+                    additionalProperties:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                          description: The path of the Aryn API the async job was submitted to.
+                          examples:
+                            - "/v1/document/partition"
+                        state:
+                          type: string
+                          description: The state of the async job.
+                          enum:
+                            - "done"
+                            - "abort"
+                            - "cancel"
+                            - "run"
+                            - "queue"
+                    examples:
+                      - "aryn:j-47gpd3604e5tz79z1jro5fc":
+                          path: "/v1/document/partition"
+                          state: "done"
                 required:
                   - jobs
 components:
