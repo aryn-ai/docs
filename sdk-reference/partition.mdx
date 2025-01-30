@@ -324,27 +324,31 @@ while True:
 </AccordionGroup>
 
 
+
+
 ## partition_file_async_cancel
-
-
 <AccordionGroup>
-
 <Accordion title="Parameters">
 - `job_id` Required. str of the job id to cancel
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and then in your environment variables (`ARYN_API_KEY` by default))).
-- `aryn_config`: An ArynConfig object (defined in [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY` and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your environment variables, and then in ~/.aryn/config.yaml).
-- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in ~/.aryn/config.yaml).
+- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
 - `async_cancel_url` url of the endpoint to submit the cancellation request to
-
 </Accordion>
-
-
 <Accordion title="Return Value">
-
-A `bool` which is true on sucess. Asynchronous jobs may only be sucesfully cancelled once. Once a job has been cancelled, partition_file_async_result calls using that job's id will return with a status of "no_such_job" soon after though not immediately.
-
+A `bool` which is True on success. Asynchronous jobs may only be successfully cancelled once. Once a job has been
+cancelled, any `partition_file_async_result` calls using that job's id will return with a status of "no_such_job" soon
+after though not immediately.
 </Accordion>
-
 <Accordion title="Example">
 ```python
 from aryn_sdk.partition import partition_file_async_submit, partition_file_async_cancel
@@ -358,7 +362,6 @@ job_id = partition_file_async_submit(
 partition_file_async_cancel(job_id)
 ```
 </Accordion>
-
 </AccordionGroup>
 
 ## partition_file_async_list
