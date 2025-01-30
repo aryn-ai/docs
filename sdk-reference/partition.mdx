@@ -280,9 +280,9 @@ Gets the results of an asynchronous partitioning job by `job_id`. Meant to be us
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
-and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
-environment variables, and then in ~/.aryn/config.yaml).
-- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
 verification.
 - `async_result_url` url of the endpoint to submit the get result request to
@@ -337,9 +337,9 @@ while True:
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
-and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
-environment variables, and then in ~/.aryn/config.yaml).
-- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
 verification.
 - `async_cancel_url` url of the endpoint to submit the cancellation request to
@@ -364,48 +364,41 @@ partition_file_async_cancel(job_id)
 </Accordion>
 </AccordionGroup>
 
+
+
+
 ## partition_file_async_list
-
-
 <AccordionGroup>
-
 <Accordion title="Parameters">
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and then in your environment variables (`ARYN_API_KEY` by default))).
-- `aryn_config`: An ArynConfig object (defined in [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY` and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your environment variables, and then in ~/.aryn/config.yaml).
-- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
 - `async_list_url` url of the endpoint to submit the list jobs request to
-
 </Accordion>
-
-
 <Accordion title="Return Value">
-
 A dict containing "jobs" which is a dict containing jobs with their job_id as their key and their value is a dict
 containing the keys "path" and "state".
-
 An example reponse body is shown below:
-
 ```json
 {
-    "jobs": {
-        "aryn:j-sc0v0lglkauo774pioflp4l": {
-            "path": "/v1/document/partition",
-            "state": "run"
-        },
-        "aryn:j-0eorfmvhaf9skaxm0sagrrl": {
-            "path": "/v1/document/partition",
-            "state": "run"
-        },
-        "aryn:j-b9xp7ny0eejvqvbazjhg8rn": {
-            "path": "/v1/document/partition",
-            "state": "run"
-        }
+    "aryn:j-sc0v0lglkauo774pioflp4l": {
+        "state": "run"
+    },
+    "aryn:j-b9xp7ny0eejvqvbazjhg8rn": {
+        "state": "run"
     }
 }
 ```
-
 </Accordion>
-
 <Accordion title="Example">
 ```python
 from aryn_sdk.partition import partition_file_async_list
@@ -413,5 +406,4 @@ from aryn_sdk.partition import partition_file_async_list
 l = partition_file_async_list()
 ```
 </Accordion>
-
 </AccordionGroup>
