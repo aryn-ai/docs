@@ -8,7 +8,7 @@ servers:
 paths:
   /v1/document/partition:
     post:
-      summary: 'Sync Partition Document'
+      summary: 'Partition Document'
       operationId: _sync_partition_document_v1
       security:
         - HTTPBearer: []
@@ -42,7 +42,7 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
   /v1/async/submit/document/partition:
     post:
-      summary: 'Partition Document Async Submit'
+      summary: 'Submit Document for Async Partitioning'
       operationId: _async_partition_document_submit_v1
       security:
         - HTTPBearer: []
@@ -55,12 +55,18 @@ paths:
               - type: string
               - type: 'null'
             title: User-Agent
+        - name: X-Aryn-Webhook
+          in: header
+          required: false
+          schema:
+            type: string
+            title: X-Aryn-Webhook
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Body__partition_pdf_async_v1_document_partition_post'
+              $ref: '#/components/schemas/Body__sync_partition_document_v1'
       responses:
         '200':
           description: Successful Response
