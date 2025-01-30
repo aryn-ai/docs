@@ -68,18 +68,34 @@ paths:
             schema:
               $ref: '#/components/schemas/Body__sync_partition_document_v1'
       responses:
-        '200':
+        '202':
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PartitionerResponse'
-        '422':
-          description: Validation Error
+                type: object
+                properties:
+                  job_id:
+                    type: string
+                    title: Job ID
+                    description: |
+                      The ID of the async job.
+                    examples:
+                      - "aryn:j-47gpd3604e5tz79z1jro5fc"
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    title: Detail
+                    description: |
+                      The detail of the error.
+                    examples:
+                      - "Not authenticated"
   /v1/async/result/{job_id}:
     get:
       summary: 'Get Async Job Status'
