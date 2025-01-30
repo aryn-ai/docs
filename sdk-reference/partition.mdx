@@ -266,53 +266,61 @@ while True:
 </AccordionGroup>
 
 
-## partition_file_result_async
-Used to get the result of an asynchronous partition call or check its status.
 
+
+## partition_file_async_result
+Gets the results of an asynchronous partitioning job by `job_id`. Meant to be used with `partition_file_async_submit`.
 <AccordionGroup>
-
 <Accordion title="Parameters">
 - `job_id` Required. str of the job id to cancel
-- `aryn_async_url` url of the endpoint to submit the cancellation request to
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (aryn-sdk will look for it in the aryn_config parameter (which by default looks in ~/.aryn/config.yaml and then in your environment variables (`ARYN_API_KEY` by default))).
-- `aryn_config`: An ArynConfig object (defined in [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY` and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your environment variables, and then in ~/.aryn/config.yaml).
-- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server. In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL verification.
-
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in ~/.aryn/config.yaml).
+- `ssl_verify` A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
+- `async_result_url` url of the endpoint to submit the get result request to
 </Accordion>
-
-
 <Accordion title="Return Value">
-Returns an `aryn_sdk.partition.partition.JobResult` which contains a `JobStatus` `status`, `int` `status_code`, and `dict` `result`. The
-return value's `result` member is otherwise indistinguishable from the return value of a call to `partition_file` using the same options
-with which this async call was made.
-
-
+A dict like the below containing "status" and "status_code". When "status" is "done", the returned dict also contains
+"result" which contains what would have been returned had `partition_file` been called directly. "status" can be
+"done", "pending", "error", or "no_such_job".<br />
+```json
+{
+  "status": "done",
+  "status_code": 200,
+  "result": ...
+}
+```
 </Accordion>
-
 <Accordion title="Example">
 ```python
 import time
-from aryn_sdk.partition import partition_file_submit_async, partition_file_result_async, JobStatus
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
 
 with open("my-favorite-pdf.pdf", "rb") as f:
-    job = partition_file_submit_async(
+    response = partition_file_async_submit(
         f,
         use_ocr=True,
         extract_table_structure=True,
     )
 
-job_id = job["job_id"]
+job_id = response["job_id"]
 
 # Poll for the results
-result = partition_file_result_async(job_id)
-while result.status == JobStatus.IN_PROGRESS:
+while True:
+    result = partition_file_async_result(job_id)
+    if result["status"] != "pending":
+        break
     time.sleep(5)
-    result = partition_file_result_async(job_id)
-
-print(result)
 ```
 </Accordion>
-
 </AccordionGroup>
 
 
