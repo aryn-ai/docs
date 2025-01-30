@@ -8,12 +8,46 @@ servers:
 paths:
   /v1/document/partition:
     post:
-      summary: 'Partition Document Async'
-      operationId: _partition_pdf_async_v1_document_partition_post
+      summary: 'Sync Partition Document'
+      operationId: _sync_partition_document_v1
       security:
         - HTTPBearer: []
       parameters:
-        - name: user-agent
+        - name: User-Agent
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: User-Agent
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body__sync_partition_document_v1'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/async/submit/document/partition:
+    post:
+      summary: 'Partition Document Async Submit'
+      operationId: _async_partition_document_submit_v1
+      security:
+        - HTTPBearer: []
+      parameters:
+        - name: User-Agent
           in: header
           required: false
           schema:
@@ -40,13 +74,116 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /v1/async/result/{job_id}:
+    get:
+      summary: 'Get Async Job Status'
+      operationId: _async_partition_document_status_v1
+      security:
+        - HTTPBearer: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Job ID
+        - name: User-Agent
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: User-Agent
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionerResponse'
+  /v1/async/cancel/{job_id}:
+    post:
+      summary: 'Cancel Async Job'
+      operationId: _async_partition_document_cancel_v1
+      security:
+        - HTTPBearer: []
+      parameters:
+        - name: job_id
+          in: path
+          required: true
+          schema:
+            type: string
+            title: Job ID
+        - name: User-Agent
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: User-Agent
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionerResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/async/list:
+    get:
+      summary: 'List Async Jobs'
+      operationId: _async_partition_document_list_v1
+      security:
+        - HTTPBearer: []
+      parameters:
+        - name: User-Agent
+          in: header
+          required: false
+          schema:
+            anyOf:
+              - type: string
+              - type: 'null'
+            title: User-Agent
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  jobs:
+                    type: object
+                    description: A map of job ids to job details.
+                    properties:
+                      path:
+                        type: string
+                        description: The path of the Aryn API the async job was submitted to.
+                      state:
+                        type: string
+                        description: The state of the async job.
+                        enum:
+                          - "done"
+                          - "abort"
+                          - "cancel"
+                          - "run"
+                          - "queue"
+                required:
+                  - jobs
 components:
   schemas:
-    Body__partition_pdf_async_v1_document_partition_post:
+    Body__sync_partition_document_v1:
       properties:
         file:
           type: string
-          format: base64
+          format: binary
           title: file
         options:
           type: object
@@ -64,17 +201,17 @@ components:
                     maxItems: 2
               title: Selected Pages
               description: |
-                An array containing single integers (e.g., 1) or arrays with exactly two integers representing a range (e.g., [1, 10]).
+                An array containing single integers (e.g., 1) and/or arrays with exactly two integers representing a range (e.g., [1, 10]).
             extract_images:
               type: boolean
               title: Extract Images
               description: |
-                A boolean value indicating whether to extract images from the document.
+                A boolean value indicating whether to crop images detected in the document and return them in ppm format converted to base64 within the binary_representation of returned image elements.
             extract_table_structure:
               type: boolean
               title: Extract Table Structure
               description: |
-                A boolean value indicating whether to extract table structure from the document.
+                A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.
             use_ocr:
               type: boolean
               title: Use OCR
@@ -131,7 +268,7 @@ components:
       type: object
       required:
         - file
-      title: Body__partition_pdf_async_v1_document_partition_post
+      title: Body__partition_document_sync_v1
     Element:
       properties:
         type:
