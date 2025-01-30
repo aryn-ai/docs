@@ -144,17 +144,28 @@ paths:
             title: User-Agent
       responses:
         '200':
-          description: Successful Response
+          description: Job Cancelled Successfully
+        '404':
+          description: Job already canceled or not found
+        '403':
+          description: Forbidden
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PartitionerResponse'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Not authenticated"
+          '500':
+            description: Internal Server Error
+            content:
+              text/plain:
+                schema:
+                  type: string
+                  examples:
+                    - "Internal Server Error"
   /v1/async/list:
     get:
       summary: 'List Async Jobs'
