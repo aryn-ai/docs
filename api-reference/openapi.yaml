@@ -40,6 +40,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Not authenticated"
   /v1/async/submit/document/partition:
     post:
       summary: 'Submit Document for Async Partitioning'
@@ -215,6 +226,25 @@ paths:
                           state: "done"
                 required:
                   - jobs
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Not authenticated"
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+                examples:
+                  - "Internal Server Error"
 components:
   schemas:
     Body__sync_partition_document_v1:
