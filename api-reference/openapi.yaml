@@ -40,6 +40,17 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+        '400':
+          description: No Input File Provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "No input file provided."
         '403':
           description: Forbidden
           content:
@@ -51,6 +62,14 @@ paths:
                     type: string
                     examples:
                       - "Not authenticated"
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+                examples:
+                  - "Internal Server Error"
   /v1/async/submit/document/partition:
     post:
       summary: 'Submit Document for Async Partitioning'
@@ -416,11 +435,16 @@ components:
             type: string
           type: array
           title: Status
+        status_code:
+          type: integer
+          title: Status Code
         error:
           anyOf:
             - type: string
             - type: 'null'
           title: Error
+          description: |
+            The error message if the partitioning is not successful.
         elements:
           anyOf:
             - items:
@@ -436,7 +460,7 @@ components:
       type: object
       required:
         - status
-        - error
+        - status_code
         - elements
         - markdown
       title: PartitionerResponse
