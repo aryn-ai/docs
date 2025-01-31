@@ -158,14 +158,14 @@ paths:
                     type: string
                     examples:
                       - "Not authenticated"
-          '500':
-            description: Internal Server Error
-            content:
-              text/plain:
-                schema:
-                  type: string
-                  examples:
-                    - "Internal Server Error"
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+                examples:
+                  - "Internal Server Error"
   /v1/async/list:
     get:
       summary: 'List Async Jobs'
