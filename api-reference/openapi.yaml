@@ -262,14 +262,10 @@ paths:
                             - "cancel"
                             - "run"
                             - "queue"
-                examples:
-                  - "jobs":
-                    - "aryn:j-47gpd3604e5tz79z1jro5fc":
-                        path: "/v1/document/partition"
-                        state: "done"
-                      "aryn:j-rw2id97rqzd8rbs9l7ef13z":
-                        path: "/v1/document/partition"
-                        state: "done"
+                    examples:
+                        - "aryn:j-47gpd3604e5tz79z1jro5fc":
+                            path: "/v1/document/partition"
+                            state: "done"
                 required:
                   - jobs
         '403':
