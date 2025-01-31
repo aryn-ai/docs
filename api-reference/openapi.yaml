@@ -132,6 +132,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartitionerResponse'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Not authenticated"
+        '404':
+          description: |
+            Job not found. This can happen if the job was already canceled, if the job ID is invalid, or it has been
+            long enough that the job has been removed from the system.
+        '500':
+          description: Internal Server Error
+          content:
+            text/plain:
+              schema:
+                type: string
+                examples:
+                  - "Internal Server Error"
   /v1/async/cancel/{job_id}:
     post:
       summary: 'Cancel Async Job'
