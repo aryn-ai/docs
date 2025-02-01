@@ -56,7 +56,7 @@ from aryn_sdk.partition import partition_file
 with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
-        aryn_api_key="MY-API-KEY",
+        aryn_api_key="MY-ARYN-API-KEY",
         use_ocr=True,
         extract_table_structure=True,
         extract_images=True
@@ -132,7 +132,7 @@ from aryn_sdk.partition import partition_file, draw_with_boxes
 with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
-        aryn_api_key="MY-ARYN-TOKEN",
+        aryn_api_key="MY-ARYN-API-KEY",
         use_ocr=True,
         extract_table_structure=True,
         extract_images=True
@@ -211,7 +211,7 @@ from aryn_sdk.partition import partition_file, tables_to_pandas
 with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
-        aryn_api_key="MY-ARYN-TOKEN",
+        aryn_api_key="MY-ARYN-API-KEY",
         use_ocr=True,
         extract_table_structure=True,
         extract_images=True
@@ -220,4 +220,190 @@ elts_and_dataframes = tables_to_pandas(data)
 ```
 </Accordion>
 
+</AccordionGroup>
+
+
+## partition_file_async_submit
+Submit a document for asynchronous partitioning and get its `job_id`. Meant to be used with `partition_file_async_result`.
+<AccordionGroup>
+<Accordion title="Parameters">
+- Note `partition_file_async_submit` accepts all parameters `partition_file` accepts in the same order and in addition
+includes the parameters below:
+- `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done":
+[{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
+- `async_submit_url`: str. If `async_submit_url` is specified, `partition_file_async_submit` will submit async requests
+to this endpoint. When `async_submit_url` is not specified, `partition_file_async_submit` will intrepret the specified
+`docparse_url` or `aps_url` parameter as the synchronous endpoint and translate it to the proper asynchronous one. If
+no urls are specified, then it will use the default async Aryn endpoint.
+</Accordion>
+
+<Accordion title="Return Value">
+A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the job_id of the submitted request.
+</Accordion>
+
+<Accordion title="Example">
+```python
+import time
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    response = partition_file_async_submit(
+        f,
+        use_ocr=True,
+        extract_table_structure=True,
+    )
+
+job_id = response["job_id"]
+
+# Poll for the results
+while True:
+    result = partition_file_async_result(job_id)
+    if result["status"] != "pending":
+        break
+    time.sleep(5)
+```
+</Accordion>
+</AccordionGroup>
+
+
+
+
+## partition_file_async_result
+Gets the results of an asynchronous partitioning job by `job_id`. Meant to be used with `partition_file_async_submit`.
+<AccordionGroup>
+<Accordion title="Parameters">
+- `job_id` Required. str of the job id to cancel
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
+- `async_result_url` url of the endpoint to submit the get result request to
+</Accordion>
+<Accordion title="Return Value">
+A dict like the below containing "status" and "status_code". When "status" is "done", the returned dict also contains
+"result" which contains what would have been returned had `partition_file` been called directly. "status" can be
+"done", "pending", "error", or "no_such_job".<br />
+```json
+{
+  "status": "done",
+  "status_code": 200,
+  "result": ...
+}
+```
+</Accordion>
+<Accordion title="Example">
+```python
+import time
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    response = partition_file_async_submit(
+        f,
+        use_ocr=True,
+        extract_table_structure=True,
+    )
+
+job_id = response["job_id"]
+
+# Poll for the results
+while True:
+    result = partition_file_async_result(job_id)
+    if result["status"] != "pending":
+        break
+    time.sleep(5)
+```
+</Accordion>
+</AccordionGroup>
+
+
+
+
+## partition_file_async_cancel
+<AccordionGroup>
+<Accordion title="Parameters">
+- `job_id` Required. str of the job id to cancel
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
+- `async_cancel_url` url of the endpoint to submit the cancellation request to
+</Accordion>
+<Accordion title="Return Value">
+A `bool` which is True on success. Asynchronous jobs may only be successfully cancelled once. Once a job has been
+cancelled, any `partition_file_async_result` calls using that job's id will return with a status of "no_such_job" soon
+after though not immediately.
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_cancel
+job_id = partition_file_async_submit(
+            "path/to/file.pdf",
+            use_ocr=True,
+            extract_table_structure=True,
+            extract_images=True,
+        )["job_id"]
+
+partition_file_async_cancel(job_id)
+```
+</Accordion>
+</AccordionGroup>
+
+
+
+
+## partition_file_async_list
+<AccordionGroup>
+<Accordion title="Parameters">
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
+`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
+(`ARYN_API_KEY` by default))).
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in `~/.aryn/config.yaml`).
+- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+In Databricks, set this to `False` to fix SSL incompatibilities. ssl_verify is `True` by default, enforcing SSL
+verification.
+- `async_list_url` url of the endpoint to submit the list jobs request to
+</Accordion>
+<Accordion title="Return Value">
+A dict containing "jobs" which is a dict containing jobs with their job_id as their key and their value is a dict
+containing the keys "path" and "state".
+An example reponse body is shown below:
+```json
+{
+    "aryn:j-sc0v0lglkauo774pioflp4l": {
+        "state": "run"
+    },
+    "aryn:j-b9xp7ny0eejvqvbazjhg8rn": {
+        "state": "run"
+    }
+}
+```
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file_async_list
+
+l = partition_file_async_list()
+```
+</Accordion>
 </AccordionGroup>
