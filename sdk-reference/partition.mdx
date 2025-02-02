@@ -231,10 +231,6 @@ Submit a document for asynchronous partitioning and get its `job_id`. Meant to b
 includes the parameters below:
 - `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done":
 [{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
-- `async_submit_url`: str. If `async_submit_url` is specified, `partition_file_async_submit` will submit async requests
-to this endpoint. When `async_submit_url` is not specified, `partition_file_async_submit` will intrepret the specified
-`docparse_url` or `aps_url` parameter as the synchronous endpoint and translate it to the proper asynchronous one. If
-no urls are specified, then it will use the default async Aryn endpoint.
 </Accordion>
 
 <Accordion title="Return Value">
@@ -284,7 +280,6 @@ and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look 
 environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
-- `async_result_url` url of the endpoint to submit the get result request to
 </Accordion>
 <Accordion title="Return Value">
 A dict like the below containing "status" and "status_code". When "status" is "done", the returned dict also contains
@@ -340,7 +335,6 @@ and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look 
 environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
-- `async_cancel_url` url of the endpoint to submit the cancellation request to
 </Accordion>
 <Accordion title="Return Value">
 A `bool` which is True on success. Asynchronous jobs may only be successfully cancelled once. Once a job has been
@@ -379,7 +373,6 @@ and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look 
 environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
-- `async_list_url` url of the endpoint to submit the list jobs request to
 </Accordion>
 <Accordion title="Return Value">
 A dict containing "jobs" which is a dict containing jobs with their job_id as their key and their value is a dict
