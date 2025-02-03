@@ -453,9 +453,7 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A dict containing "jobs" which is a dict containing jobs with their job_id as their key and their value is a dict
-containing the keys "path" and "state".
-An example reponse body is shown below:
+A dict like the one below which maps job_ids to a dict containing details of the respective job.
 ```json
 {
     "aryn:j-sc0v0lglkauo774pioflp4l": {
