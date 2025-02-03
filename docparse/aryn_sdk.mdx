@@ -101,7 +101,13 @@ The full chunking options are documented [here](/docparse/chunking_strategies).
 
 ## Partitioning asynchronously
 
-You can submit a job to the async DocParse API using aryn-sdk and the pattern below:
+`partition_file_async_submit` is a function that submits a file partitioning job to Aryn and returns with its `job_id`.
+You can use the returned `job_id` to keep track of your request to partition the file. Poll for the result using
+another function, `partition_file_async_result`, (it returns a dict with a “status” key that indicates whether the job
+is “done”, “pending” or in “error” state). Once the “status” is “done” the dict returned by
+`partition_file_async_result` will have a “result” key with the actual results. The following code snippet is an
+example of how you can use these
+functions:
 
 ```python
 import time
@@ -143,10 +149,19 @@ results = [None] * len(files)
 for i, job_id in enumerate(job_ids):
     while True:
         result = partition_file_async_result(job_id)
+
         if result["status"] != "pending":
             break
+
         time.sleep(5)
-    results[i] = result
+
+    if result["status"] == "done":
+        results[i] = result
+
+## print the results
+## will be None if job failed
+for result in results:
+    print(result)
 ```
 
 Optionally, you can also set a webhook for Aryn's services to call when your job is completed:
