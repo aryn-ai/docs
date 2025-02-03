@@ -372,12 +372,12 @@ If there is an error with partitioning itself rather than scheduling the work, t
   "result": ...
 }
 ```
-| `status` | `status_code` | `result` present? |
-| -------- | ------------- | ----------------- |
-| "done" | 200 | yes |
-| "pending" | 202 | no |
-| "no_such_job" | 404 | no |
-| "error" | all others | no |
+| `status` | `status_code` | `result` |
+| -------- | ------------- | -------- |
+| "done" | 200 | matches what would have been returned had `partition_file` been called directly |
+| "pending" | 202 | not present |
+| "no_such_job" | 404 | not present |
+| "error" | all others | not present |
 </Accordion>
 <Accordion title="Example">
 ```python
