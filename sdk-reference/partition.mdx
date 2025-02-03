@@ -346,17 +346,17 @@ while True:
 Gets the results of an asynchronous partitioning job by `job_id`. Meant to be used with `partition_file_async_submit`.
 <AccordionGroup>
 <Accordion title="Parameters">
-- `job_id` Required. str of the job id to cancel
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+- `job_id`: Required. A str of the job id to poll and attempt to get the result for.
+- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
-an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
 and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in `~/.aryn/config.yaml`).
-- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+- `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
@@ -409,17 +409,17 @@ while True:
 ## partition_file_async_cancel
 <AccordionGroup>
 <Accordion title="Parameters">
-- `job_id` Required. str of the job id to cancel
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+- `job_id`: Required. A str of the job id to cancel
+- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
-an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
 and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in `~/.aryn/config.yaml`).
-- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+- `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
@@ -447,16 +447,16 @@ partition_file_async_cancel(job_id)
 ## partition_file_async_list
 <AccordionGroup>
 <Accordion title="Parameters">
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
+- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
-an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
 and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in `~/.aryn/config.yaml`).
-- `ssl_verify` A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+- `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
