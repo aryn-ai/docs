@@ -102,8 +102,8 @@ The full chunking options are documented [here](/docparse/chunking_strategies).
 ## Partitioning asynchronously
 
 The `partition_file_async_submit` function submits a file partitioning job to Aryn and returns with it's `job_id`. You
-can use the returned `job_id` to keep track of your request to partition the file. You can poll for the result using
-the `partition_file_async_result` function (it returns a dict with a “status” key that indicates whether the job is
+can use the returned `job_id` to keep track of your request to partition the file. Poll for the result using another
+function, `partition_file_async_result`, (it returns a dict with a “status” key that indicates whether the job is
 “done”, “pending” or in “error” state). Once the “status” is “done” the dict returned by `partition_file_async_result`
 will have a “result” key with the actual results. The following code snippet is an example of how you can use these
 functions:
