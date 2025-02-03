@@ -309,7 +309,7 @@ environment variables, and then in ~/.aryn/config.yaml).
 <Accordion title="Return Value">
 A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the `job_id` of the submitted request.
 
-If no Aryn API key is provided, `partition_file_async_submit` will raise an `requests.exceptions.HTTPError`.
+If no Aryn API key is provided, `partition_file_async_submit` will raise an `requests.exceptions.HTTPError`:
 ```
 requests.exceptions.HTTPError: Error: status_code: 403, reason: {"detail":"Not authenticated"}
 ```
