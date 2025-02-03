@@ -105,11 +105,11 @@ paths:
               schema:
                 type: object
                 properties:
-                  job_id:
+                  task_id:
                     type: string
-                    title: Job ID
+                    title: Task ID
                     description: |
-                      The ID of the async job.
+                      The ID of the async task.
                     examples:
                       - "aryn:j-47gpd3604e5tz79z1jro5fc"
         '403':
@@ -123,19 +123,19 @@ paths:
                     type: string
                     examples:
                       - "Not authenticated"
-  /v1/async/result/{job_id}:
+  /v1/async/result/{task_id}:
     get:
-      summary: 'Get Async Job Status'
+      summary: 'Get Async Task Status'
       operationId: _async_partition_document_status_v1
       security:
         - HTTPBearer: []
       parameters:
-        - name: job_id
+        - name: task_id
           in: path
           required: true
           schema:
             type: string
-            title: Job ID
+            title: Task ID
         - name: User-Agent
           in: header
           required: false
@@ -164,8 +164,8 @@ paths:
                       - "Not authenticated"
         '404':
           description: |
-            Job not found. This can happen if the job was already canceled, if the job ID is invalid, or it has been
-            long enough that the job has been removed from the system.
+            Task not found. This can happen if the task was already canceled, if the task ID is invalid, or it has been
+            long enough that the task has been removed from the system.
         '500':
           description: Internal Server Error
           content:
@@ -174,19 +174,19 @@ paths:
                 type: string
                 examples:
                   - "Internal Server Error"
-  /v1/async/cancel/{job_id}:
+  /v1/async/cancel/{task_id}:
     post:
-      summary: 'Cancel Async Job'
+      summary: 'Cancel Async Task'
       operationId: _async_partition_document_cancel_v1
       security:
         - HTTPBearer: []
       parameters:
-        - name: job_id
+        - name: task_id
           in: path
           required: true
           schema:
             type: string
-            title: Job ID
+            title: Task ID
         - name: User-Agent
           in: header
           required: false
@@ -197,9 +197,9 @@ paths:
             title: User-Agent
       responses:
         '200':
-          description: Job Cancelled Successfully
+          description: Task Cancelled Successfully
         '404':
-          description: Job already canceled or not found
+          description: Task already canceled or not found
         '403':
           description: Forbidden
           content:
@@ -221,7 +221,7 @@ paths:
                   - "Internal Server Error"
   /v1/async/list:
     get:
-      summary: 'List Async Jobs'
+      summary: 'List Async Tasks'
       operationId: _async_partition_document_list_v1
       security:
         - HTTPBearer: []
@@ -242,20 +242,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  jobs:
+                  tasks:
                     type: object
-                    description: A map of job ids to job details.
+                    description: A map of task ids to task details.
                     additionalProperties:
                       type: object
                       properties:
                         path:
                           type: string
-                          description: The path of the Aryn API the async job was submitted to.
+                          description: The path of the Aryn API the async task was submitted to.
                           examples:
                             - "/v1/document/partition"
                         state:
                           type: string
-                          description: The state of the async job.
+                          description: The state of the async task.
                           enum:
                             - "done"
                             - "abort"
@@ -267,7 +267,7 @@ paths:
                             path: "/v1/document/partition"
                             state: "done"
                 required:
-                  - jobs
+                  - tasks
         '403':
           description: Forbidden
           content:
