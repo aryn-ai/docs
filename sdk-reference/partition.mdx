@@ -364,8 +364,7 @@ A dict like the below containing "status" and "status_code". When "status" is "d
 "result" which contains what would have been returned had `partition_file` been called directly. "status" can be
 "done", "pending", "error", or "no_such_job".<br />
 If there is an error with partitioning itself rather than scheduling the work, then the "status" will be "done" and the
-"result" will contain an "error" field. Unlike `partition_file`, `partition_file_async_result` does
-not raise a `PartitionError` on failure to partition.
+"result" will contain an "error" field.
 ```json
 {
   "status": "done",
