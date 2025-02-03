@@ -58,6 +58,11 @@
       "name": "Slack Community",
       "icon": "slack",
       "url": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
+    },
+    {
+      "name": "Sycamore - Document ETL",
+      "icon": "bars-staggered",
+      "url": "https://github.com/aryn-ai/sycamore"
     }
   ],
   "navigation": [

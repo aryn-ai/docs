@@ -2,7 +2,7 @@
 
 This is the documentation for Aryn, and contains the API and SDK based docs for each of them. It was created to host the API docs for Aryn in a public repository that both can receive contributions and ensures internal code is secure.
 
-For the Sycamore documentation code: please refer to https://github.com/aryn-ai/sycamore/tree/main/docs.
+For Sycamore documentation, visit: https://sycamore.readthedocs.io/en/stable/
 
 ## Contributions
 
