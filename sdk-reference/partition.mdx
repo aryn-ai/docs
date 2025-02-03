@@ -416,8 +416,7 @@ ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
 A `bool` which is True on success. Asynchronous jobs may only be successfully cancelled once. Once a job has been
-cancelled, any `partition_file_async_result` calls using that job's id will return with a status of "no_such_job" soon
-after though not immediately.
+cancelled, any `partition_file_async_result` calls using that job's id will return with a status of "no_such_job".
 </Accordion>
 <Accordion title="Example">
 ```python
