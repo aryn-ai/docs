@@ -223,6 +223,8 @@ elts_and_dataframes = tables_to_pandas(data)
 </AccordionGroup>
 
 
+
+
 ## partition_file_async_submit
 Submit a document for asynchronous partitioning and get its `job_id`. Meant to be used with `partition_file_async_result`.
 <AccordionGroup>
@@ -266,8 +268,6 @@ option is present, and default options are chosen when `chunking_options` is spe
         `section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the
         section-header to the start of this new chunk and continues. Merges elements on different pages, unless
         `merge_across_pages` is set to `False`.
-
-
         - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the
         chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so
         would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start
@@ -307,7 +307,12 @@ environment variables, and then in ~/.aryn/config.yaml).
 </Accordion>
 
 <Accordion title="Return Value">
-A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the job_id of the submitted request.
+A dict like `{"job_id": "aryn:j-yjchiesfqlish1ye58cco41"}` containing the `job_id` of the submitted request.
+
+If no Aryn API key is provided, `partition_file_async_submit` will raise an `requests.exceptions.HTTPError`.
+```
+requests.exceptions.HTTPError: Error: status_code: 403, reason: {"detail":"Not authenticated"}
+```
 </Accordion>
 
 <Accordion title="Example">
