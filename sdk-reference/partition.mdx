@@ -347,7 +347,7 @@ Gets the results of an asynchronous partitioning job by `job_id`. Meant to be us
 <AccordionGroup>
 <Accordion title="Parameters">
 - `job_id`: Required. A str of the job id to poll and attempt to get the result for.
-- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
@@ -410,7 +410,7 @@ while True:
 <AccordionGroup>
 <Accordion title="Parameters">
 - `job_id`: Required. A str of the job id to cancel
-- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
@@ -447,7 +447,7 @@ partition_file_async_cancel(job_id)
 ## partition_file_async_list
 <AccordionGroup>
 <Accordion title="Parameters">
-- `aryn_api_key`: A str containing your Aryn API key. You can get one for free at
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
 (`ARYN_API_KEY` by default))).
