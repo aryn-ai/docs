@@ -147,10 +147,19 @@ results = [None] * len(files)
 for i, job_id in enumerate(job_ids):
     while True:
         result = partition_file_async_result(job_id)
+
         if result["status"] != "pending":
             break
+
         time.sleep(5)
-    results[i] = result
+
+    if result["status"] == "done":
+        results[i] = result
+
+## print the results
+## will be None if job failed
+for result in results:
+    print(result)
 ```
 
 Optionally, you can also set a webhook for Aryn's services to call when your job is completed:
