@@ -1,0 +1,142 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "Aryn Documentation",
+  "description": "Aryn is a document intelligence platform that helps you extract and understand structured data from unstructured documents.",
+  "colors": {
+    "primary": "#417586",
+    "light": "#417586",
+    "dark": "#417586"
+  },
+  "favicon": "aryn_logo.png",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "aryn_playground_cloud_console"
+            ]
+          },
+          {
+            "group": "DocParse",
+            "pages": [
+              "docparse/aryn_sdk",
+              "docparse/output_structure",
+              "docparse/chunking_strategies",
+              "docparse/processing_options",
+              "docparse/formats_supported",
+              "docparse/output_label_options_walkthrough",
+              "docparse/output_walkthrough",
+              "docparse/tables",
+              "docparse/images",
+              "docparse/chunking_tutorial"
+            ]
+          },
+          {
+            "group": "DocPrep",
+            "pages": [
+              "docprep/getting_started"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API Documentation",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Endpoints",
+            "pages": [
+              "api-reference/endpoint/partition",
+              "api-reference/endpoint/async-partition-submit",
+              "api-reference/endpoint/async-partition-result",
+              "api-reference/endpoint/async-partition-cancel",
+              "api-reference/endpoint/async-partition-list"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Python SDK Reference",
+        "groups": [
+          {
+            "group": "Aryn SDK Reference",
+            "pages": [
+              "sdk-reference/partition"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Recipes",
+        "groups": [
+          {
+            "group": "Recipes",
+            "pages": [
+              "example-code/introduction"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Aryn Blog",
+          "href": "https://www.aryn.ai/blog",
+          "icon": "newspaper"
+        },
+        {
+          "anchor": "Slack Community",
+          "href": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg",
+          "icon": "slack"
+        },
+        {
+          "anchor": "Sycamore - Document ETL",
+          "href": "https://github.com/aryn-ai/sycamore",
+          "icon": "bars-staggered"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/aryn_logo_full.png",
+    "dark": "/logo/aryn_logo_full.png"
+  },
+  "background": {
+    "decoration": "windows"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Get Support",
+        "href": "mailto:info@aryn.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Website",
+      "href": "https://www.aryn.ai/"
+    }
+  },
+  "seo": {
+    "indexing": "all"
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/ArynInc",
+      "github": "https://github.com/aryn-ai",
+      "linkedin": "https://www.linkedin.com/company/aryn-ai"
+    }
+  }
+}
