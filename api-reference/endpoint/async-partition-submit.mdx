@@ -7,14 +7,14 @@ This is the Aryn DocParse API for submitting a document to be partitioned (and o
 when its done.
 
 This takes all the same parameters as the syncronous partitioning endpoint and in addition accepts a webhook url in the
-optional header `X-Aryn-Webhook`. When the job stops running, Aryn will POST to the provided webhook url with a body
+optional header `X-Aryn-Webhook`. When the task stops running, Aryn will POST to the provided webhook url with a body
 like the one below:
 
 ```json
 {
   "done": [
     {
-      "job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"
+      "task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"
     }
   ]
 }

@@ -226,7 +226,7 @@ elts_and_dataframes = tables_to_pandas(data)
 
 
 ## partition_file_async_submit
-Submit a document for asynchronous partitioning and get its `job_id`. Meant to be used with `partition_file_async_result`.
+Submit a document for asynchronous partitioning and get its `task_id`. Meant to be used with `partition_file_async_result`.
 <AccordionGroup>
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object
@@ -302,12 +302,12 @@ default))).
 an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
-- `webhook_url`: a str url for Aryn to visit when the async job has stopped. POSTs a body like this: `{"done":
-[{"job_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
+- `webhook_url`: a str url for Aryn to visit when the async task has stopped. POSTs a body like this: `{"done":
+[{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
 </Accordion>
 
 <Accordion title="Return Value">
-A dict containing the `job_id` of the submitted request.
+A dict containing the `task_id` of the submitted request.
 
 If no Aryn API key is provided, `partition_file_async_submit` will raise an `requests.exceptions.HTTPError`:
 ```
@@ -327,11 +327,11 @@ with open("my-favorite-pdf.pdf", "rb") as f:
         extract_table_structure=True,
     )
 
-job_id = response["job_id"]
+task_id = response["task_id"]
 
 # Poll for the results
 while True:
-    result = partition_file_async_result(job_id)
+    result = partition_file_async_result(task_id)
     if result["status"] != "pending":
         break
     time.sleep(5)
@@ -343,10 +343,10 @@ while True:
 
 
 ## partition_file_async_result
-Gets the results of an asynchronous partitioning job by `job_id`. Meant to be used with `partition_file_async_submit`.
+Gets the results of an asynchronous partitioning task by `task_id`. Meant to be used with `partition_file_async_submit`.
 <AccordionGroup>
 <Accordion title="Parameters">
-- `job_id`: Required. A str of the job id to poll and attempt to get the result for.
+- `task_id`: Required. A str of the task id to poll and attempt to get the result for.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
@@ -362,7 +362,7 @@ ssl_verify is `True` by default, enforcing SSL verification.
 <Accordion title="Return Value">
 A dict like the one in the example below containing "status" and "status_code". When "status" is "done", the returned
 dict also contains "result" which contains what would have been returned had `partition_file` been called directly.
-"status" can be "done", "pending", "error", or "no_such_job".<br />
+"status" can be "done", "pending", "error", or "no_such_task".<br />
 If there is an error with partitioning itself rather than scheduling the work, then the "status" will be "done" and the
 "result" will contain an "error" field.
 ```json
@@ -376,7 +376,7 @@ If there is an error with partitioning itself rather than scheduling the work, t
 | -------- | ------------- | -------- |
 | "done" | 200 | matches what would have been returned had `partition_file` been called directly |
 | "pending" | 202 | not present |
-| "no_such_job" | 404 | not present |
+| "no_such_task" | 404 | not present |
 | "error" | all others | not present |
 </Accordion>
 <Accordion title="Example">
@@ -391,11 +391,11 @@ with open("my-favorite-pdf.pdf", "rb") as f:
         extract_table_structure=True,
     )
 
-job_id = response["job_id"]
+task_id = response["task_id"]
 
 # Poll for the results
 while True:
-    result = partition_file_async_result(job_id)
+    result = partition_file_async_result(task_id)
     if result["status"] != "pending":
         break
     time.sleep(5)
@@ -409,7 +409,7 @@ while True:
 ## partition_file_async_cancel
 <AccordionGroup>
 <Accordion title="Parameters">
-- `job_id`: Required. A str of the job id to cancel
+- `task_id`: Required. A str of the task id to cancel
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
 [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
 `aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
@@ -423,20 +423,20 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A `bool` which is True on success. Asynchronous jobs may only be successfully cancelled once. Once a job has been
-cancelled, any `partition_file_async_result` calls using that job's id will return with a status of "no_such_job".
+A `bool` which is True on success. Asynchronous tasks may only be successfully cancelled once. Once a task has been
+cancelled, any `partition_file_async_result` calls using that task's id will return with a status of "no_such_task".
 </Accordion>
 <Accordion title="Example">
 ```python
 from aryn_sdk.partition import partition_file_async_submit, partition_file_async_cancel
-job_id = partition_file_async_submit(
+task_id = partition_file_async_submit(
             "path/to/file.pdf",
             use_ocr=True,
             extract_table_structure=True,
             extract_images=True,
-        )["job_id"]
+        )["task_id"]
 
-partition_file_async_cancel(job_id)
+partition_file_async_cancel(task_id)
 ```
 </Accordion>
 </AccordionGroup>
@@ -460,13 +460,13 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A dict like the one below which maps job_ids to a dict containing details of the respective job.
+A dict like the one below which maps task_ids to a dict containing details of the respective task.
 ```json
 {
-    "aryn:j-sc0v0lglkauo774pioflp4l": {
+    "aryn:t-sc0v0lglkauo774pioflp4l": {
         "state": "run"
     },
-    "aryn:j-b9xp7ny0eejvqvbazjhg8rn": {
+    "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
         "state": "run"
     }
 }
