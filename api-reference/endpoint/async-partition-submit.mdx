@@ -3,7 +3,7 @@ title: 'Async Partition Submit'
 openapi: 'post /v1/async/submit/document/partition'
 ---
 This is the Aryn DocParse API for submitting a document to be partitioned (and optionally chunked) asynchronously. Use
-[the async partition result API](async-partition-result) to poll the asynchronous partitioning task and get its result
+[the async partition result API](./async-partition-result) to poll the asynchronous partitioning job and get its result
 when its done.
 
 This takes all the same parameters as the syncronous partitioning endpoint and in addition accepts a webhook url in the
