@@ -303,7 +303,7 @@ an api key. If aryn_api_key is set it will override this. The default ArynConfig
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
 - `webhook_url`: a str url for Aryn to visit when the async task has stopped. POSTs a body like this: `{"done":
-[{"task_id": "aryn:j-47gpd3604e5tz79z1jro5fc"}]}`
+[{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
 </Accordion>
 
 <Accordion title="Return Value">
@@ -463,10 +463,10 @@ ssl_verify is `True` by default, enforcing SSL verification.
 A dict like the one below which maps task_ids to a dict containing details of the respective task.
 ```json
 {
-    "aryn:j-sc0v0lglkauo774pioflp4l": {
+    "aryn:t-sc0v0lglkauo774pioflp4l": {
         "state": "run"
     },
-    "aryn:j-b9xp7ny0eejvqvbazjhg8rn": {
+    "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
         "state": "run"
     }
 }

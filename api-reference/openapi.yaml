@@ -111,7 +111,7 @@ paths:
                     description: |
                       The ID of the async task.
                     examples:
-                      - "aryn:j-47gpd3604e5tz79z1jro5fc"
+                      - "aryn:t-47gpd3604e5tz79z1jro5fc"
         '403':
           description: Forbidden
           content:
@@ -263,7 +263,7 @@ paths:
                             - "run"
                             - "queue"
                     examples:
-                        - "aryn:j-47gpd3604e5tz79z1jro5fc":
+                        - "aryn:t-47gpd3604e5tz79z1jro5fc":
                             path: "/v1/document/partition"
                             state: "done"
                 required:
