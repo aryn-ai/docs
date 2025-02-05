@@ -144,6 +144,14 @@ paths:
               - type: string
               - type: 'null'
             title: User-Agent
+        - name: path_filter
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - /v1/document/partition
+            title: Path Filter
       responses:
         '200':
           description: Successful Response
@@ -195,6 +203,14 @@ paths:
               - type: string
               - type: 'null'
             title: User-Agent
+        - name: path_filter
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - /v1/document/partition
+            title: Path Filter
       responses:
         '200':
           description: Task Cancelled Successfully
@@ -234,6 +250,14 @@ paths:
               - type: string
               - type: 'null'
             title: User-Agent
+        - name: path_filter
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - /v1/document/partition
+            title: Path Filter
       responses:
         '200':
           description: Successful Response
