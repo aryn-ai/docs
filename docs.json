@@ -92,6 +92,11 @@
     "global": {
       "anchors": [
         {
+          "anchor": "Status Page",
+          "href": "https://aryn.instatus.com/",
+          "icon": "signal"
+        },
+        {
           "anchor": "Aryn Blog",
           "href": "https://www.aryn.ai/blog",
           "icon": "newspaper"
