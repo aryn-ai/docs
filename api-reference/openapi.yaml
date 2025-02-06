@@ -150,7 +150,7 @@ paths:
           schema:
             type: string
             enum:
-              - /v1/document/partition
+              - ^/v1/document/partition$
             title: Path Filter
       responses:
         '200':
@@ -209,7 +209,7 @@ paths:
           schema:
             type: string
             enum:
-              - /v1/document/partition
+              - ^/v1/document/partition$
             title: Path Filter
       responses:
         '200':
@@ -256,7 +256,7 @@ paths:
           schema:
             type: string
             enum:
-              - /v1/document/partition
+              - ^/v1/document/partition$
             title: Path Filter
       responses:
         '200':
