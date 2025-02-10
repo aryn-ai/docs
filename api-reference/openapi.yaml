@@ -351,6 +351,17 @@ components:
               title: Use OCR
               description: |
                 A boolean value indicating whether to use OCR or not on the document.
+            ocr_images:
+              type: boolean
+              title: OCR Images
+              description: |
+                A boolean value indicating whether to OCR images in the document.
+            ocr_language:
+              type: string
+              enum: ['abaza', 'albanian', 'angika', 'avar', 'bhojpuri', 'bihari', 'chinese', 'chinese_traditional', 'croatian', 'danish', 'dargwa', 'dutch', 'english', 'estonian', 'french', 'german', 'hungarian', 'icelandic', 'ingush', 'irish', 'italian', 'kabardian', 'korean', 'kurdish', 'lak', 'latvian', 'lithuanian', 'magahi', 'maithili', 'malay', 'maltese', 'maori', 'marathi', 'mongolian', 'nagpuri', 'nepali', 'newari', 'norwegian', 'occitan', 'persian', 'polish', 'portuguese', 'romanian', 'russian', 'serbian_cyrillic', 'serbian_latin', 'slovak', 'slovenian', 'spanish', 'swahili', 'swedish', 'tabassaran', 'tagalog', 'tamil', 'telugu', 'turkish', 'ukrainian', 'urdu', 'uyghur', 'uzbek', 'vietnamese']
+              title: OCR Language
+              description: |
+                The language to use for OCR. Defaults to english.
             threshold:
               anyOf:
               - type: string
