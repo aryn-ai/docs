@@ -19,38 +19,37 @@ from aryn_sdk.partition import partition_file_async_submit, partition_file_async
 
 ## Get a list of all files you are interested in parsing
 files = os.walk(<directory-with-files>)[2]
-task_ids = [None] * len(files)
 
 ## Iterate through all the files to submit a task to partition each file
 ## and create a list of running tasks
-for i, file_name in enumerate(files):
+task_to_file = {}
+for file_name in enumerate(files):
   try:
-    task_ids[i] = partition_file_async_submit(file_name))["task_id"]
+    task_id = partition_file_async_submit(file_name))["task_id"]
+    task_to_file[task_id] = file_name
   except Exception as e:
-    print(f"Failed to submit {f}: {e}")
-
-results = [None] * len(files)
+    print(f"Failed to submit {file_name}: {e}")
 
 ## Wait for all tasks to finish
-count = len(task_ids)
-while count > 0:
-  for i, task_id in enumerate(task_ids):
-    if task_id:
-      result = partition_file_async_result(task_id)
-      status = result["status"]
-      # if particular task is done, note it
-      if status != "pending":
-        print(f"Task {task_id} done.")
-        count -= 1
-	task_ids[i] == None
-        if status == "done":
-          results[i] = result
-      else:
-        time.sleep(1)
+file_to_result = {}
+while task_to_file:
+  retired = []
+  for task_id, file_name in task_to_file.items():
+    result = partition_file_async_result(task_id)
+    status = result["status"]
+    # if particular task is done, note it
+    if status != "pending":
+      print(f"Task {task_id} for {file_name} done.")
+      retired.append(task_id)
+      file_to_result[file_name] = result if status == "done" else None
+    else:
+      time.sleep(1)
+  for task_id in retired:
+    del task_to_file[task_id]
 
 ## print the results; will be None if task failed
-for result in results:
-  print(result)
+for file_name, result in file_to_result.items()
+  print(file_name, result)
 ```
 
 ## Using a webHook
