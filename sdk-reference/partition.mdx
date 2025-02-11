@@ -31,7 +31,7 @@ set the threshold manually, we recommend starting with a value of `0.32`.
         - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
     - `max_tokens`: An integer specifying the cutoff for splitting chunks that are too large. Default value is 512.
     - `tokenizer`: A string specifying the tokenizer to use when determining how characters in a chunk are grouped. Valid values are `openai_tokenizer`, `character_tokenizer`, and `huggingface_tokenizer`. Defaults to `openai_tokenizer`.
-    - `tokenizer_options`: A tree with string keys specifying the options for the chosen tokenizer. Defaults to `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
+    - `tokenizer_options`: A nested dictionary with string keys specifying the options for the chosen tokenizer. Defaults to `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
         - Available options for `openai_tokenizer`:
             - `model_name`: Accepts all models supported by OpenAI's [tiktoken tokenizer](https://github.com/openai/tiktoken). Default is "text-embedding-3-small"
         - Available options for `HuggingFaceTokenizer`:
@@ -307,7 +307,7 @@ option is present, and default options are chosen when `chunking_options` is spe
     - `max_tokens`: An integer specifying the cutoff for splitting chunks that are too large. Default value is 512.
     - `tokenizer`: A string specifying the tokenizer to use when determining how characters in a chunk are grouped.
     Valid values are `openai_tokenizer`, `character_tokenizer`, and `huggingface_tokenizer`. Defaults to `openai_tokenizer`.
-    - `tokenizer_options`: A tree with string keys specifying the options for the chosen tokenizer. Defaults to
+    - `tokenizer_options`: A nested dictionary with string keys specifying the options for the chosen tokenizer. Defaults to
     `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
         - Available options for `openai_tokenizer`:
             - `model_name`: Accepts all models supported by OpenAI's
@@ -429,7 +429,7 @@ User errors:
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
 - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
-- ```HTTPError: Error:status_code 404```. Reason: `"No such task"`
+- ```aryn_sdk.partition.partition.PartitionTaskNotFoundError```. Reason: `"No such task"`
     - Fix: Check to make sure the task_id specified is correct.
 
 
@@ -485,7 +485,7 @@ User errors:
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
 - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
-- ```HTTPError: Error:status_code 404```. Reason: `"No such task"`
+- ```aryn_sdk.partition.partition.PartitionTaskNotFoundError```. Reason: `"No such task"`
     - Fix: Check to make sure the task_id specified is correct.
 
 Other errors:
@@ -515,10 +515,10 @@ A dict like the one below which maps task_ids to a dict containing details of th
 ```json
 {
     "aryn:t-sc0v0lglkauo774pioflp4l": {
-        "state": "pending"
+        "task_status": "pending"
     },
     "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
-        "state": "pending"
+        "task_status": "pending"
     }
 }
 ```

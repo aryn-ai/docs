@@ -172,10 +172,6 @@ paths:
                 $ref: '#/components/schemas/PartitionerResponse'
         '202':
           description: Task is pending
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PartitionerResponse'
         '403':
           description: Forbidden
           content:
@@ -186,18 +182,9 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated."
+                      - "No Aryn API key provided."
         '404':
           description: No such task.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  detail:
-                    type: string
-                    examples:
-                      - "Task not found."
         '500':
           description: Internal Server Error
           content:
@@ -259,7 +246,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated."
+                      - "No Aryn API key provided."
         '500':
           description: Internal Server Error
           content:
@@ -310,7 +297,7 @@ paths:
                           description: The path of the Aryn API the async task was submitted to.
                           examples:
                             - "/v1/document/partition"
-                        state:
+                        task_status:
                           type: string
                           description: The state of the async task.
                           enum:
@@ -322,7 +309,7 @@ paths:
                     examples:
                         - "aryn:t-47gpd3604e5tz79z1jro5fc":
                             path: "/v1/document/partition"
-                            state: "done"
+                            task_status: "done"
                 required:
                   - tasks
         '403':
@@ -335,7 +322,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated."
+                      - "No Aryn API key provided."
         '500':
           description: Internal Server Error
           content:
