@@ -392,14 +392,14 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A dict like the one in the example below containing "status". When "status" is "done", the returned
-dict also contains "result" which contains what would have been returned had `partition_file` been called directly. If there is an error with partitioning the file itself, then the "status" will still be "done" but the
+A dict like the one in the example below containing "task_status". When "task_status" is "done", the returned
+dict also contains "result" which contains what would have been returned had `partition_file` been called directly. If there is an error with partitioning the file itself, then the "task_status" will still be "done" but the
 "result" will contain an "error" field indicating what went wrong.
 
-"status" can be "done" or "pending". <br />
+"task_status" can be "done" or "pending". <br />
 ```json
 {
-  "status": "done",
+  "task_status":"done",
   "result": ...
 }
 ```
@@ -412,7 +412,7 @@ from aryn_sdk.partition import partition_file_async_result
 # Poll for the results
 while True:
     result = partition_file_async_result(task_id)
-    if result["status"] != "pending":
+    if result["task_status"] != "pending":
         break
     time.sleep(1)
 ```
@@ -458,8 +458,8 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A `bool` which is True on success. Asynchronous tasks may only be successfully cancelled once. Once a task has been
-cancelled, any `partition_file_async_result` calls using that task's id will return with a status of "no_such_task".
+No return value. Asynchronous tasks may only be successfully cancelled once. Once a task has been
+cancelled, any `partition_file_async_result` calls using that task's id will throw an exception.
 </Accordion>
 <Accordion title="Example">
 ```python
