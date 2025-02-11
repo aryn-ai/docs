@@ -13,7 +13,7 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
 
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object specifying where the file to parse is.
-- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned. 
+- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will 
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
 set the threshold manually, we recommend starting with a value of `0.32`.
@@ -69,6 +69,19 @@ elements = data['elements']
 </Accordion>
 <Accordion title="Exceptions">
 
+User errors:
+- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "This async API requires you to upgrade your account plan"}`
+    - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "No Aryn API Key provided"}`
+    - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "Invalid Aryn API key"}`
+    - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "Expired Aryn API key"}`
+    - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
+
+Other errors:
+- ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+
 </Accordion>
 
 </AccordionGroup>
@@ -110,7 +123,8 @@ png_str = convert_image_element(image_elts[2], format="PNG", b64encode=True)
 ```
 </Accordion>
 <Accordion title="Exceptions">
-
+-  ```ValueError``` - "b64encode was True but format was PIL. Cannot b64-encode a PIL Image". 
+    - Fix: If you're calling the function with a PIL image, please set b64encode to False. 
 </Accordion>
 
 </AccordionGroup>
@@ -150,7 +164,7 @@ pages = draw_with_boxes("my-favorite-pdf.pdf", data, draw_table_cells=True)
 ```
 </Accordion>
 <Accordion title="Exceptions">
-
+-  Will throw an exception if the function is not called with a PDF file.
 </Accordion>
 
 </AccordionGroup>
@@ -245,12 +259,12 @@ elts_and_dataframes = tables_to_pandas(data)
 
 
 ## partition_file_async_submit
-Submit a document for asynchronous partitioning and get its `task_id`. Meant to be used with `partition_file_async_result`.
+Submit a document for asynchronous partitioning and get its `task_id`. The results of the task will remain available in the system for 48 hours. Meant to be used with `partition_file_async_result`.
 <AccordionGroup>
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object
 specifying where the file to parse is.
-- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned. 
+- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will 
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
 set the threshold manually, we recommend starting with a value of `0.32`.
@@ -258,11 +272,11 @@ set the threshold manually, we recommend starting with a value of `0.32`.
 useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
 text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural
-content partitioner using a purpose built table extraction model. If set to `False`, tables are still identified but
+content using a purpose built table extraction model. If set to `False`, tables are still identified but
 not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
 Default is `False`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction, which currently only
-supports the boolean `include_additional_text`, which will add in text from OCR boxes. When include_additional_text is
+supports the boolean `include_additional_text`. When include_additional_text is
 set to true and table extraction is enabled, DocParse will attempt to enhance the table structure by merging in tokens
 from text extraction. This can be useful for working with tables that have missing or misaligned text.
 `include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
@@ -343,13 +357,13 @@ task_id = response["task_id"]
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 400```. Reason: `"This async API requires you to upgrade your account plan"`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
 - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `"Invalid Aryn API key"`
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `"Expired Aryn API key"`
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
 
 
@@ -381,7 +395,7 @@ ssl_verify is `True` by default, enforcing SSL verification.
 <Accordion title="Return Value">
 A dict like the one in the example below containing "status" and "status_code". When "status" is "done", the returned
 dict also contains "result" which contains what would have been returned had `partition_file` been called directly.
-"status" can be "done", "pending", "error", or "no_such_task".<br />
+"status" can be "done", "pending", "failed", or "cancelled".<br />
 If there is an error with partitioning itself rather than scheduling the work, then the "status" will be "done" and the
 "result" will contain an "error" field.
 ```json
@@ -395,7 +409,7 @@ If there is an error with partitioning itself rather than scheduling the work, t
 | -------- | ------------- | -------- |
 | "done" | 200 | matches what would have been returned had `partition_file` been called directly |
 | "pending" | 202 | not present |
-| "no_such_task" | 404 | not present |
+| "cancelled" | 404 | not present |
 | "error" | all others | not present |
 </Accordion>
 <Accordion title="Example">
@@ -415,14 +429,16 @@ while True:
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "This async API requires you to upgrade your account plan"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "No Aryn API Key provided"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Invalid Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Expired Aryn API key"}`
-    - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+    - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+- ```HTTPError: Error:status_code 404```. Reason: `"No such task"`
+    - Fix: Check to make sure the task_id specified is correct.
 
 
 Other errors:
@@ -471,15 +487,16 @@ partition_file_async_cancel(task_id)
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "This async API requires you to upgrade your account plan"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "No Aryn API Key provided"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Invalid Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Expired Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
-
+- ```HTTPError: Error:status_code 404```. Reason: `"No such task"`
+    - Fix: Check to make sure the task_id specified is correct.
 
 Other errors:
 - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
@@ -528,13 +545,13 @@ l = partition_file_async_list()
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "This async API requires you to upgrade your account plan"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "No Aryn API Key provided"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Invalid Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 400```. Reason: `{"detail": "Expired Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
 
 
