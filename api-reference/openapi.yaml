@@ -61,7 +61,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Authentication error."
+                      - "Not authenticated."
         '500':
           description: Internal Server Error
           content:
@@ -122,7 +122,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Authentication error."
+                      - "Not authenticated."
         '429':
           description: Too many requests.
           content:
@@ -186,7 +186,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Authentication error."
+                      - "Not authenticated."
         '404':
           description: No such task.
           content:
@@ -259,7 +259,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Authentication error."
+                      - "Not authenticated."
         '500':
           description: Internal Server Error
           content:
@@ -268,7 +268,6 @@ paths:
                 type: string
                 examples:
                   - "Internal Server Error"
-                  - "Other issues"
   /v1/async/list:
     get:
       summary: 'List Async Tasks'
@@ -336,7 +335,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Authentication error."
+                      - "Not authenticated."
         '500':
           description: Internal Server Error
           content:

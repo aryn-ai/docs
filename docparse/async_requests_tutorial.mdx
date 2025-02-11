@@ -26,7 +26,7 @@ task_ids = [None] * len(files)
 ## and create a list of running tasks
 for i, file_name in enumerate(files):
   try:
-      task_ids[i] = partition_file_async_submit(open(file_name, 'rb'))["task_id"]
+      task_ids[i] = partition_file_async_submit(file_name)["task_id"]
   except Exception as e:
       print(f"Failed to submit {f}: {e}")
 
@@ -57,8 +57,7 @@ for result in results:
 Optionally, you can also set a webhook for Aryn's services to call when your task is completed:
 
 ```python
-f = open("/path/to/my/file.docx", "rb")
-partition_file_async_submit(f, webhook_url="https://example.com/alert")
+partition_file_async_submit("/path/to/my/file.docx", webhook_url="https://example.com/alert")
 ```
 
 Aryn will POST a request containing a body like the below to the webhook URL:
