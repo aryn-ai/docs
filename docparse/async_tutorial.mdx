@@ -17,8 +17,9 @@ import time
 from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
 import os
 
+YOUR_DIRECTORY_NAME = ""
 ## Get a list of all files you are interested in parsing
-files = os.walk(<directory-with-files>)[2]
+files = os.walk(YOUR_DIRECTORY_NAME)[2]
 task_ids = [None] * len(files)
 
 ## Iterate through all the files to submit a task to partition each file
@@ -56,7 +57,7 @@ for result in results:
 Optionally, you can also set a webhook for Aryn's services to call when your task is completed:
 
 ```python
-f = open("path/to/my/file.docx", "rb")
+f = open("/path/to/my/file.docx", "rb")
 partition_file_async_submit(f, webhook_url="https://example.com/alert")
 ```
 

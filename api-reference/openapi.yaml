@@ -61,7 +61,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated"
+                      - "Authentication error."
         '500':
           description: Internal Server Error
           content:
@@ -122,7 +122,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated."
+                      - "Authentication error."
         '429':
           description: Too many requests.
           content:
@@ -170,6 +170,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PartitionerResponse'
+        '202':
+          description: Task is pending
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartitionerResponse'
         '403':
           description: Forbidden
           content:
@@ -180,9 +186,18 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated"
+                      - "Authentication error."
         '404':
-          description: "No such task."
+          description: No such task.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Task not found."
         '500':
           description: Internal Server Error
           content:
@@ -224,7 +239,16 @@ paths:
         '200':
           description: Task Cancelled Successfully
         '404':
-          description: Task already canceled or not found
+          description: No such task.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Task not found."
         '403':
           description: Forbidden
           content:
@@ -235,7 +259,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated"
+                      - "Authentication error."
         '500':
           description: Internal Server Error
           content:
@@ -244,6 +268,7 @@ paths:
                 type: string
                 examples:
                   - "Internal Server Error"
+                  - "Other issues"
   /v1/async/list:
     get:
       summary: 'List Async Tasks'
@@ -311,7 +336,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated"
+                      - "Authentication error."
         '500':
           description: Internal Server Error
           content:

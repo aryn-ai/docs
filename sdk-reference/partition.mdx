@@ -329,7 +329,7 @@ an api key. If aryn_api_key is set it will override this. The default ArynConfig
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
-- `webhook_url`: a str url for Aryn to visit when the async task has stopped. POSTs a body like this: `{"done":
+- `webhook_url`: a string url for Aryn to visit when the async task has stopped. POSTs a body like this: `{"done":
 [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
 </Accordion>
 
@@ -380,7 +380,7 @@ Other errors:
 Gets the results of an asynchronous partitioning task by `task_id`. Meant to be used with `partition_file_async_submit`.
 <AccordionGroup>
 <Accordion title="Parameters">
-- `task_id`: Required. A str of the task id to poll and attempt to get the result for.
+- `task_id`: Required. A string of the task id to poll and attempt to get the result for.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
@@ -391,24 +391,17 @@ environment variables, and then in `~/.aryn/config.yaml`).
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
 <Accordion title="Return Value">
-A dict like the one in the example below containing "status" and "status_code". When "status" is "done", the returned
-dict also contains "result" which contains what would have been returned had `partition_file` been called directly.
-"status" can be "done", "pending", "failed", or "cancelled".<br />
-If there is an error with partitioning itself rather than scheduling the work, then the "status" will be "done" and the
-"result" will contain an "error" field.
+A dict like the one in the example below containing "status". When "status" is "done", the returned
+dict also contains "result" which contains what would have been returned had `partition_file` been called directly. If there is an error with partitioning the file itself, then the "status" will still be "done" but the
+"result" will contain an "error" field indicating what went wrong.
+
+"status" can be "done" or "pending". <br />
 ```json
 {
   "status": "done",
-  "status_code": 200,
   "result": ...
 }
 ```
-| `status` | `status_code` | `result` |
-| -------- | ------------- | -------- |
-| "done" | 200 | matches what would have been returned had `partition_file` been called directly |
-| "pending" | 202 | not present |
-| "cancelled" | 404 | not present |
-| "failed" | all others | not present |
 </Accordion>
 <Accordion title="Example">
 ```python
@@ -420,7 +413,7 @@ while True:
     result = partition_file_async_result(task_id)
     if result["status"] != "pending":
         break
-    time.sleep(5)
+    time.sleep(1)
 ```
 </Accordion>
 
@@ -453,7 +446,7 @@ Other errors:
 Cancels the task associated with the task_id specified.
 <AccordionGroup>
 <Accordion title="Parameters">
-- `task_id`: Required. A str of the task id to cancel
+- `task_id`: Required. A string of the task id to cancel.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
@@ -504,6 +497,7 @@ Other errors:
 
 
 ## partition_file_async_list
+Lists all the partition_file tasks still running in your account.
 <AccordionGroup>
 <Accordion title="Parameters">
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
