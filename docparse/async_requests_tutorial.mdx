@@ -8,7 +8,7 @@ The following functions can be used together to send files to DocParse to partit
 
 `partition_file_async_submit` - function that makes a request to partition the file and returns a task_id that you can use to keep track of your request to partition the file
 
-`partition_file_async_result` - function that you can call to get the result of the partition_file task you just sent. It will return a dict that indicates a status (`“done”`, `“pending”` , `“failed”` or `“cancelled”`)
+`partition_file_async_result` - function that you can call to get the result of the partition_file task you just sent. It will return a dict that indicates a status (`“done”` or `“pending”`)
 
 Here’s an example of how you can process multiple files at the same time:
 
@@ -37,14 +37,14 @@ for i, task_id in enumerate(task_ids):
   while True:
     result = partition_file_async_result(task_id)
     # if particular task is done, break 
-    if result["status"] != "pending":
+    if result["task_status"] != "pending":
       print(f"Task {task_id} done.")
       break
       
     # else sleep
     time.sleep(1)
        
-  if result["status"] == "done":
+  if result["task_status"] == "done":
     results[i] = result
 
 ## print the results, will be None if task failed
@@ -72,12 +72,12 @@ If you want to list all the asynchronous partition_file tasks that are running a
 
 ```python
 >> partition_file_async_list()
-{'aryn:t-wewbyn5zyh9uxzgghgi5ehf': {'state': 'pending'},
- 'aryn:t-3kuln0wm0zqex2ks7ue0kvi': {'state': 'pending'},
- 'aryn:t-o38deeglw3hkl6p939gdyyk': {'state': 'pending'},
- 'aryn:t-zxzjrwmaifj8ql5ar1zttye': {'state': 'pending'},
- 'aryn:t-fn6j1sbuhsohrx51r4eom9n': {'state': 'pending'},
- 'aryn:t-luldbdt5d2kn8cact61mao8': {'state': 'pending'}}
+{'aryn:t-wewbyn5zyh9uxzgghgi5ehf': {'task_status': 'pending'},
+ 'aryn:t-3kuln0wm0zqex2ks7ue0kvi': {'task_status': 'pending'},
+ 'aryn:t-o38deeglw3hkl6p939gdyyk': {'task_status': 'pending'},
+ 'aryn:t-zxzjrwmaifj8ql5ar1zttye': {'task_status': 'pending'},
+ 'aryn:t-fn6j1sbuhsohrx51r4eom9n': {'task_status': 'pending'},
+ 'aryn:t-luldbdt5d2kn8cact61mao8': {'task_status': 'pending'}}
 ```
 
 If you want to cancel a particular asynchronous partition_file task you can call the following function: 
