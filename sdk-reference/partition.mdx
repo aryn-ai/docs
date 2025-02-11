@@ -13,12 +13,12 @@ Sends a file to Aryn DocParse and returns a Python dictionary with elements cont
 
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object specifying where the file to parse is.
-- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
+- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes for the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will 
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
 set the threshold manually, we recommend starting with a value of `0.32`.
 - `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
-- `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content partitioner using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
+- `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction, which currently only supports the boolean `include_additional_text`, which will add in text from OCR boxes. When include_additional_text is set to true and table extraction is enabled, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. `include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
 - `ocr_images`: A boolean that, when `True`, causes DocParse to use OCR to attempt to generate a text representation of detected images. When `False`, images do not contain a text_representation. Default is `False`.
@@ -70,13 +70,13 @@ elements = data['elements']
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "This async API requires you to upgrade your account plan"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "No Aryn API Key provided"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "Invalid Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
-- ```HTTPError: Error:status_code 403```. Reason: `{"detail": "Expired Aryn API key"}`
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
 
 Other errors:
@@ -264,7 +264,7 @@ Submit a document for asynchronous partitioning and get its `task_id`. The resul
 <Accordion title="Parameters">
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object
 specifying where the file to parse is.
-- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes in the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
+- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes for the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will 
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
 set the threshold manually, we recommend starting with a value of `0.32`.
@@ -328,7 +328,7 @@ server. ssl_verify is `True` by default, enforcing SSL verification.
 an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
-- `aryn_api_key`: `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `webhook_url`: a str url for Aryn to visit when the async task has stopped. POSTs a body like this: `{"done":
 [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
 </Accordion>
@@ -340,7 +340,6 @@ A dict containing the `task_id` of the submitted request.
 
 <Accordion title="Example">
 ```python
-import time
 from aryn_sdk.partition import partition_file_async_submit
 
 with open("my-favorite-pdf.pdf", "rb") as f:
@@ -350,14 +349,14 @@ with open("my-favorite-pdf.pdf", "rb") as f:
         extract_table_structure=True,
     )
 
-#get task id
+# get task id
 task_id = response["task_id"]
 ```
 </Accordion>
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
 - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
@@ -365,6 +364,8 @@ User errors:
     - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
 - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
     - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
+- ```HTTPError: Error:status_code 429```. Reason: `"Too many requests"`
+    - Fix: Please try again after some time. Each account is allowed 1000 tasks to run at a time.
 
 
 Other errors:
@@ -380,10 +381,7 @@ Gets the results of an asynchronous partitioning task by `task_id`. Meant to be 
 <AccordionGroup>
 <Accordion title="Parameters">
 - `task_id`: Required. A str of the task id to poll and attempt to get the result for.
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
-[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
-`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
-(`ARYN_API_KEY` by default))).
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
@@ -410,7 +408,7 @@ If there is an error with partitioning itself rather than scheduling the work, t
 | "done" | 200 | matches what would have been returned had `partition_file` been called directly |
 | "pending" | 202 | not present |
 | "cancelled" | 404 | not present |
-| "error" | all others | not present |
+| "failed" | all others | not present |
 </Accordion>
 <Accordion title="Example">
 ```python
@@ -429,7 +427,7 @@ while True:
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
 - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
@@ -452,13 +450,11 @@ Other errors:
 
 
 ## partition_file_async_cancel
+Cancels the task associated with the task_id specified.
 <AccordionGroup>
 <Accordion title="Parameters">
 - `task_id`: Required. A str of the task id to cancel
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
-[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
-`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
-(`ARYN_API_KEY` by default))).
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
@@ -487,7 +483,7 @@ partition_file_async_cancel(task_id)
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
 - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
@@ -510,10 +506,7 @@ Other errors:
 ## partition_file_async_list
 <AccordionGroup>
 <Accordion title="Parameters">
-- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at
-[aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (`aryn-sdk` will look for it in the
-`aryn_config` parameter (which by default looks in `~/.aryn/config.yaml` and then in your environment variables
-(`ARYN_API_KEY` by default))).
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
@@ -527,10 +520,10 @@ A dict like the one below which maps task_ids to a dict containing details of th
 ```json
 {
     "aryn:t-sc0v0lglkauo774pioflp4l": {
-        "state": "run"
+        "state": "pending"
     },
     "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
-        "state": "run"
+        "state": "pending"
     }
 }
 ```
@@ -545,7 +538,7 @@ l = partition_file_async_list()
 <Accordion title="Exceptions">
 
 User errors:
-- ```HTTPError: Error:status_code 403```. Reason: `"This async API requires you to upgrade your account plan"`
+- ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
     - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
 - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
     - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.

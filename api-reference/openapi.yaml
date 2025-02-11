@@ -122,7 +122,18 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "Not authenticated"
+                      - "Not authenticated."
+        '429':
+          description: Too many requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Too many requests"
   /v1/async/result/{task_id}:
     get:
       summary: 'Get Async Task Status'
@@ -171,9 +182,7 @@ paths:
                     examples:
                       - "Not authenticated"
         '404':
-          description: |
-            Task not found. This can happen if the task was already canceled, if the task ID is invalid, or it has been
-            long enough that the task has been removed from the system.
+          description: "No such task."
         '500':
           description: Internal Server Error
           content:
