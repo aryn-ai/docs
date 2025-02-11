@@ -1,0 +1,113 @@
+---
+title: 'Tutorial: Calling DocParse Asynchronously'
+description: 'See how you can call DocParse asynchronously'
+icon: 'clock'
+---
+
+The following functions can be used together to send files to DocParse to partition asynchronously:  
+
+`partition_file_async_submit` - function that makes a request to partition the file and returns a task_id that you can use to keep track of your request to partition the file
+
+`partition_file_async_result` - function that you can call to get the result of the partition_file task you just sent. It will return a dict that indicates a status (`“done”`, `“pending”` , `“failed”` or `“cancelled”`)
+
+Here’s an example of how you can process multiple files at the same time:
+
+```python
+import time
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
+import os
+
+YOUR_DIRECTORY_NAME = ""
+## Get a list of all files you are interested in parsing
+files = os.walk(YOUR_DIRECTORY_NAME)[2]
+task_ids = [None] * len(files)
+
+## Iterate through all the files to submit a task to partition each file
+## and create a list of running tasks
+for i, file_name in enumerate(files):
+  try:
+      task_ids[i] = partition_file_async_submit(file_name)["task_id"]
+  except Exception as e:
+      print(f"Failed to submit {f}: {e}")
+
+results = [None] * len(files)
+
+## Wait for all tasks to finish
+for i, task_id in enumerate(task_ids):
+  while True:
+    result = partition_file_async_result(task_id)
+    # if particular task is done, break 
+    if result["status"] != "pending":
+      print(f"Task {task_id} done.")
+      break
+      
+    # else sleep
+    time.sleep(1)
+       
+  if result["status"] == "done":
+    results[i] = result
+
+## print the results, will be None if task failed
+for result in results:
+  print(result)
+```
+
+It is important to note that sending multiple asynchronous partitioning tasks at the same time does not guarantee that they will run simultaneously.
+
+## Using a webHook
+
+Optionally, you can also set a webhook for Aryn's services to call when your task is completed:
+
+```python
+partition_file_async_submit("/path/to/my/file.docx", webhook_url="https://example.com/alert")
+```
+
+Aryn will POST a request containing a body like the below to the webhook URL:
+
+```json
+{"done": [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}
+```
+
+If you want to list all the asynchronous partition_file tasks that are running and not yet completed in your account, you can call the following function:
+
+```python
+>> partition_file_async_list()
+{'aryn:t-wewbyn5zyh9uxzgghgi5ehf': {'state': 'pending'},
+ 'aryn:t-3kuln0wm0zqex2ks7ue0kvi': {'state': 'pending'},
+ 'aryn:t-o38deeglw3hkl6p939gdyyk': {'state': 'pending'},
+ 'aryn:t-zxzjrwmaifj8ql5ar1zttye': {'state': 'pending'},
+ 'aryn:t-fn6j1sbuhsohrx51r4eom9n': {'state': 'pending'},
+ 'aryn:t-luldbdt5d2kn8cact61mao8': {'state': 'pending'}}
+```
+
+If you want to cancel a particular asynchronous partition_file task you can call the following function: 
+
+```python
+>> partition_file_async_cancel("aryn:t-47gpd3604e5tz79z1jro5fc")
+```
+
+## Using cURL
+
+You can also call the async APIs directly without python through cURL:
+
+```bash
+curl -X POST https://api.aryn.cloud/v1/async/submit/document/partition -F "file=@path/to/file.pdf" -F 'options={"use_ocr": true}' -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+You can poll your result with the command below. Use the call id the command returned as output.
+
+```bash
+curl https://api.aryn.cloud/v1/async/result/aryn:t-bipwgqesiqixfz2kyew3j8d -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+To list pending tasks use the command below:
+
+```bash
+curl https://api.aryn.cloud/v1/async/list -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+You can cancel a pending task with the command below:
+
+```bash
+curl -X POST https://api.aryn.cloud/v1/async/cancel/aryn:t-bipwgqesiqixfz2kyew3j8d -H "Authorization: Bearer MY_ARYN_API_KEY"
+```

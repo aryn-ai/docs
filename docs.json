@@ -34,7 +34,8 @@
               "docparse/output_walkthrough",
               "docparse/tables",
               "docparse/images",
-              "docparse/chunking_tutorial"
+              "docparse/chunking_tutorial",
+              "docparse/async_requests_tutorial"
             ]
           },
           {

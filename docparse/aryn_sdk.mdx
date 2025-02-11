@@ -99,80 +99,8 @@ with open("mydocument.pdf", "rb") as f:
 
 The full chunking options are documented [here](/docparse/chunking_strategies).
 
-## Partitioning asynchronously
+## Asynchronous requests
 
-`partition_file_async_submit` is a function that submits a file partitioning task to Aryn and returns with its `task_id`.
-You can use the returned `task_id` to keep track of your request to partition the file. Poll for the result using
-another function, `partition_file_async_result`, (it returns a dict with a “status” key that indicates whether the task
-is “done”, “pending” or in “error” state). Once the “status” is “done” the dict returned by
-`partition_file_async_result` will have a “result” key with the actual results. The following code snippet is an
-example of how you can use these
-functions:
 
-```python
-import time
-from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
-
-with open("my-favorite-pdf.pdf", "rb") as f:
-    response = partition_file_async_submit(
-        f,
-        use_ocr=True,
-        extract_table_structure=True,
-    )
-
-task_id = response["task_id"]
-
-# Poll for the results
-while True:
-    result = partition_file_async_result(task_id)
-    if result["status"] != "pending":
-        break
-    time.sleep(5)
-```
-
-One way to do this with multiple requests at a time is shown below:
-
-```python
-import logging
-import time
-from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
-
-files = [open("file1.pdf", "rb"), open("file2.docx", "rb")]
-task_ids = [None] * len(files)
-for i, f in enumerate(files):
-    try:
-        task_ids[i] = partition_file_async_submit(f)["task_id"]
-    except Exception as e:
-        logging.warning(f"Failed to submit {f}: {e}")
-
-results = [None] * len(files)
-for i, task_id in enumerate(task_ids):
-    while True:
-        result = partition_file_async_result(task_id)
-
-        if result["status"] != "pending":
-            break
-
-        time.sleep(5)
-
-    if result["status"] == "done":
-        results[i] = result
-
-## print the results
-## will be None if task failed
-for result in results:
-    print(result)
-```
-
-Optionally, you can also set a webhook for Aryn's services to call when your task is completed:
-
-```python
-partition_file_async_submit("path/to/my/file.docx", webhook_url="https://example.com/alert")
-```
-
-Aryn will POST a request containing a body like the below:
-```json
-{"done": [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}
-```
-
-For more information, see the [Aryn SDK documentation](/sdk-reference/partition).
+If you need to submit a large number of partitioning requests at once, we recommend using the asynchronous version of the API: `partition_file_async_submit`. The asynchronous API submits a file partitioning task to Aryn and returns with its `task_id`.
+You can use the returned `task_id` to keep track of your request to partition the file using the `partition_file_async_result`. To learn more check out the [documentation](/sdk-reference/partition#partition-file-async-submit) and the [tutorial](/docparse/async_requests_tutorial).
