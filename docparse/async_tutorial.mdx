@@ -25,9 +25,9 @@ task_ids = [None] * len(files)
 ## and create a list of running tasks
 for i, file_name in enumerate(files):
   try:
-      task_ids[i] = partition_file_async_submit(file_name))["task_id"]
+    task_ids[i] = partition_file_async_submit(file_name))["task_id"]
   except Exception as e:
-      print(f"Failed to submit {f}: {e}")
+    print(f"Failed to submit {f}: {e}")
 
 results = [None] * len(files)
 
@@ -35,16 +35,18 @@ results = [None] * len(files)
 count = len(task_ids)
 while count > 0:
   for i, task_id in enumerate(task_ids):
-    result = partition_file_async_result(task_id)
-    status = result["status"]
-    # if particular task is done, note it
-    if status != "pending":
-      print(f"Task {task_id} done.")
-      count -= 1
-      if status == "done":
-        results[i] = result
-    else:
-      time.sleep(1)
+    if task_id:
+      result = partition_file_async_result(task_id)
+      status = result["status"]
+      # if particular task is done, note it
+      if status != "pending":
+        print(f"Task {task_id} done.")
+        count -= 1
+	task_ids[i] == None
+        if status == "done":
+          results[i] = result
+      else:
+        time.sleep(1)
 
 ## print the results; will be None if task failed
 for result in results:
