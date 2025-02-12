@@ -172,6 +172,15 @@ paths:
                 $ref: '#/components/schemas/PartitionerResponse'
         '202':
           description: Task is pending
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "Task is pending."
         '403':
           description: Forbidden
           content:
@@ -184,7 +193,16 @@ paths:
                     examples:
                       - "No Aryn API key provided."
         '404':
-          description: No such task.
+          description: No suck task.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detail:
+                    type: string
+                    examples:
+                      - "No suck task."
         '500':
           description: Internal Server Error
           content:
