@@ -19,15 +19,17 @@ import os
 
 YOUR_DIRECTORY_NAME = ""
 ## Get a list of all files you are interested in parsing
-files = os.walk(YOUR_DIRECTORY_NAME)[2]
+files = os.listdir(YOUR_DIRECTORY_NAME)
 task_ids = [None] * len(files)
 
 ## Iterate through all the files to submit a task to partition each file
 ## and create a list of running tasks
 for i, file_name in enumerate(files):
-  try:
-      task_ids[i] = partition_file_async_submit(file_name)["task_id"]
-  except Exception as e:
+  file_path = f"{YOUR_DIRECTORY_NAME}/{file_name}"
+  if os.path.isfile(file_path):
+    try:
+      task_ids[i] = partition_file_async_submit(file_path)["task_id"]
+    except Exception as e:
       print(f"Failed to submit {f}: {e}")
 
 results = [None] * len(files)
