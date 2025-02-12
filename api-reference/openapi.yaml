@@ -292,9 +292,9 @@ paths:
                     additionalProperties:
                       type: object
                       properties:
-                        path:
+                        action:
                           type: string
-                          description: The path of the Aryn API the async task was submitted to.
+                          description: The action of the Aryn API the async task was submitted to.
                           examples:
                             - "/v1/document/partition"
                         task_status:
@@ -308,7 +308,7 @@ paths:
                             - "queue"
                     examples:
                         - "aryn:t-47gpd3604e5tz79z1jro5fc":
-                            path: "/v1/document/partition"
+                            action: "/v1/document/partition"
                             task_status: "done"
                 required:
                   - tasks
