@@ -19,37 +19,40 @@ import os
 
 YOUR_DIRECTORY_NAME = ""
 ## Get a list of all files you are interested in parsing
-files = os.walk(YOUR_DIRECTORY_NAME)[2]
+files = os.listdir(YOUR_DIRECTORY_NAME)
 task_ids = [None] * len(files)
 
 ## Iterate through all the files to submit a task to partition each file
 ## and create a list of running tasks
 for i, file_name in enumerate(files):
-  try:
-      task_ids[i] = partition_file_async_submit(file_name)["task_id"]
-  except Exception as e:
-      print(f"Failed to submit {f}: {e}")
+    file_path = f"{YOUR_DIRECTORY_NAME}/{file_name}"
+    if os.path.isfile(file_path):
+        try:
+            print(f"Submitting {file_path}")
+            task_ids[i] = partition_file_async_submit(file_path)["task_id"]
+        except Exception as e:
+            print(f"Failed to submit {file_path}: {e}")
 
 results = [None] * len(files)
 
 ## Wait for all tasks to finish
 for i, task_id in enumerate(task_ids):
-  while True:
-    result = partition_file_async_result(task_id)
-    # if particular task is done, break 
-    if result["task_status"] != "pending":
-      print(f"Task {task_id} done.")
-      break
-      
-    # else sleep
-    time.sleep(1)
-       
-  if result["task_status"] == "done":
-    results[i] = result
+    while True:
+        result = partition_file_async_result(task_id)
+        # if particular task is done, break
+        if result["task_status"] != "pending":
+            print(f"Task {task_id} done.")
+            break
+
+        # else sleep
+        time.sleep(1)
+
+    if result["task_status"] == "done":
+        results[i] = result
 
 ## print the results, will be None if task failed
 for result in results:
-  print(result)
+    print(result)
 ```
 
 It is important to note that sending multiple asynchronous partitioning tasks at the same time does not guarantee that they will run simultaneously.

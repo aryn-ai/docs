@@ -5,7 +5,9 @@ description: 'Documentation for Aryn SDK Partition'
 
 Please find the documentation for the Aryn SDK Partition module below. All parameters are optional unless specified otherwise.
 
-## partition_file
+
+## Synchronous Partitioning Functions
+### partition_file
 
 Sends a file to Aryn DocParse and returns a Python dictionary with elements containing its document structure and text.
 
@@ -47,11 +49,6 @@ set the threshold manually, we recommend starting with a value of `0.32`.
 </Accordion>
 
 
-<Accordion title="Return Value">
-
-A dictionary containing keys `status` and `elements`. If output_format is `markdown`, returns a dictionary of `status` and `markdown`.
-</Accordion>
-
 <Accordion title="Example">
 
 ```python
@@ -67,6 +64,11 @@ with open("my-favorite-pdf.pdf", "rb") as f:
     )
 elements = data['elements']
 ```
+</Accordion>
+
+<Accordion title="Return Value">
+
+A dictionary containing keys `status` and `elements`. If output_format is `markdown`, returns a dictionary of `status` and `markdown`.
 </Accordion>
 <Accordion title="Exceptions">
 
@@ -87,179 +89,10 @@ Other errors:
 
 </AccordionGroup>
 
-## convert_image_element
 
-Convert an image element to a more usable format. If no format is specified, create a PIL Image object. If a format is specified, output the bytes of the image in that format. If `b64encode` is set to `True`, base64-encode the bytes and return them as a `string`.
+## Aynchronous Partitioning Functions
 
-<AccordionGroup>
-
-<Accordion title="Parameters">
-- `elem`: Required. An image element from the `elements` field of a `partition_file` response.
-- `format`: A `string` specifying the format to output bytes to. Default is `PIL`.
-- `b64encode`: A `boolean` that when set to True enables base64-encoding of the output bytes of this function. Format cannot be `PIL` when this option is `True`. Default is `False`.
-
-</Accordion>
-
-
-<Accordion title="Return Value">
-
-Either a PIL `Image` object, bytes of an image, or a base64-encoded image as a `str`.
-
-</Accordion>
-
-<Accordion title="Example">
-```python
-from aryn_sdk.partition import partition_file, convert_image_element
-
-with open("my-favorite-pdf.pdf", "rb") as f:
-    data = partition_file(
-        f,
-        extract_images=True
-    )
-image_elts = [e for e in data['elements'] if e['type'] == 'Image']
-
-pil_img = convert_image_element(image_elts[0])
-jpg_bytes = convert_image_element(image_elts[1], format='JPEG')
-png_str = convert_image_element(image_elts[2], format="PNG", b64encode=True)
-```
-</Accordion>
-<Accordion title="Exceptions">
--  ```ValueError``` - "b64encode was True but format was PIL. Cannot b64-encode a PIL Image". 
-    - Fix: If you're calling the function with a PIL image, please set b64encode to False. 
-</Accordion>
-
-</AccordionGroup>
-
-## draw_with_boxes
-
-Create a list of images from the provided PDF, one for each page, with bounding boxes detected by the partitioner drawn on.
-
-<AccordionGroup>
-
-<Accordion title="Parameters">
-- `pdf_file`: Required. A PDF file opened in binary mode or a path to a PDF file expressed as a `string` or a `PathLike` object upon which to draw.
--`partitioning_data`: Required. The output from `partition_file`.
-- `draw_table_cells`: A boolean that when `True`, makes the function draw individually detected cells of tables. When `False`, the bounding boxes of table cells are not drawn but the outer bounding boxes of tables and the bounding boxes of all other elements are still drawn. Default is False.
-
-</Accordion>
-
-
-<Accordion title="Return Value">
-A list of images of pages of the PDF, each with bounding boxes drawn on.
-
-</Accordion>
-
-<Accordion title="Example">
-```python
-from aryn_sdk.partition import partition_file, draw_with_boxes
-
-with open("my-favorite-pdf.pdf", "rb") as f:
-    data = partition_file(
-        f,
-        aryn_api_key="MY-ARYN-API-KEY",
-        use_ocr=True,
-        extract_table_structure=True,
-        extract_images=True
-    )
-pages = draw_with_boxes("my-favorite-pdf.pdf", data, draw_table_cells=True)
-```
-</Accordion>
-<Accordion title="Exceptions">
--  Will throw an exception if the function is not called with a PDF file.
-</Accordion>
-
-</AccordionGroup>
-
-## table_elem_to_dataframe
-
-Create a `pandas` DataFrame representing the tabular data inside the provided table element. If the element is not of type `table` or doesn't contain any table data, return `None` instead.
-
-<AccordionGroup>
-
-<Accordion title="Parameters">
-- `elem`: Required. An element from the 'elements' field of a `partition_file` response.
-
-</Accordion>
-
-
-<Accordion title="Return Value">
-A Pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, returns None instead.
-
-</Accordion>
-
-<Accordion title="Example">
-```python
-from aryn_sdk.partition import partition_file, table_elem_to_dataframe
-
-with open("partition-me.pdf", "rb") as f:
-    data = partition_file(
-        f,
-        use_ocr=True,
-        extract_table_structure=True,
-        extract_images=True
-    )
-
-# Find the first table and convert it to a dataframe
-df = None
-for element in data['elements']:
-    if element['type'] == 'table':
-        df = table_elem_to_dataframe(element)
-        break
-```
-</Accordion>
-
-<Accordion title="Exceptions">
-
-</Accordion>
-
-</AccordionGroup>
-
-
-## tables_to_pandas
-
-For every table element in the provided partitioning response, create a pandas DataFrame representing the tabular data. Return a list containing all the elements, with tables paired with their corresponding DataFrames.
-
-
-<AccordionGroup>
-
-<Accordion title="Parameters">
-
-- `data`: A response from `partition_file`
-
-</Accordion>
-
-
-<Accordion title="Return Value">
-
-A list of tuples, where each tuple contains an element from the 'elements' field of a `partition_file` response and a Pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, the DataFrame will be `None`.
-
-</Accordion>
-
-<Accordion title="Example">
-```python
-from aryn_sdk.partition import partition_file, tables_to_pandas
-
-with open("my-favorite-pdf.pdf", "rb") as f:
-    data = partition_file(
-        f,
-        aryn_api_key="MY-ARYN-API-KEY",
-        use_ocr=True,
-        extract_table_structure=True,
-        extract_images=True
-    )
-elts_and_dataframes = tables_to_pandas(data)
-```
-</Accordion>
-
-<Accordion title="Exceptions">
-
-</Accordion>
-
-</AccordionGroup>
-
-
-
-## partition_file_async_submit
+### partition_file_async_submit
 Submit a document for asynchronous partitioning and get its `task_id`. The results of the task will remain available in the system for 48 hours. Meant to be used with `partition_file_async_result`.
 Note: sending multiple asynchronous partitioning tasks at the same time does not guarantee that they will run simultaneously.
 <AccordionGroup>
@@ -335,11 +168,6 @@ environment variables, and then in ~/.aryn/config.yaml).
 [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
 </Accordion>
 
-<Accordion title="Return Value">
-A dict containing the `task_id` of the submitted request.
-
-</Accordion>
-
 <Accordion title="Example">
 ```python
 from aryn_sdk.partition import partition_file_async_submit
@@ -354,6 +182,10 @@ with open("my-favorite-pdf.pdf", "rb") as f:
 # get task id
 task_id = response["task_id"]
 ```
+</Accordion>
+<Accordion title="Return Value">
+A dict containing the `task_id` of the submitted request.
+
 </Accordion>
 <Accordion title="Exceptions">
 
@@ -378,7 +210,7 @@ Other errors:
 
 
 
-## partition_file_async_result
+### partition_file_async_result
 Gets the results of an asynchronous partitioning task by `task_id`. Meant to be used with `partition_file_async_submit`.
 <AccordionGroup>
 <Accordion title="Parameters">
@@ -392,19 +224,7 @@ environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
 </Accordion>
-<Accordion title="Return Value">
-A dict like the one in the example below containing "task_status". When "task_status" is "done", the returned
-dict also contains "result" which contains what would have been returned had `partition_file` been called directly. If there is an error with partitioning the file itself, then the "task_status" will still be "done" but the
-"result" will contain an "error" field indicating what went wrong.
 
-"task_status" can be "done" or "pending". <br />
-```json
-{
-  "task_status":"done",
-  "result": ...
-}
-```
-</Accordion>
 <Accordion title="Example">
 ```python
 import time
@@ -416,6 +236,20 @@ while True:
     if result["task_status"] != "pending":
         break
     time.sleep(1)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A dict like the one in the example below containing "task_status". When "task_status" is "done", the returned
+dict also contains "result" which contains what would have been returned had `partition_file` been called directly. If there is an error with partitioning the file itself, then the "task_status" will still be "done" but the
+"result" will contain an "error" field indicating what went wrong.
+
+"task_status" can be "done" or "pending". <br />
+```json
+{
+  "task_status":"done",
+  "result": ...
+}
 ```
 </Accordion>
 
@@ -444,7 +278,7 @@ Other errors:
 
 
 
-## partition_file_async_cancel
+### partition_file_async_cancel
 Cancels the task associated with the task_id specified.
 <AccordionGroup>
 <Accordion title="Parameters">
@@ -457,10 +291,6 @@ and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look 
 environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
-</Accordion>
-<Accordion title="Return Value">
-No return value. Asynchronous tasks may only be successfully cancelled once. Once a task has been
-cancelled, any `partition_file_async_result` calls using that task's id will throw an exception.
 </Accordion>
 <Accordion title="Example">
 ```python
@@ -475,6 +305,11 @@ task_id = partition_file_async_submit(
 partition_file_async_cancel(task_id)
 ```
 </Accordion>
+<Accordion title="Return Value">
+No return value. Asynchronous tasks may only be successfully cancelled once. Once a task has been
+cancelled, any `partition_file_async_result` calls using that task's id will throw an exception.
+</Accordion>
+
 <Accordion title="Exceptions">
 
 User errors:
@@ -498,7 +333,7 @@ Other errors:
 
 
 
-## partition_file_async_list
+### partition_file_async_list
 Lists all the partition_file tasks still running in your account.
 <AccordionGroup>
 <Accordion title="Parameters">
@@ -510,6 +345,13 @@ and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look 
 environment variables, and then in `~/.aryn/config.yaml`).
 - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
 ssl_verify is `True` by default, enforcing SSL verification.
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file_async_list
+
+l = partition_file_async_list()
+```
 </Accordion>
 <Accordion title="Return Value">
 A dict like the one below which maps task_ids to a dict containing details of the respective task.
@@ -524,13 +366,7 @@ A dict like the one below which maps task_ids to a dict containing details of th
 }
 ```
 </Accordion>
-<Accordion title="Example">
-```python
-from aryn_sdk.partition import partition_file_async_list
 
-l = partition_file_async_list()
-```
-</Accordion>
 <Accordion title="Exceptions">
 
 User errors:
@@ -549,3 +385,177 @@ Other errors:
 
 </Accordion>
 </AccordionGroup>
+
+
+## Helper Functions
+
+### convert_image_element
+
+Convert an image element to a more usable format. If no format is specified, create a PIL Image object. If a format is specified, output the bytes of the image in that format. If `b64encode` is set to `True`, base64-encode the bytes and return them as a `string`.
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+- `elem`: Required. An image element from the `elements` field of a `partition_file` response.
+- `format`: A `string` specifying the format to output bytes to. Default is `PIL`.
+- `b64encode`: A `boolean` that when set to True enables base64-encoding of the output bytes of this function. Format cannot be `PIL` when this option is `True`. Default is `False`.
+
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, convert_image_element
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        extract_images=True
+    )
+image_elts = [e for e in data['elements'] if e['type'] == 'Image']
+
+pil_img = convert_image_element(image_elts[0])
+jpg_bytes = convert_image_element(image_elts[1], format='JPEG')
+png_str = convert_image_element(image_elts[2], format="PNG", b64encode=True)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+
+Either a PIL `Image` object, bytes of an image, or a base64-encoded image as a `str`.
+
+</Accordion>
+
+
+<Accordion title="Exceptions">
+-  ```ValueError``` - "b64encode was True but format was PIL. Cannot b64-encode a PIL Image". 
+    - Fix: If you're calling the function with a PIL image, please set b64encode to False. 
+</Accordion>
+
+</AccordionGroup>
+
+### draw_with_boxes
+
+Create a list of images from the provided PDF, one for each page, with bounding boxes detected by the partitioner drawn on.
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+- `pdf_file`: Required. A PDF file opened in binary mode or a path to a PDF file expressed as a `string` or a `PathLike` object upon which to draw.
+-`partitioning_data`: Required. The output from `partition_file`.
+- `draw_table_cells`: A boolean that when `True`, makes the function draw individually detected cells of tables. When `False`, the bounding boxes of table cells are not drawn but the outer bounding boxes of tables and the bounding boxes of all other elements are still drawn. Default is False.
+
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, draw_with_boxes
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-API-KEY",
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+pages = draw_with_boxes("my-favorite-pdf.pdf", data, draw_table_cells=True)
+```
+</Accordion>
+<Accordion title="Return Value">
+A list of images of pages of the PDF, each with bounding boxes drawn on.
+
+</Accordion>
+
+
+<Accordion title="Exceptions">
+-  Will throw an exception if the function is not called with a PDF file.
+</Accordion>
+
+</AccordionGroup>
+
+### table_elem_to_dataframe
+
+Create a `pandas` DataFrame representing the tabular data inside the provided table element. If the element is not of type `table` or doesn't contain any table data, return `None` instead.
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+- `elem`: Required. An element from the 'elements' field of a `partition_file` response.
+
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, table_elem_to_dataframe
+
+with open("partition-me.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+
+# Find the first table and convert it to a dataframe
+df = None
+for element in data['elements']:
+    if element['type'] == 'table':
+        df = table_elem_to_dataframe(element)
+        break
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A Pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, returns None instead.
+
+</Accordion>
+
+
+
+<Accordion title="Exceptions">
+
+</Accordion>
+
+</AccordionGroup>
+
+
+### tables_to_pandas
+
+For every table element in the provided partitioning response, create a pandas DataFrame representing the tabular data. Return a list containing all the elements, with tables paired with their corresponding DataFrames.
+
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+
+- `data`: A response from `partition_file`
+
+</Accordion>
+
+
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, tables_to_pandas
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-API-KEY",
+        use_ocr=True,
+        extract_table_structure=True,
+        extract_images=True
+    )
+elts_and_dataframes = tables_to_pandas(data)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+
+A list of tuples, where each tuple contains an element from the 'elements' field of a `partition_file` response and a Pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, the DataFrame will be `None`.
+
+</Accordion>
+
+<Accordion title="Exceptions">
+
+</Accordion>
+
+</AccordionGroup>
+
