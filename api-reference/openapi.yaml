@@ -193,7 +193,7 @@ paths:
                     examples:
                       - "No Aryn API key provided."
         '404':
-          description: No suck task.
+          description: No such task.
           content:
             application/json:
               schema:
@@ -202,7 +202,7 @@ paths:
                   detail:
                     type: string
                     examples:
-                      - "No suck task."
+                      - "No such task."
         '500':
           description: Internal Server Error
           content:
