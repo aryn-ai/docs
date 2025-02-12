@@ -28,6 +28,7 @@ for i, file_name in enumerate(files):
     file_path = f"{YOUR_DIRECTORY_NAME}/{file_name}"
     if os.path.isfile(file_path):
         try:
+            print(f"Submitting {file_path}")
             task_ids[i] = partition_file_async_submit(file_path)["task_id"]
         except Exception as e:
             print(f"Failed to submit {file_path}: {e}")
