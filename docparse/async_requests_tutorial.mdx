@@ -50,9 +50,9 @@ for i, task_id in enumerate(task_ids):
     if result["task_status"] == "done":
         results[i] = result
 
-## print the results, will be None if task failed
-for result in results:
-    print(result)
+## print the results will be None if task failed
+for file_name, result in zip(files, results):
+  print(file_name,": ", result)
 ```
 
 It is important to note that sending multiple asynchronous partitioning tasks at the same time does not guarantee that they will run simultaneously.
