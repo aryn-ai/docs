@@ -388,7 +388,7 @@ components:
               type: boolean
               title: Summarize Images
               description: |
-                A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.
+                 (PAYG Only) A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.
             use_ocr:
               type: boolean
               title: Use OCR
