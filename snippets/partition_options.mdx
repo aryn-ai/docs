@@ -1,25 +1,66 @@
-- `threshold`: This represents the threshold for accepting the model's predicted bounding boxes. It defaults to `auto`, where the service uses a processing method to find the best prediction for each possible bounding box. This is the recommended setting. However, this can be overriden by specifying a numerical threshold between 0 and 1. If you specify a numerical threshold, only bounding boxes with confidence scores higher than the threshold will be returned (instead of using the processing method described above). A lower value will include more objects, but may have overlaps, while a higher value will reduce the number of overlaps, but may miss legitimate objects. If you do set the threshold manually, we recommend starting with a value of `0.32`. 
-    Either the specific `string` `auto` or a `float` between `0.0` and `1.0`, inclusive. This value specifies the cutoff for detecting bounding boxes. A lower value will include more objects, but may have overlaps, while a higher value will reduce the number of overlaps, but may miss legitimate objects. Default is `auto` (DocParse will choose optimal bounding boxes).
-- `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
-- `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
-- `table_extraction_options`: A map with string keys specifying options for table extraction, which currently only supports the boolean `include_additional_text`, which will add in text from OCR boxes.  When include_additional_text is set to true and table extraction is enabled, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. `include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
+- `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object
+specifying where the file to parse is.
+- `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes for the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box. 
+Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will 
+include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
+set the threshold manually, we recommend starting with a value of `0.32`.
+- `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
+useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
+text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
+- `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural
+content using a purpose built table extraction model. If set to `False`, tables are still identified but
+not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
+Default is `False`.
+- `table_extraction_options`: A map with string keys specifying options for table extraction, which currently only
+supports the boolean `include_additional_text`. When include_additional_text is
+set to true and table extraction is enabled, DocParse will attempt to enhance the table structure by merging in tokens
+from text extraction. This can be useful for working with tables that have missing or misaligned text.
+`include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
 - `summarize_images`: A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
-- `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition. Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A valid example value for selected_pages is `[1, 10, [15, 20]]` which would include pages 1, 10, 15, 16, 17 ..., 20.  `selected_pages` is `None` by default, which results in all pages of the document being parsed.
-- `chunking_options`: A dictionary of options for specifying chunking behavior. Chunking is only performed when this option is present, and default options are chosen when `chunking_options` is specified as `{}`.
-    - `strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are `context_rich`, `mixed_multi_column`, and `maximize_within_limit`. The default and recommended chunker is `context_rich` as `{'strategy': 'context_rich'}`.
-        - Behavior of `context_rich` chunker: The goal of this strategy is to add context to evenly-sized chunks. This is most useful for retrieval based GenAI applications. context_rich chunking combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. Merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the Section-header to the start of this new chunk and continues. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
-
-        - Behavior of `mixed_multi_column` chunker: `mixed_multi_column` performs well on journal articles and documents layouts that contain one or two columns. For each page, it detects whether the elements are present in two columns and if so, it orders them properly with the left column appearing in the order first. Then, it drops elements that are only one token in size. It also drops elements in the top and bottom 5% of the page. Elements returned do not have a `type`. The `marked` merger always breaks across pages.
-
-        - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless `merge_across_pages` is set to `False`.
+- `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition.
+Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A
+valid example value for selected_pages is `[1, 10, [15, 20]]` which would include pages 1, 10, 15, 16, 17 ..., 20.
+`selected_pages` is `None` by default, which results in all pages of the document being parsed.
+- `chunking_options`: A dictionary of options for specifying chunking behavior. Chunking is only performed when this
+option is present, and default options are chosen when `chunking_options` is specified as `{}`.
+    - `strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are `context_rich`
+    and `maximize_within_limit`. The default and recommended chunker is `context_rich` as
+    `{'strategy': 'context_rich'}`.
+        - Behavior of `context_rich` chunker: The goal of this strategy is to add context to evenly-sized chunks. This
+        is most useful for retrieval based GenAI applications. Context_rich chunking combines adjacent `section-header`
+        and `title` elements into a new `section-header` element. Merges elements into a chunk with its most recent
+        `section-header`. If the chunk would contain too many tokens, then it starts a new chunk copying the
+        section-header to the start of this new chunk and continues. Merges elements on different pages, unless
+        `merge_across_pages` is set to `False`.
+        - Behavior of `maximize_within_limit` chunker: The goal of the `maximize_within_limit` chunker is to make the
+        chunks as large as possible. Merges elements into the last most recently merged set of elements unless doing so
+        would make its token count exceed `max_tokens`. In that case, it would keep the new element separate and start
+        merging subsequent elements into that one, following the same rule. Merges elements on different pages, unless
+        `merge_across_pages` is set to `False`.
     - `max_tokens`: An integer specifying the cutoff for splitting chunks that are too large. Default value is 512.
-    - `tokenizer`: A string specifying the tokenizer to use when determining how characters in a chunk are grouped. Valid values are `openai_tokenizer`, `character_tokenizer`, and `huggingface_tokenizer`. Defaults to `openai_tokenizer`.
-    - `tokenizer_options`: A tree with string keys specifying the options for the chosen tokenizer. Defaults to `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
+    - `tokenizer`: A string specifying the tokenizer to use when determining how characters in a chunk are grouped.
+    Valid values are `openai_tokenizer`, `character_tokenizer`, and `huggingface_tokenizer`. Defaults to `openai_tokenizer`.
+    - `tokenizer_options`: A nested dictionary with string keys specifying the options for the chosen tokenizer. Defaults to
+    `{'model_name': 'text-embedding-3-small'}`, which works with the OpenAI tokenizer.
         - Available options for `openai_tokenizer`:
-            - `model_name`: Accepts all models supported by OpenAI's [tiktoken tokenizer](https://github.com/openai/tiktoken). Default is "text-embedding-3-small"
+            - `model_name`: Accepts all models supported by OpenAI's
+            [tiktoken tokenizer](https://github.com/openai/tiktoken). Default is "text-embedding-3-small"
         - Available options for `HuggingFaceTokenizer`:
-            - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
+            - `model_name`: Accepts all huggingface tokenizers from the
+            [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
         - `character_tokenizer` does not take any options.
-    - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to `True`. 
-- `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
+    - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page
+    boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to
+    `True`.
+- `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called
+`elements` which contains the partitioned elements, represented in JSON. If set to `markdown` the service response will
+instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
+- `ssl_verify`: A `boolean` that controls whether the client verifies the SSL certificate of the chosen DocParse
+server. ssl_verify is `True` by default, enforcing SSL verification.
+- `aryn_config`: An ArynConfig object (defined in
+[aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+an api key. If aryn_api_key is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+environment variables, and then in ~/.aryn/config.yaml).
+- `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
