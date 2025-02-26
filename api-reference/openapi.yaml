@@ -384,6 +384,11 @@ components:
               title: Extract Table Structure
               description: |
                 A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.
+            summarize_images:
+              type: boolean
+              title: Summarize Images
+              description: |
+                A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.
             use_ocr:
               type: boolean
               title: Use OCR

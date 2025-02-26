@@ -119,6 +119,7 @@ set to true and table extraction is enabled, DocParse will attempt to enhance th
 from text extraction. This can be useful for working with tables that have missing or misaligned text.
 `include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
+- `summarize_images`: A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
 - `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition.
 Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A
 valid example value for selected_pages is `[1, 10, [15, 20]]` which would include pages 1, 10, 15, 16, 17 ..., 20.
