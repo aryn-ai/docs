@@ -18,7 +18,7 @@ All of the available options are listed below, and are optional unless specified
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
   - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table strcuture by merging in tokens from text extraction. This can be useful for working with tables that have missing of misaligned text. Default is `False`
-  - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Selection expressions are of the form
+  - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is 500 pixels, use deformable_detr; otherwise use table_transformer." To choose to use only "deformable_detr" or "table_transformer", set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
       ```
       metric cmp threshold -> model; metric cmp threshold -> model; model
       ```
@@ -28,7 +28,7 @@ All of the available options are listed below, and are optional unless specified
       - Thresholds must be numeric.
       - Supported comparison operators are "\<, \>, \<=, \>=, ==, !=".
 
-      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. To choose to use only "deformable_detr" or "table_transformer", set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, Which means "if the largest dimension of the table is 500 pixels, use deformable_detr; otherwise use table_transformer.
+      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer.
 
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
 - `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
