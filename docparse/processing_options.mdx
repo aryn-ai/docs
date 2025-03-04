@@ -24,11 +24,15 @@ All of the available options are listed below, and are optional unless specified
       ```
       And should be read as a series of "if metric compares to threshold, then model" statements. Statements are processed from left to right.
       - Supported models are "table_transformer", which tends to do well with smaller tables, and "deformable_detr", which tends to do better with larger tables.
-      - Supported metrics are "pixels", which corresponds to the maximum dimension of the bounding box containing the table, and "chars", which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
+      - Supported metrics are "pixels", which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and "chars", which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
       - Thresholds must be numeric.
       - Supported comparison operators are "\<, \>, \<=, \>=, ==, !=".
 
-      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer.
+      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer. Anything after the unconditional statement will not be processed
+      Examples:
+        - `table_transformer` => always use table transformer
+        - `pixels > 500 -> deformable_detr; table_transformer` => if the biggest dimension of the table is greater than 500 pixels use deformable detr. Otherwise use table_transformer.
+        - `pixels>50->table_transformer; chars<30->deformable_detr;chars>35->table_transformer;pixels>2->deformable_detr;table_transformer;comment` => if the biggest dimension is more than 50 pixels use table transformer. Else if the total number of chars in the table is less than 30 use deformable_detr. Else if there are mode than 35 chars use table transformer. Else if there are more than 2 pixels in the biggest dimension use deformable detr. Otherwise use table transformer. comment is not processed.
 
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
 - `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
