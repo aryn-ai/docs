@@ -12,11 +12,28 @@ export ARYN_API_KEY="PUT API KEY HERE"
 ```
 
 All of the available options are listed below, and are optional unless specified otherwise.
-- `threshold`: This represents the threshold for accepting the model's predicted bounding boxes. It defaults to `auto`, where the service uses a processing method to find the best prediction for each possible bounding box. This is the recommended setting. However, this can be overridden by specifying a numerical threshold between 0 and 1. If you specify a numerical threshold, only bounding boxes with confidence scores higher than the threshold will be returned (instead of using the processing method described above). A lower value will include more objects, but may have overlaps, while a higher value will reduce the number of overlaps, but may miss legitimate objects. If you do set the threshold manually, we recommend starting with a value of `0.32`. 
+- `threshold`: This represents the threshold for accepting the model's predicted bounding boxes. It defaults to `auto`, where the service uses a processing method to find the best prediction for each possible bounding box. This is the recommended setting. However, this can be overridden by specifying a numerical threshold between 0 and 1. If you specify a numerical threshold, only bounding boxes with confidence scores higher than the threshold will be returned (instead of using the processing method described above). A lower value will include more objects, but may have overlaps, while a higher value will reduce the number of overlaps, but may miss legitimate objects. If you do set the threshold manually, we recommend starting with a value of `0.32`.
     Either the specific `string` `auto` or a `float` between `0.0` and `1.0`, inclusive. This value specifies the cutoff for detecting bounding boxes. A lower value will include more objects, but may have overlaps, while a higher value will reduce the number of overlaps, but may miss legitimate objects. Default is `auto` (DocParse will choose optimal bounding boxes).
 - `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
-- `table_extraction_options`: A map with string keys specifying options for table extraction, which currently only supports the boolean `include_additional_text`, which will add in text from OCR boxes. When `include_additional_text` is set to `True` and table extraction is enabled, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. `include_additional_text` is `False` by default. The default table_extraction_options is `{}`.
+- `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
+  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `False`
+  - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
+      ```
+      metric cmp threshold -> model; metric cmp threshold -> model; model
+      ```
+      And should be read as a series of `if metric compares to threshold, then use model` statements. Statements are processed from left to right.
+      - Supported models are `table_transformer`, which tends to do well with smaller tables, and `deformable_detr`, which tends to do better with larger tables.
+      - Supported metrics are `pixels`, which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and `chars`, which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
+      - Thresholds must be numeric.
+      - Supported comparison operators are `<, >, <=, >=, ==, !=`.
+
+      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer. Anything after the unconditional statement will not be processed.
+      Examples:
+        - `table_transformer` => always use table transformer
+        - `pixels > 500 -> deformable_detr; table_transformer` => if the biggest dimension of the table is greater than 500 pixels use deformable detr. Otherwise use table_transformer.
+        - `pixels>50->table_transformer; chars<30->deformable_detr;chars>35->table_transformer;pixels>2->deformable_detr;table_transformer;comment` => if the biggest dimension is more than 50 pixels use table transformer. Else if the total number of chars in the table is less than 30 use deformable_detr. Else if there are mode than 35 chars use table transformer. Else if there are more than 2 pixels in the biggest dimension use deformable detr. Otherwise use table transformer. comment is not processed.
+
 - `extract_images`: A boolean that determines whether to extract images from the document. Default: `False`.
 - `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
 - `ocr_language`: A string that specifies the language to use for OCR. The default is `english` (English). The full list of supported languages can be found [here](./formats_supported).
@@ -34,11 +51,11 @@ All of the available options are listed below, and are optional unless specified
         - Available options for `HuggingFaceTokenizer`:
             - `model_name`: Accepts all huggingface tokenizers from the [huggingface/tokenizers repo](https://github.com/huggingface/tokenizers).
         - `character_tokenizer` does not take any options.
-    - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`. 
+    - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page boundaries. Defaults to `True`.
 - `output_format`: A string controlling the output representation. Defaults to `json` which yields an array called `elements` which contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include a field called `markdown` that contains a string representing the entire document in Markdown format.
 - `pages_per_call`: This is only available when using the Partition function in Sycamore. This option divides the processing of your document into batches of pages, and you specify the size of each batch (number of pages). This is useful when running OCR on large documents.
 - `output_label_options`: A dictionary of options to specify which heuristic to apply to enforce certain label outputs. If this option is not specified, no heuristic is applied. The options the dictionary supports are listed below.
-    - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output. 
+    - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output.
     - `title_candidate_elements`: A list of strings that are candidate elements to be promoted to title.
     - `orientation_correction`: A boolean value that specifies whether to correct the orientation of rotated pages during the preprocessing step.
 
