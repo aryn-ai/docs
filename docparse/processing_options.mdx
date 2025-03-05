@@ -17,18 +17,18 @@ All of the available options are listed below, and are optional unless specified
 - `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
-  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table strcuture by merging in tokens from text extraction. This can be useful for working with tables that have missing of misaligned text. Default is `False`
+  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `False`
   - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
       ```
       metric cmp threshold -> model; metric cmp threshold -> model; model
       ```
-      And should be read as a series of "if metric compares to threshold, then model" statements. Statements are processed from left to right.
-      - Supported models are "table_transformer", which tends to do well with smaller tables, and "deformable_detr", which tends to do better with larger tables.
-      - Supported metrics are "pixels", which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and "chars", which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
+      And should be read as a series of ``if metric compares to threshold, then use model`` statements. Statements are processed from left to right.
+      - Supported models are ``table_transformer``, which tends to do well with smaller tables, and ``deformable_detr``, which tends to do better with larger tables.
+      - Supported metrics are ``pixels``, which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and ``chars``, which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
       - Thresholds must be numeric.
-      - Supported comparison operators are "\<, \>, \<=, \>=, ==, !=".
+      - Supported comparison operators are ``<, >, <=, >=, ==, !=``.
 
-      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer. Anything after the unconditional statement will not be processed
+      A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer. Anything after the unconditional statement will not be processed.
       Examples:
         - `table_transformer` => always use table transformer
         - `pixels > 500 -> deformable_detr; table_transformer` => if the biggest dimension of the table is greater than 500 pixels use deformable detr. Otherwise use table_transformer.

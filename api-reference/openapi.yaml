@@ -4,11 +4,11 @@ info:
   description: "DocParse API"
   version: 0.1.0
 servers:
-- url: "https://api.aryn.cloud"
+  - url: "https://api.aryn.cloud"
 paths:
   /v1/document/partition:
     post:
-      summary: 'Partition Document'
+      summary: "Partition Document"
       operationId: _sync_partition_document_v1
       security:
         - HTTPBearer: []
@@ -19,28 +19,28 @@ paths:
           schema:
             anyOf:
               - type: string
-              - type: 'null'
+              - type: "null"
             title: User-Agent
       requestBody:
         required: true
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Body__sync_partition_document_v1'
+              $ref: "#/components/schemas/Body__sync_partition_document_v1"
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PartitionerResponse'
-        '422':
+                $ref: "#/components/schemas/PartitionerResponse"
+        "422":
           description: Validation Error
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-        '400':
+                $ref: "#/components/schemas/HTTPValidationError"
+        "400":
           description: No Input File Provided
           content:
             application/json:
@@ -51,7 +51,7 @@ paths:
                     type: string
                     examples:
                       - "No input file provided."
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -62,7 +62,7 @@ paths:
                     type: string
                     examples:
                       - "Not authenticated."
-        '500':
+        "500":
           description: Internal Server Error
           content:
             text/plain:
@@ -72,7 +72,7 @@ paths:
                   - "Internal Server Error"
   /v1/async/submit/document/partition:
     post:
-      summary: 'Submit Document for Async Partitioning'
+      summary: "Submit Document for Async Partitioning"
       operationId: _async_partition_document_submit_v1
       security:
         - HTTPBearer: []
@@ -83,7 +83,7 @@ paths:
           schema:
             anyOf:
               - type: string
-              - type: 'null'
+              - type: "null"
             title: User-Agent
         - name: X-Aryn-Webhook
           in: header
@@ -96,9 +96,9 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Body__sync_partition_document_v1'
+              $ref: "#/components/schemas/Body__sync_partition_document_v1"
       responses:
-        '202':
+        "202":
           description: Successful Response
           content:
             application/json:
@@ -112,7 +112,7 @@ paths:
                       The ID of the async task.
                     examples:
                       - "aryn:t-47gpd3604e5tz79z1jro5fc"
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -123,7 +123,7 @@ paths:
                     type: string
                     examples:
                       - "Not authenticated."
-        '429':
+        "429":
           description: Too many requests.
           content:
             application/json:
@@ -136,7 +136,7 @@ paths:
                       - "Too many requests"
   /v1/async/result/{task_id}:
     get:
-      summary: 'Get Async Task Status'
+      summary: "Get Async Task Status"
       operationId: _async_partition_document_status_v1
       security:
         - HTTPBearer: []
@@ -153,7 +153,7 @@ paths:
           schema:
             anyOf:
               - type: string
-              - type: 'null'
+              - type: "null"
             title: User-Agent
         - name: path_filter
           in: query
@@ -164,13 +164,13 @@ paths:
               - ^/v1/document/partition$
             title: Path Filter
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PartitionerResponse'
-        '202':
+                $ref: "#/components/schemas/PartitionerResponse"
+        "202":
           description: Task is pending
           content:
             application/json:
@@ -181,7 +181,7 @@ paths:
                     type: string
                     examples:
                       - "Task is pending."
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -192,7 +192,7 @@ paths:
                     type: string
                     examples:
                       - "No Aryn API key provided."
-        '404':
+        "404":
           description: No such task.
           content:
             application/json:
@@ -203,7 +203,7 @@ paths:
                     type: string
                     examples:
                       - "No such task."
-        '500':
+        "500":
           description: Internal Server Error
           content:
             text/plain:
@@ -213,7 +213,7 @@ paths:
                   - "Internal Server Error"
   /v1/async/cancel/{task_id}:
     post:
-      summary: 'Cancel Async Task'
+      summary: "Cancel Async Task"
       operationId: _async_partition_document_cancel_v1
       security:
         - HTTPBearer: []
@@ -230,7 +230,7 @@ paths:
           schema:
             anyOf:
               - type: string
-              - type: 'null'
+              - type: "null"
             title: User-Agent
         - name: path_filter
           in: query
@@ -241,9 +241,9 @@ paths:
               - ^/v1/document/partition$
             title: Path Filter
       responses:
-        '200':
+        "200":
           description: Task Cancelled Successfully
-        '404':
+        "404":
           description: No such task.
           content:
             application/json:
@@ -254,7 +254,7 @@ paths:
                     type: string
                     examples:
                       - "Task not found."
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -265,7 +265,7 @@ paths:
                     type: string
                     examples:
                       - "No Aryn API key provided."
-        '500':
+        "500":
           description: Internal Server Error
           content:
             text/plain:
@@ -275,7 +275,7 @@ paths:
                   - "Internal Server Error"
   /v1/async/list:
     get:
-      summary: 'List Async Tasks'
+      summary: "List Async Tasks"
       operationId: _async_partition_document_list_v1
       security:
         - HTTPBearer: []
@@ -286,7 +286,7 @@ paths:
           schema:
             anyOf:
               - type: string
-              - type: 'null'
+              - type: "null"
             title: User-Agent
         - name: path_filter
           in: query
@@ -297,7 +297,7 @@ paths:
               - ^/v1/document/partition$
             title: Path Filter
       responses:
-        '200':
+        "200":
           description: Successful Response
           content:
             application/json:
@@ -325,12 +325,12 @@ paths:
                             - "run"
                             - "queue"
                     examples:
-                        - "aryn:t-47gpd3604e5tz79z1jro5fc":
-                            action: "/v1/document/partition"
-                            task_status: "done"
+                      - "aryn:t-47gpd3604e5tz79z1jro5fc":
+                          action: "/v1/document/partition"
+                          task_status: "done"
                 required:
                   - tasks
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -341,7 +341,7 @@ paths:
                     type: string
                     examples:
                       - "No Aryn API key provided."
-        '500':
+        "500":
           description: Internal Server Error
           content:
             text/plain:
@@ -384,11 +384,30 @@ components:
               title: Extract Table Structure
               description: |
                 A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.
+            table_extraction_options:
+              type: object
+              title: Table Extraction Options
+              description: |
+                Options for table extraction
+              properties:
+                include_additional_text:
+                  type: boolean
+                  title: Include Additional Text
+                  description: |
+                    Attempts to merge text within the table bounding box but missed by the table due to misalignment issues.
+                model_selection:
+                  type: string
+                  title: Model Selection
+                  description: >
+                    An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`,
+                    which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only
+                    deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Refer to the
+                    [full documentation](processing_options) for more details.
             summarize_images:
               type: boolean
               title: Summarize Images
               description: |
-                 (PAYG Only) A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.
+                (PAYG Only) A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.
             use_ocr:
               type: boolean
               title: Use OCR
@@ -396,17 +415,94 @@ components:
                 A boolean value indicating whether to use OCR or not on the document.
             ocr_language:
               type: string
-              enum: ['abaza', 'adyghe', 'afrikaans', 'albanian', 'angika','arabic', 'avar', 'azerbaijani', 'belarusian', 'bhojpuri', 'bihari', 'bosnian', 'bulgarian', 'chinese', 'chinese_traditional', 'croatian', 'czech', 'danish', 'dargwa', 'dutch', 'english', 'estonian', 'french', 'german', 'hindi', 'hungarian', 'icelandic', 'indonesian', 'ingush', 'irish', 'italian', 'japanese', 'kabardian', 'korean','konkani',  'kurdish', 'lak', 'latvian', 'lezghian', 'lithuanian', 'magahi', 'maithili', 'malay', 'maltese', 'maori', 'marathi', 'mongolian', 'nagpuri', 'nepali', 'newari', 'norwegian', 'occitan', 'persian', 'polish', 'portuguese', 'romanian', 'russian', 'serbian_cyrillic', 'serbian_latin', 'slovak', 'slovenian', 'spanish', 'swahili', 'swedish', 'tabassaran', 'tagalog', 'tamil', 'telugu', 'turkish', 'ukrainian', 'urdu', 'uyghur', 'uzbek', 'vietnamese', 'welsh']
+              enum:
+                [
+                  "abaza",
+                  "adyghe",
+                  "afrikaans",
+                  "albanian",
+                  "angika",
+                  "arabic",
+                  "avar",
+                  "azerbaijani",
+                  "belarusian",
+                  "bhojpuri",
+                  "bihari",
+                  "bosnian",
+                  "bulgarian",
+                  "chinese",
+                  "chinese_traditional",
+                  "croatian",
+                  "czech",
+                  "danish",
+                  "dargwa",
+                  "dutch",
+                  "english",
+                  "estonian",
+                  "french",
+                  "german",
+                  "hindi",
+                  "hungarian",
+                  "icelandic",
+                  "indonesian",
+                  "ingush",
+                  "irish",
+                  "italian",
+                  "japanese",
+                  "kabardian",
+                  "korean",
+                  "konkani",
+                  "kurdish",
+                  "lak",
+                  "latvian",
+                  "lezghian",
+                  "lithuanian",
+                  "magahi",
+                  "maithili",
+                  "malay",
+                  "maltese",
+                  "maori",
+                  "marathi",
+                  "mongolian",
+                  "nagpuri",
+                  "nepali",
+                  "newari",
+                  "norwegian",
+                  "occitan",
+                  "persian",
+                  "polish",
+                  "portuguese",
+                  "romanian",
+                  "russian",
+                  "serbian_cyrillic",
+                  "serbian_latin",
+                  "slovak",
+                  "slovenian",
+                  "spanish",
+                  "swahili",
+                  "swedish",
+                  "tabassaran",
+                  "tagalog",
+                  "tamil",
+                  "telugu",
+                  "turkish",
+                  "ukrainian",
+                  "urdu",
+                  "uyghur",
+                  "uzbek",
+                  "vietnamese",
+                  "welsh",
+                ]
               title: OCR Language
               description: |
                 The language to use for OCR. Defaults to `english`.
             threshold:
               anyOf:
-              - type: string
-                enum: ['auto']
-              - type: number
-                minimum: 0
-                maximum: 1
+                - type: string
+                  enum: ["auto"]
+                - type: number
+                  minimum: 0
+                  maximum: 1
               title: Threshold
               description: |
                 A number between 0 and 1 indicating the threshold for document segmentation. Defaults to auto, which uses an automatic threshold.
@@ -415,13 +511,23 @@ components:
               properties:
                 strategy:
                   type: string
-                  enum: ['context_rich', 'mixed_multi_column', 'maximize_within_limit']
+                  enum:
+                    [
+                      "context_rich",
+                      "mixed_multi_column",
+                      "maximize_within_limit",
+                    ]
                   title: Strategy
                   description: |
                     The strategy to use for merging chunks. Defaults to context_rich.
                 tokenizer:
                   type: string
-                  enum: ['openai_tokenizer', 'character_tokenizer', 'huggingface_tokenizer']
+                  enum:
+                    [
+                      "openai_tokenizer",
+                      "character_tokenizer",
+                      "huggingface_tokenizer",
+                    ]
                   title: Tokenizer
                   description: |
                     The tokenizer to use for chunking. Defaults to openai_tokenizer.
@@ -452,23 +558,23 @@ components:
                   title: title_candidate_elements
                   description: |
                     An array of strings representing the elements that should be considered as title candidates. Defaults to ["Section-header", "Caption"]
-                promote_title: 
+                promote_title:
                   type: boolean
                   title: promote_title
                   description: |
                     A boolean that specifies whether to promote an element to title. Defaults to false.
                 orientation_correction:
                   type: boolean
-                  title:  orientation_correction
+                  title: orientation_correction
                   description: |
                     A boolean value indicating whether to correct the orientation of the pages. Defaults to false.
               title: Output Label Options
               description: |
                 A dictionary of options to specify which heuristic to apply to enforce certain label outputs.
-              
+
             output_format:
               type: string
-              enum: ['json', 'markdown']
+              enum: ["json", "markdown"]
               title: Output Format
               description: |
                 The format of the output. Defaults to json.
@@ -504,7 +610,7 @@ components:
           anyOf:
             - type: string
               format: binary
-            - type: 'null'
+            - type: "null"
           title: Binary Representation
           description: |
             The binary representation of the element.
@@ -520,7 +626,7 @@ components:
       properties:
         detail:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: "#/components/schemas/ValidationError"
           type: array
           title: Detail
       type: object
@@ -538,21 +644,21 @@ components:
         error:
           anyOf:
             - type: string
-            - type: 'null'
+            - type: "null"
           title: Error
           description: |
             The error message if the partitioning is not successful.
         elements:
           anyOf:
             - items:
-                $ref: '#/components/schemas/Element'
+                $ref: "#/components/schemas/Element"
               type: array
-            - type: 'null'
+            - type: "null"
           title: Elements
         markdown:
           anyOf:
             - type: string
-            - type: 'null'
+            - type: "null"
           title: Markdown
       type: object
       required:
