@@ -22,11 +22,11 @@ All of the available options are listed below, and are optional unless specified
       ```
       metric cmp threshold -> model; metric cmp threshold -> model; model
       ```
-      And should be read as a series of ``if metric compares to threshold, then use model`` statements. Statements are processed from left to right.
-      - Supported models are ``table_transformer``, which tends to do well with smaller tables, and ``deformable_detr``, which tends to do better with larger tables.
-      - Supported metrics are ``pixels``, which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and ``chars``, which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
+      And should be read as a series of `if metric compares to threshold, then use model` statements. Statements are processed from left to right.
+      - Supported models are `table_transformer`, which tends to do well with smaller tables, and `deformable_detr`, which tends to do better with larger tables.
+      - Supported metrics are `pixels`, which corresponds to the maximum dimension of the bounding box containing the table (we find this to be easier to reason about than the total number of pixels which depends on two numbers), and `chars`, which corresponds to the total number of characters within the table as determined by the OCR/text extraction step.
       - Thresholds must be numeric.
-      - Supported comparison operators are ``<, >, <=, >=, ==, !=``.
+      - Supported comparison operators are `<, >, <=, >=, ==, !=`.
 
       A statement with no metric, comparison, and threshold can be thought of as a default, where statements after the default will not be processed. If no such 'unconditional' statement is included and no conditions match, DocParse will default to table_transformer. Anything after the unconditional statement will not be processed.
       Examples:
