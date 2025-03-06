@@ -413,6 +413,22 @@ components:
               title: Use OCR
               description: |
                 A boolean value indicating whether to use OCR or not on the document.
+            text_extraction_options:
+              type: object
+              title: Text Extraction Options
+              description: |
+                Options for text extraction
+              properties:
+                ocr_text_mode:
+                  type: string
+                  enum:
+                    [
+                      "vision",
+                      "standard",
+                    ]
+                  title: OCR Text Mode
+                  description: |
+                    The mode to use for OCR text extraction on non-table elements. Defaults to `standard`. Note that the `vision` mode is only available for PAYG users.
             ocr_language:
               type: string
               enum:

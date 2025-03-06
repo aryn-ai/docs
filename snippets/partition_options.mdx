@@ -7,6 +7,8 @@ set the threshold manually, we recommend starting with a value of `0.32`.
 - `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
 useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
 text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
+- `text_extraction_options`: A map with string keys specifying options for text extraction.
+    - `ocr_text_mode`: A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for non-table elements (`standard` will be used for table elements) and for PAYG users only.
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural
 content using a purpose built table extraction model. If set to `False`, tables are still identified but
 not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
