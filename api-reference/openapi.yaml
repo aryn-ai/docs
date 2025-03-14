@@ -564,6 +564,12 @@ components:
               title: Chunking Options
               description: |
                 The options for chunking the document. If not specified, then chunking will not be performed.
+            output_format:
+              type: string
+              enum: ["json", "markdown"]
+              title: Output Format
+              description: |
+                The format of the output. Defaults to json.
             output_label_options:
               type: object
               properties:
@@ -587,13 +593,24 @@ components:
               title: Output Label Options
               description: |
                 A dictionary of options to specify which heuristic to apply to enforce certain label outputs.
-
-            output_format:
-              type: string
-              enum: ["json", "markdown"]
-              title: Output Format
+            markdown_options:
+              type: object
+              properties:
+                include_pagenum:
+                  type: boolean
+                  description: |
+                    A boolean value indicating whether to include page numbers in the markdown output. Defaults to false.
+                include_headers:
+                  type: boolean
+                  description: |
+                    A boolean value indicating whether to include page headers in the markdown output. Defaults to false.
+                include_footers:
+                  type: boolean
+                  description: |
+                    A boolean value indicating whether to include page footers in the markdown output. Defaults to false.
+              title: Markdown Options
               description: |
-                The format of the output. Defaults to json.
+                A dictionary of options to specify what to include in the markdown output.
       type: object
       required:
         - file

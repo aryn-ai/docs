@@ -60,6 +60,10 @@ All of the available options are listed below, and are optional unless specified
     - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output.
     - `title_candidate_elements`: A list of strings that are candidate elements to be promoted to title.
     - `orientation_correction`: A boolean value that specifies whether to correct the orientation of rotated pages during the preprocessing step.
+- `markdown_options`: A dictionary of options to specify what to include in the markdown output.
+    - `include_pagnum`: A boolean that specifies whether to include page numbers in the markdown output. Default is `False`.
+    - `include_headers`: A boolean that specifies whether to include headers in the markdown output. Default is `False`.
+    - `include_footers`: A boolean that specifies whether to include footers in the markdown output. Default is `False`.
 
 Here is an example of how you can use some of these options in a curl command or in Python code with the [Aryn SDK](./aryn_sdk).
 
