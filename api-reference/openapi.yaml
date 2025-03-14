@@ -610,7 +610,7 @@ components:
                     A boolean value indicating whether to include page footers in the markdown output. Defaults to false.
               title: Markdown Options
               description: |
-                A dictionary of options to specify what include in the markdown output.
+                A dictionary of options to specify what to include in the markdown output.
       type: object
       required:
         - file
