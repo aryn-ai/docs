@@ -919,8 +919,10 @@
             "required": true,
             "schema": {
               "type": "string",
+              "description": "The ID of the docset to query.",
               "title": "Docset Id"
-            }
+            },
+            "description": "The ID of the docset to query."
           },
           {
             "name": "page_size",
@@ -928,9 +930,11 @@
             "required": false,
             "schema": {
               "type": "integer",
+              "description": "The number of results to return per page.",
               "default": 10,
               "title": "Page Size"
-            }
+            },
+            "description": "The number of results to return per page."
           },
           {
             "name": "page_token",
@@ -945,8 +949,10 @@
                   "type": "null"
                 }
               ],
+              "description": "Reserved for future use. A pagination token to retrieve the next page of results.",
               "title": "Page Token"
-            }
+            },
+            "description": "Reserved for future use. A pagination token to retrieve the next page of results."
           }
         ],
         "requestBody": {
@@ -1530,7 +1536,8 @@
                 "type": "null"
               }
             ],
-            "title": "Query"
+            "title": "Query",
+            "description": "The query to search for"
           },
           "query_type": {
             "type": "string",
@@ -1541,6 +1548,7 @@
               "hybrid"
             ],
             "title": "Query Type",
+            "description": "The type of query to perform.",
             "default": "lexical"
           },
           "properties_filter": {
@@ -1552,7 +1560,8 @@
                 "type": "null"
               }
             ],
-            "title": "Properties Filter"
+            "title": "Properties Filter",
+            "description": "A filter to apply to the properties of the documents."
           },
           "return_type": {
             "type": "string",
@@ -1561,6 +1570,7 @@
               "element"
             ],
             "title": "Return Type",
+            "description": "The type of result to return.",
             "default": "doc"
           },
           "include_fields": {
@@ -1575,7 +1585,8 @@
                 "type": "null"
               }
             ],
-            "title": "Include Fields"
+            "title": "Include Fields",
+            "description": "When specified, the server performs a projection to return only the fields specified by this list of JsonPaths (see RFC 9535) given as a list of strings."
           },
           "debug_info": {
             "anyOf": [
@@ -1587,11 +1598,15 @@
               }
             ],
             "title": "Debug Info",
+            "description": "When `True`, the server returns additional debug information (the embedding calculated for a vector or hybrid query) in the response.",
             "default": false
           }
         },
         "additionalProperties": false,
         "type": "object",
+        "required": [
+          "query"
+        ],
         "title": "SimpleQueryRequest"
       },
       "SimpleQueryResponse": {
@@ -1599,7 +1614,8 @@
           "results": {
             "items": {},
             "type": "array",
-            "title": "Results"
+            "title": "Results",
+            "description": "The list of results returned by the query. These are Json objects representing the documents or elements that matched the query, possibly filtered by the optional projection specified by include_fields."
           },
           "query_embedding": {
             "anyOf": [
@@ -1613,7 +1629,8 @@
                 "type": "null"
               }
             ],
-            "title": "Query Embedding"
+            "title": "Query Embedding",
+            "description": "The embedding calculated for the query, if the query type is vector or hybrid and `debug_info` is True."
           },
           "next_page_token": {
             "anyOf": [
@@ -1624,7 +1641,8 @@
                 "type": "null"
               }
             ],
-            "title": "Next Page Token"
+            "title": "Next Page Token",
+            "description": "Reserved for future use. Will be a pagination token that can be used to retrieve the next page of results."
           }
         },
         "type": "object",
