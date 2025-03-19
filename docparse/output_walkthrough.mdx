@@ -1,12 +1,12 @@
 ---
 title: 'Tutorial: DocParse Intro'
-description: 'Walking through a document using Aryn DocParse'
+description: 'Parsing and extracting elements from a document'
 icon: 'person-walking'
 ---
 
 ## Introduction
 
-In [this example](https://colab.research.google.com/drive/120STOQ5wGIpFUbgS7Gcld_PVW-CfLWOg#scrollTo=bTu2a1K-F19w), we'll use DocParse to extract data from an NTSB report. We'll go through the important code snippets below to see what's going on. For the purposes of this tutorial, we focus on page 2 of the document, given below.
+In [this example](https://colab.research.google.com/drive/120STOQ5wGIpFUbgS7Gcld_PVW-CfLWOg#scrollTo=bTu2a1K-F19w), we'll use DocParse to extract data from an NTSB report using the `aryn-sdk`. We'll go through the important code snippets below to see what's going on. For the purposes of this tutorial, we focus on page 2 of the document, given below.
 
 <Frame>
   <img src="/images/59_page2.png" />
@@ -21,7 +21,7 @@ with open(file_name, 'rb') as file:
   ## Make a call to the partitioning service and set extract_images to true.
   partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, use_ocr=False, selected_pages=[2])
 ```
-We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The `aryn_api_key` is your API key from Aryn. In this example, we set `use_ocr` to `False` to avoid OCR and use embedded text, and set `extract_images` and `extract_table_structure` to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2.
+We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The `aryn_api_key` is your API key from Aryn. In this example, we set `use_ocr` to `False` to avoid OCR and use embedded text, and set `extract_images` and `extract_table_structure` to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2. This document is also be added to [your storage](http://app.aryn.ai/storage/), where you can visualize the labeled bounding boxes and extracted elements.
 
 ### Viewing the JSON Output
 
