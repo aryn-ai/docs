@@ -60,7 +60,22 @@ You can view your newly extracted properties when viewing a document in the DocS
 
 ### Using vector and keyword search
 
-TBD
+You can easily search over your documents and the associated metadata by using the search API. Once you have added documents to a docset and extracted properties, you can simply use the search API as follows: 
+
+```python
+from aryn_sdk.client.client import Client, SimpleQueryRequest
+
+results = myClient.search(docset_id = [your-docset-ID], query = SimpleQueryRequest(query=[your-query-phrase], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+```
+
+this will return a SimpleQueryResponse object as follows:
+
+```
+SimpleQueryResponse(results=[], query_embedding=None, next_page_token=None)
+```
+
+the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/store.mdx).
+
 
 ### Finding docs in the DocSet Explorer
 
