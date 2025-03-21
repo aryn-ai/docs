@@ -57,19 +57,15 @@
           },
           {
             "group": "DocParse",
-            "pages": [
-              "api-reference/endpoint/docparse/partition",
-              "api-reference/endpoint/docparse/async-partition-submit",
-              "api-reference/endpoint/docparse/async-partition-result",
-              "api-reference/endpoint/docparse/async-partition-cancel",
-              "api-reference/endpoint/docparse/async-partition-list"
-            ]
+            "openapi": {
+              "source": "api-reference/endpoint/docparse/openapi.yaml"
+            }
           },
           {
             "group": "Aryn Platform",
-            "pages": [
-              "api-reference/endpoint/platform/simple-search"
-            ]
+            "openapi": {
+              "source": "api-reference/endpoint/platform/openapi.json"
+            }
           }
         ]
       },
