@@ -27,6 +27,7 @@
             "pages": [
               "docparse/aryn_sdk",
               "docparse/output_structure",
+              "docparse/storage",
               "docparse/chunking_strategies",
               "docparse/processing_options",
               "docparse/formats_supported",
