@@ -73,7 +73,8 @@
           {
             "group": "Aryn SDK Reference",
             "pages": [
-              "sdk-reference/partition"
+              "sdk-reference/partition",
+              "sdk-reference/store"
             ]
           }
         ]

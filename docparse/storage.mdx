@@ -1,0 +1,82 @@
+---
+title: 'Storage'
+description: 'Storage and search for your parsed documents.'
+icon: 'database'
+---
+
+DocParse includes storage, search, and metadata enrichment for your parsed documents. You can view the bounding boxes (segmentation) and extracted elements from your documents in the DocParse UI. You can also use GenAI to extract metadata from your documents (PAYG feature), or download the parsed document. 
+
+DocParse's storage enables you to search your stored documents with vector (semantic) or keyword search using the Aryn UI or API.
+
+For more information about DocParse storage limits, visit the [Docparse pricing page](https://www.aryn.ai/pricing). PAYG customers can opt-out of DocParse storage.
+
+## Adding document to storage
+
+DocParse stores parsed documents in DocSets, and provides a default DocSet (named `docparse_storage`) to use. Think of a DocSet like a folder for your processed Docs, and it's optimized to store and index the elements and metadata from each Doc.
+
+By default, DocParse will add your processed Doc to the default DocSet named `docparse_storage`. You can create a new DocSet using the Aryn UI or `create-docset` API, and specify it using the `add_to_docset_id` when partitioning a document:
+
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, add_to_docset_id:[your-docset-ID])
+```
+
+You can find your DocSet ID in the Storage page in the Aryn UI or using the `list-docsets` API.
+
+Documents are automatically added for Free Trial customers. For Pay As You Go (PAYG) customers, you can opt-out of storing your documents in two ways:
+
+1. Specify an empty string for the `add_to_docset_id` parameter in the `Partition` API.
+2. Opt-out of data storage on the Settings page in the Aryn UI. This will disable storage for all `Partition` API calls.
+
+
+## Viewing stored documents
+
+You can view the parsed documents in your DocSet on the Storage page in the Aryn UI. Select your DocSet, and then select a Doc. In the UI, you will see the labeled bounding boxes for each element in your document, and the contents of each element. You can also view the metadata (called `properties`) extracted from your document.
+
+You can also use the `get-doc` API to retrieve the parsed Doc, or `get-doc-binary` to get the original document.
+
+
+## Extracting metadata from your documents
+
+You can easily extract metadata (called `properties`) from your documents using GenAI for documents in DocParse storage. Properties are stored as part of your document in key:value pairs (property_name:property_value), and extracted using an LLM from all the documents in your DocSet. This feaure is available for Pay-As-You-Go customers. You can use the Extract Properties feature in the DocSet page (under Storage) or using the `extract-properties` API.
+
+From the Storage tab, click on your DocSet to open it. Then, click on the Extract Properties button, and then select Add Property. You can add up to 15 properties in the UI, and hundreds when using the API directly. Next, add the information to guide the GenAI model to properly extract your property:
+
+`Name`: The name of the property. This is the key in the key:value pair.
+`Type`: The type of value to extract. Choose between `String`, `Number`, or `Boolean`.
+`Description`: The description of the property being extracted.
+`Default Value`: If the LLM does not find a value to exract, this is what will be placed as the value for the property.
+`Examples`: These are comma separated example property values. The LLM will use these as examples of what a value might be for a specific property.
+
+
+After providing this information, click Add Property. Then, click Extract. DocParse will run a job to extract the properties specified, and share a Task ID so you can monitor the task's progress. Completed Tasks will disappear from the Tasks page when complete.
+
+You can view your newly extracted properties when viewing a document in the DocSet by selecting the Properties tab in the Document viewer.
+
+
+## Searching stored documents
+
+### Using vector and keyword search
+
+You can easily search over your documents and the associated metadata by using the search API. Once you have added documents to a docset and extracted properties, you can simply use the search API as follows: 
+
+```python
+from aryn_sdk.client.client import Client, SimpleQueryRequest
+
+results = myClient.search(docset_id = [your-docset-ID], query = SimpleQueryRequest(query=[your-query-phrase], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+```
+
+this will return a SimpleQueryResponse object as follows:
+
+```
+SimpleQueryResponse(results=[], query_embedding=None, next_page_token=None)
+```
+
+the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/store.mdx).
+
+
+### Finding docs in the DocSet Explorer
+
+TBD
