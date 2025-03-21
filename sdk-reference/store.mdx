@@ -1,0 +1,67 @@
+---
+title: 'Storage'
+description: 'Documentation for Aryn SDK Stroage'
+---
+
+
+Please find the documentation for the Aryn SDK Storage below. All parameters are optional unless specified otherwise.
+
+
+
+
+## Search Functions
+
+### search
+Search over a docset and get back relevant documents or elements that match your search criteria. 
+
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<PartitionOptions />
+- `docset_id`: A string specifying the id of the docset you are searching over. 
+- `query`: A string that specifies what term you are searching for within the contents of your documents. The query_type parameter specified below will control exactly how this query parameter is used to search over your documents.   
+- `query_type`: An enum that can be either `keyword`, `vector`, or `lexical`:
+  * When `keyword` is specified, the search call will perform a substring match and return results that contain strings that contain the query term specified.
+  * When `vector` is specified, the search call will internally embed the query with the embedding function associated with the docset you are querying on and perform a k-nearest neighbor search to retrieve the results.
+  * When `lexical` is specified, the search call will perform an exact string match and return results where the query string shows up as a standalone word. 
+- `filters`: A string that specifies a boolean expression. This expression specifies the condition to use when extracting documents or elements from the docset.
+  * 'windSpeed>5 AND state="Texas"'
+- `k`: The number of records to return back.
+- `return_type`: An enum that an be either `doc` or `element`. When `doc` is specified, documents that match the search criteria are retuned. When `element` is specified, specific sections of the document (i.e. elements) are returned.
+- `page_token`:   A string used for pagination purposes. If provided, this will indicate to the server where to begin the next set of records to return. Valid for 24 hours.  
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, SearchRequest
+
+results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+
+```
+</Accordion>
+<Accordion title="Return Value">
+
+A SearchResponse object which contains the following attributes: 
+- results: A list containing either the documents or elements that matched the search criteria and were returned.
+- query_embedding: If the query_type selected is 'vector', this is field indicates the embedding vector that was used to perform the search. 
+- next_page_token: The pagination token. If None, there are no more search results to retrieve. If not None, the caller may use this to retrieve more results for the particular search query.
+
+</Accordion>
+<Accordion title="Exceptions">
+
+User errors:
+- ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
+    - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+- ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
+    - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+- ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+    - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys). 
+- ```HTTPError: Error:status_code 404```. Reason: `"Docset not found error"`
+    - Fix: Please try again with a valid docset id.
+- ```HTTPError: Error:status_code 400```. Reason: `"Incorrect input"`
+    - Fix: Please try again with correct input.
+
+Other errors:
+- ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+</Accordion>
+</AccordionGroup>
