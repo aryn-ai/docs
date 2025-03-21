@@ -63,20 +63,20 @@ You can view your newly extracted properties when viewing a document in the DocS
 You can easily search over your documents and the associated metadata by using the search API. Once you have added documents to a docset and extracted properties, you can simply use the search API as follows: 
 
 ```python
-from aryn_sdk.client.client import Client, SimpleQueryRequest
 
-results = myClient.search(docset_id = [your-docset-ID], query = SimpleQueryRequest(query=[your-query-phrase], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+from aryn_sdk.client.client import Client, SearchRequest
+
+results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
 ```
 
-this will return a SimpleQueryResponse object as follows:
+this will return a SearchResponse object as follows:
 
 ```
-SimpleQueryResponse(results=[], query_embedding=None, next_page_token=None)
+SearchResponse(results=[], query_embedding=[your-query-embedded], next_page_token=None)
 ```
 
-the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/store.mdx).
-
+the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/query.mdx).
 
 ### Finding docs in the DocSet Explorer
 
-TBD
+You can also search over your documents through the docset explorer. From the Storage tab, click on view to open your DocSet. Then, click on "Filter" and populate the form with your search criteria. You can specify specific properties you'd like to search on by clicking the "+Add property" button and then choosing the property you'd like to filter on.

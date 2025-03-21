@@ -77,7 +77,8 @@
             "group": "Aryn SDK Reference",
             "pages": [
               "sdk-reference/partition",
-              "sdk-reference/store"
+              "sdk-reference/storage",
+              "sdk-reference/query"
             ]
           }
         ]
