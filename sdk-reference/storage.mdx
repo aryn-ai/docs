@@ -3,5 +3,420 @@ title: 'Storage'
 description: 'Documentation for how to call the Storage APIs using the Aryn SDK'
 ---
 
+import DocSetMetadata from '/snippets/docset_metadata.mdx';
+import DocumentMetadata from '/snippets/document_metadata.mdx';
+import Document from '/snippets/document.mdx';
 
 Please find the documentation for how to call the Storage APIs using the Aryn SDK below. All parameters are optional unless specified otherwise.
+
+## DocSet Functions
+Functions for managing document sets (DocSets) which are collections of documents.
+
+### Create DocSet
+Create a new DocSet to store documents.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="name" type="string" required>
+String name for the DocSet
+</ParamField>
+<ParamField path="properties" type="object">
+Optional dictionary of additional properties
+</ParamField>
+<ParamField path="schema" type="Schema">
+Optional Schema object defining document properties
+</ParamField>
+<ParamField path="prompts" type="object">
+Optional dictionary of prompts for the DocSet
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client
+
+docset = client.create_docset(name="My DocSet")
+docset_id = docset.docset_id
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A DocSetMetadata object containing:
+<DocSetMetadata />
+</Accordion>
+</AccordionGroup>
+
+### Get DocSet
+Retrieve metadata for a DocSet.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet to retrieve
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+docset = client.get_docset(docset_id="your-docset-id")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A DocSetMetadata object containing:
+<DocSetMetadata />
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### List DocSets
+List all DocSets in the account.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField query="page_size" type="integer" default="100">
+  Number of items per page
+</ParamField>
+
+<ParamField query="page_token" type="string">
+  Token for pagination
+</ParamField>
+
+<ParamField query="name_eq" type="string">
+  Filter DocSets by exact name match
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+docsets = client.list_docsets().get_all()
+for docset in docsets:
+    print(f"DocSet: {docset.name}")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A paginated list of DocSetMetadata objects, each containing:
+<DocSetMetadata />
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Delete DocSet
+Delete a DocSet and all its documents.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet to delete
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+client.delete_docset(docset_id="your-docset-id")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+The metadata of the deleted DocSet
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+## Document Functions
+Functions for managing individual documents within DocSets.
+
+### List Documents
+List all documents in a DocSet.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  ID of the DocSet containing the documents
+</ParamField>
+
+<ParamField query="page_size" type="integer" default="100">
+  Number of items per page
+</ParamField>
+
+<ParamField query="page_token" type="string">
+  Token for pagination
+</ParamField>
+
+</Accordion>
+
+<Accordion title="Example">
+```python
+docs = client.list_docs(docset_id="your-docset-id")
+for doc in docs:
+    print(f"Document: {doc.name}")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A paginated list of DocumentMetadata objects, each containing:
+<DocumentMetadata />
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 400`: "Invalid filter parameters"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Get Document
+Get a document by ID.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the document
+</ParamField>
+
+<ParamField path="doc_id" type="string" required>
+  The unique identifier of the document to retrieve
+</ParamField>
+
+<ParamField query="include_elements" type="boolean" default="true">
+  Boolean to include document elements
+</ParamField>
+
+<ParamField query="include_binary" type="boolean" default="false">
+  Boolean to include binary data
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+doc = client.get_doc(docset_id="your-docset-id", doc_id="your-doc-id")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A Document object containing:
+<Document />
+
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "Document not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Delete Document
+Delete a document by ID.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the document
+</ParamField>
+
+<ParamField path="doc_id" type="string" required>
+  The unique identifier of the document to delete
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+client.delete_doc(docset_id="your-docset-id", doc_id="your-doc-id")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+The metadata of the deleted document
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "Document not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Get Document Binary
+Get the binary content of a document.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the document
+</ParamField>
+
+<ParamField path="doc_id" type="string" required>
+  The unique identifier of the document to retrieve
+</ParamField>
+
+<ParamField path="file" type="string" required>
+    The file object to write the binary content to
+</ParamField>
+
+</Accordion>
+
+<Accordion title="Example">
+```python
+output = "output.pdf"
+client.get_doc_binary(docset_id="your-docset-id", doc_id="your-doc-id", file=output)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+The binary content of the document
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "Document not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+## Properties Functions
+Functions for managing document properties.
+
+### Update Document Properties
+Update properties of a document.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the document
+</ParamField>
+
+<ParamField path="doc_id" type="string" required>
+  The unique identifier of the document to update
+</ParamField>
+
+<ParamField body="updates" type="array" required>
+  List of ReplaceOperation objects defining property updates
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.types import ReplaceOperation
+
+updates = [
+    ReplaceOperation(
+        path="/properties/status",
+        value="reviewed"
+    )
+]
+client.update_doc_properties(
+    docset_id="your-docset-id",
+    doc_id="your-doc-id",
+    operations=updates
+)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+The updated Document object containing:
+<Document />
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "Document not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Extract Properties
+Extract properties from a document.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the documents
+</ParamField>
+
+<ParamField body="schema" type="object" required>
+  Schema object defining properties to extract
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.types.schema import Schema, SchemaField
+
+schema = Schema(fields=[
+    SchemaField(name="category", field_type="string")
+])
+client.extract_properties(docset_id="your-docset-id", schema=schema)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A job status object containing:
+- `exit_status`: The exit status of the job
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+### Delete Properties
+Delete properties from a document.
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="docset_id" type="string" required>
+  The unique identifier of the DocSet containing the documents
+</ParamField>
+
+<ParamField body="schema" type="object" required>
+  Schema object defining properties to delete
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+client.delete_properties(docset_id="your-docset-id", schema=schema)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A job status object
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+
