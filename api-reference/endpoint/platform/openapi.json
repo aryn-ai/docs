@@ -787,7 +787,7 @@
           "transform"
         ],
         "summary": "Extract Properties",
-        "description": "Extract properties given in the schema from the docset.",
+        "description": "Extract properties given in the schema from the DocSet.",
         "operationId": "extract_properties_v1_jobs_extract_properties_post",
         "security": [
           {
@@ -801,8 +801,10 @@
             "required": true,
             "schema": {
               "type": "string",
+              "description": "The ID of the DocSet to extract properties from",
               "title": "Docset Id"
-            }
+            },
+            "description": "The ID of the DocSet to extract properties from"
           }
         ],
         "requestBody": {
@@ -810,7 +812,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/Schema",
+                "description": "A Schema describing the fields to extract from the DocSet"
               }
             }
           }
@@ -846,7 +849,7 @@
           "transform"
         ],
         "summary": "Delete Properties",
-        "description": "Delete properties given in the schema from the docset.",
+        "description": "Delete properties given in the schema from the DocSet.",
         "operationId": "delete_properties_v1_jobs_delete_properties_post",
         "security": [
           {
@@ -860,8 +863,10 @@
             "required": true,
             "schema": {
               "type": "string",
+              "description": "The ID of the DocSet to delete properties from",
               "title": "Docset Id"
-            }
+            },
+            "description": "The ID of the DocSet to delete properties from"
           }
         ],
         "requestBody": {
@@ -869,7 +874,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/Schema",
+                "description": "A Schema of the fields to delete from the DocSet"
               }
             }
           }
@@ -931,7 +937,7 @@
             "schema": {
               "type": "integer",
               "description": "The number of results to return per page.",
-              "default": 10,
+              "default": 100,
               "title": "Page Size"
             },
             "description": "The number of results to return per page."
@@ -960,7 +966,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SimpleQueryRequest"
+                "$ref": "#/components/schemas/SearchRequest"
               }
             }
           }
@@ -971,7 +977,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SimpleQueryResponse"
+                  "$ref": "#/components/schemas/SearchResponse"
                 }
               }
             }
@@ -1082,10 +1088,10 @@
             "title": "Name",
             "description": "The name of the DocSet."
           },
-          "created": {
+          "created_at": {
             "type": "string",
             "format": "date-time",
-            "title": "Created",
+            "title": "Created At",
             "description": "The creation time of this DocSet."
           },
           "readonly": {
@@ -1149,7 +1155,7 @@
           "account_id",
           "docset_id",
           "name",
-          "created",
+          "created_at",
           "readonly"
         ],
         "title": "DocSetMetadata"
@@ -1330,7 +1336,14 @@
             "description": "The type of the Element."
           },
           "text_representation": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Text Representation",
             "description": "The text representation of the Element."
           },
@@ -1525,7 +1538,7 @@
         "title": "SchemaField",
         "description": "Represents a field in a DocSet schema."
       },
-      "SimpleQueryRequest": {
+      "SearchRequest": {
         "properties": {
           "query": {
             "anyOf": [
@@ -1604,12 +1617,9 @@
         },
         "additionalProperties": false,
         "type": "object",
-        "required": [
-          "query"
-        ],
-        "title": "SimpleQueryRequest"
+        "title": "SearchRequest"
       },
-      "SimpleQueryResponse": {
+      "SearchResponse": {
         "properties": {
           "results": {
             "items": {},
@@ -1649,7 +1659,7 @@
         "required": [
           "results"
         ],
-        "title": "SimpleQueryResponse"
+        "title": "SearchResponse"
       },
       "ValidationError": {
         "properties": {
