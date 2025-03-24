@@ -910,9 +910,9 @@
         "tags": [
           "search"
         ],
-        "summary": "Simple Query",
-        "description": "Run a simple query.",
-        "operationId": "simple_query_v1_query_search__docset_id__post",
+        "summary": "Query",
+        "description": "Run a query.",
+        "operationId": "query_v1_query_search__docset_id__post",
         "security": [
           {
             "HTTPBearer": []
