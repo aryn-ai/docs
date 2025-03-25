@@ -38,12 +38,6 @@
               "docparse/chunking_tutorial",
               "docparse/async_requests_tutorial"
             ]
-          },
-          {
-            "group": "DocPrep",
-            "pages": [
-              "docprep/getting_started"
-            ]
           }
         ]
       },
