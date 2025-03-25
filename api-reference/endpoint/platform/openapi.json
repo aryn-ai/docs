@@ -1,0 +1,1705 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/v1/storage/docsets/{docset_id}/docs": {
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "List Docs",
+        "description": "List documents in a DocSet with pagination.\n\nArgs:\n    docset_id: The ID of the DocSet\n    next_token: Token for the next page of results\n    page_size: Number of items per page (default 100)\n    filter_dict: JSON string containing filter parameters\n\nReturns:\n    List[DocumentMetadata]: Paginated list of document metadata in the DocSet",
+        "operationId": "list_docs_v1_storage_docsets__docset_id__docs_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Docset Id"
+            }
+          },
+          {
+            "name": "comparator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Comparator"
+            }
+          },
+          {
+            "name": "filter_dict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Filter Dict"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Page Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response List Docs V1 Storage Docsets  Docset Id  Docs Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/docs/{doc_id}": {
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "Get Doc",
+        "description": "Get a document from a DocSet.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    Document: Document data including elements, embeddings, metadata, and binary data",
+        "operationId": "get_doc_v1_storage_docsets__docset_id__docs__doc_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Docset Id"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_get_doc_v1_storage_docsets__docset_id__docs__doc_id__get"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "document"
+        ],
+        "summary": "Delete Doc",
+        "description": "Remove a document from a DocSet and delete the file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document to remove",
+        "operationId": "delete_doc_v1_storage_docsets__docset_id__docs__doc_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Docset Id"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/docs/{doc_id}/properties": {
+      "patch": {
+        "tags": [
+          "document"
+        ],
+        "summary": "Update Doc Properties",
+        "description": "Updates the properties of an individual document in place. This call can\nbe used to replace one or more properties with a new value. The update\nsyntax is based on [JSON Patch](https://jsonpatch.com), though we\ncurrently support only the replace operation.",
+        "operationId": "update_doc_properties_v1_storage_docsets__docset_id__docs__doc_id__properties_patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The id of the DocSet containing the document to update.",
+              "title": "Docset Id"
+            },
+            "description": "The id of the DocSet containing the document to update."
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The id of the document to update.",
+              "title": "Doc Id"
+            },
+            "description": "The id of the document to update."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FieldUpdates"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Document"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/docs/{doc_id}/binary": {
+      "get": {
+        "tags": [
+          "document"
+        ],
+        "summary": "Get Doc Binary",
+        "description": "Get binary original source file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
+        "operationId": "get_doc_binary_v1_storage_docsets__docset_id__docs__doc_id__binary_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Docset Id"
+            }
+          },
+          {
+            "name": "doc_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Doc Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets": {
+      "get": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "List Docsets",
+        "description": "List all DocSets in the system.\n\nReturns:\n    list[DocSetMetadata]: A list of DocSet metadata objects\n\nNote:\n    Will be paginated in v2",
+        "operationId": "list_docsets_v1_storage_docsets_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 100,
+              "title": "Page Size"
+            }
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Page Token"
+            }
+          },
+          {
+            "name": "name_eq",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Name Eq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Create Docset",
+        "description": "Create a new DocSet.\n\nArgs:\n    name (str): The name for the new DocSet\n\nReturns:\n    DocSetMetadata: Metadata of the newly created DocSet",
+        "operationId": "create_docset_v1_storage_docsets_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_create_docset_v1_storage_docsets_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocSetMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}": {
+      "get": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Get Docset",
+        "description": "Get metadata for a specific DocSet.\n\nArgs:\n    docset_id (str): The unique identifier of the DocSet\n\nReturns:\n    DocSetMetadata: Metadata object containing DocSet information",
+        "operationId": "get_docset_v1_storage_docsets__docset_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocSetMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Update Docset",
+        "description": "Updates the metadata associated with a docset.\n\nCurrently, this will replace any field that is set (non-None) in the update. In\nv2 we will add support for proper update masks a la AIP-134.\n\nAt present, the prompts and query_schema fields will be completely\nreplaced -- there is not currently a mechanism to update a subfield.",
+        "operationId": "update_docset_v1_storage_docsets__docset_id__patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocSetUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocSetMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Delete Docset",
+        "description": "Delete a specific DocSet.\n\nArgs:\n    docset_id (str): The unique identifier of the DocSet\n\nReturns:\n    DocSetMetadata: Metadata object containing DocSet information",
+        "operationId": "delete_docset_v1_storage_docsets__docset_id__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocSetMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/clone": {
+      "post": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Clone Docset",
+        "operationId": "clone_docset_v1_storage_docsets__docset_id__clone_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/readonly/{value}": {
+      "post": {
+        "tags": [
+          "docset"
+        ],
+        "summary": "Set Readonly Docset",
+        "description": "Sets the read-only status of the DocSet.",
+        "operationId": "set_readonly_docset_v1_storage_docsets__docset_id__readonly__value__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          },
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Value"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocSetMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/jobs/extract-properties": {
+      "post": {
+        "tags": [
+          "transform"
+        ],
+        "summary": "Extract Properties",
+        "description": "Extract properties given in the schema from the DocSet.",
+        "operationId": "extract_properties_v1_jobs_extract_properties_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the DocSet to extract properties from",
+              "title": "Docset Id"
+            },
+            "description": "The ID of the DocSet to extract properties from"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schema",
+                "description": "A Schema describing the fields to extract from the DocSet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/jobs/delete-properties": {
+      "post": {
+        "tags": [
+          "transform"
+        ],
+        "summary": "Delete Properties",
+        "description": "Delete properties given in the schema from the DocSet.",
+        "operationId": "delete_properties_v1_jobs_delete_properties_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the DocSet to delete properties from",
+              "title": "Docset Id"
+            },
+            "description": "The ID of the DocSet to delete properties from"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Schema",
+                "description": "A Schema of the fields to delete from the DocSet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/query/search/{docset_id}": {
+      "post": {
+        "tags": [
+          "search"
+        ],
+        "summary": "Query",
+        "description": "Run a query.",
+        "operationId": "query_v1_query_search__docset_id__post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The ID of the docset to query.",
+              "title": "Docset Id"
+            },
+            "description": "The ID of the docset to query."
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "The number of results to return per page.",
+              "default": 100,
+              "title": "Page Size"
+            },
+            "description": "The number of results to return per page."
+          },
+          {
+            "name": "page_token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Reserved for future use. A pagination token to retrieve the next page of results.",
+              "title": "Page Token"
+            },
+            "description": "Reserved for future use. A pagination token to retrieve the next page of results."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SearchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Body_create_docset_v1_storage_docsets_post": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/JsonValue"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Properties"
+          },
+          "schema": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Schema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompts": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "propertyNames": {
+                  "$ref": "#/components/schemas/PromptType"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "Body_create_docset_v1_storage_docsets_post"
+      },
+      "Body_get_doc_v1_storage_docsets__docset_id__docs__doc_id__get": {
+        "properties": {
+          "include_elements": {
+            "type": "boolean",
+            "title": "Include Elements",
+            "default": true
+          },
+          "include_binary": {
+            "type": "boolean",
+            "title": "Include Binary",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "Body_get_doc_v1_storage_docsets__docset_id__docs__doc_id__get"
+      },
+      "DocSetMetadata": {
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "title": "Account Id",
+            "description": "The account id containing the DocSet."
+          },
+          "docset_id": {
+            "type": "string",
+            "title": "Docset Id",
+            "description": "The unique id for the DocSet."
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the DocSet."
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At",
+            "description": "The creation time of this DocSet."
+          },
+          "readonly": {
+            "type": "boolean",
+            "title": "Readonly",
+            "description": "Whether the DocSet is read-only."
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/JsonValue"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Properties",
+            "description": "Additional properties for the DocSet."
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size",
+            "description": "The size of the DocSet in bytes."
+          },
+          "query_schema": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Schema"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The schema of the DocSet."
+          },
+          "prompts": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/PromptType"
+            },
+            "type": "object",
+            "title": "Prompts",
+            "description": "The prompts associated with this DocSet.",
+            "default": {}
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_id",
+          "docset_id",
+          "name",
+          "created_at",
+          "readonly"
+        ],
+        "title": "DocSetMetadata"
+      },
+      "DocSetUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/components/schemas/JsonValue"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Properties"
+          },
+          "query_schema": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Schema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "prompts": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "propertyNames": {
+                  "$ref": "#/components/schemas/PromptType"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prompts"
+          }
+        },
+        "type": "object",
+        "title": "DocSetUpdate"
+      },
+      "Document": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "The unique id for the Document."
+          },
+          "elements": {
+            "items": {
+              "$ref": "#/components/schemas/Element"
+            },
+            "type": "array",
+            "title": "Elements",
+            "description": "The elements contained in the Document.",
+            "default": []
+          },
+          "properties": {
+            "type": "object",
+            "title": "Properties",
+            "description": "A map of properties for the Document.",
+            "default": {}
+          },
+          "binary_data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Binary Data",
+            "description": "The binary content of the document, encoded as a base64 string."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "Document",
+        "description": ""
+      },
+      "DocumentMetadata": {
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "title": "Account Id",
+            "description": "The account id containing the Document."
+          },
+          "doc_id": {
+            "type": "string",
+            "title": "Doc Id",
+            "description": "The unique id for the Document."
+          },
+          "docset_id": {
+            "type": "string",
+            "title": "Docset Id",
+            "description": "The unique id for the DocSet containing the Document."
+          },
+          "created_at": {
+            "type": "string",
+            "title": "Created At",
+            "description": "The time at which this document was added to the system."
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of this Document."
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size",
+            "description": "The size of the Document in bytes."
+          },
+          "content_type": {
+            "type": "string",
+            "title": "Content Type",
+            "description": "The content type of the source Document."
+          },
+          "properties": {
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Properties",
+            "description": "Additional properties for the Document."
+          }
+        },
+        "type": "object",
+        "required": [
+          "account_id",
+          "doc_id",
+          "docset_id",
+          "created_at",
+          "name",
+          "size",
+          "content_type"
+        ],
+        "title": "DocumentMetadata",
+        "description": ""
+      },
+      "Element": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "description": "The unique id for the Element."
+          },
+          "type": {
+            "type": "string",
+            "title": "Type",
+            "description": "The type of the Element."
+          },
+          "text_representation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text Representation",
+            "description": "The text representation of the Element."
+          },
+          "embedding": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Embedding",
+            "description": "The vector embedding of the Element."
+          },
+          "properties": {
+            "type": "object",
+            "title": "Properties",
+            "description": "A map of properties for the Element.",
+            "default": {}
+          },
+          "bbox": {
+            "prefixItems": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Bbox",
+            "description": "The bounding box of the Element."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "text_representation",
+          "embedding",
+          "bbox"
+        ],
+        "title": "Element",
+        "description": ""
+      },
+      "FieldUpdates": {
+        "properties": {
+          "operations": {
+            "items": {
+              "$ref": "#/components/schemas/ReplaceOperation"
+            },
+            "type": "array",
+            "title": "Operations",
+            "description": "A list of updates to a document that will be applied sequentially."
+          }
+        },
+        "type": "object",
+        "required": [
+          "operations"
+        ],
+        "title": "FieldUpdates"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "JsonValue": {},
+      "PromptType": {
+        "type": "string",
+        "enum": [
+          "CHAT_SYSTEM"
+        ],
+        "title": "PromptType"
+      },
+      "ReplaceOperation": {
+        "properties": {
+          "op": {
+            "type": "string",
+            "const": "replace",
+            "title": "Op",
+            "description": "The type of JSON Patch operation. Currently only 'replace' is supported",
+            "default": "replace"
+          },
+          "path": {
+            "title": "Path",
+            "description": "a [JSON Pointer](https://datatracker.ietf.org/doc/html/rfc6901) object identifying the value to be replaced."
+          },
+          "value": {
+            "$ref": "#/components/schemas/JsonValue",
+            "description": "The new value to replace the existing value."
+          }
+        },
+        "type": "object",
+        "required": [
+          "path",
+          "value"
+        ],
+        "title": "ReplaceOperation"
+      },
+      "Schema": {
+        "properties": {
+          "fields": {
+            "items": {
+              "$ref": "#/components/schemas/SchemaField"
+            },
+            "type": "array",
+            "title": "Fields",
+            "description": "A list of fields belong to this schema."
+          }
+        },
+        "type": "object",
+        "required": [
+          "fields"
+        ],
+        "title": "Schema",
+        "description": "Represents the schema of a DocSet."
+      },
+      "SchemaField": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the field."
+          },
+          "field_type": {
+            "type": "string",
+            "title": "Field Type",
+            "description": "The type of the field."
+          },
+          "default": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default",
+            "description": "The default value for the field."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "A natural language description of the field."
+          },
+          "examples": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Examples",
+            "description": "A list of example values for the field."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "field_type"
+        ],
+        "title": "SchemaField",
+        "description": "Represents a field in a DocSet schema."
+      },
+      "SearchRequest": {
+        "properties": {
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query",
+            "description": "The query to search for"
+          },
+          "query_type": {
+            "type": "string",
+            "enum": [
+              "keyword",
+              "lexical",
+              "vector",
+              "hybrid"
+            ],
+            "title": "Query Type",
+            "description": "The type of query to perform.",
+            "default": "lexical"
+          },
+          "properties_filter": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Properties Filter",
+            "description": "A filter to apply to the properties of the documents."
+          },
+          "return_type": {
+            "type": "string",
+            "enum": [
+              "doc",
+              "element"
+            ],
+            "title": "Return Type",
+            "description": "The type of result to return.",
+            "default": "doc"
+          },
+          "include_fields": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include Fields",
+            "description": "When specified, the server performs a projection to return only the fields specified by this list of JsonPaths (see RFC 9535) given as a list of strings."
+          },
+          "debug_info": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Debug Info",
+            "description": "When `True`, the server returns additional debug information (the embedding calculated for a vector or hybrid query) in the response.",
+            "default": false
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "SearchRequest"
+      },
+      "SearchResponse": {
+        "properties": {
+          "results": {
+            "items": {},
+            "type": "array",
+            "title": "Results",
+            "description": "The list of results returned by the query. These are Json objects representing the documents or elements that matched the query, possibly filtered by the optional projection specified by include_fields."
+          },
+          "query_embedding": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "number"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query Embedding",
+            "description": "The embedding calculated for the query, if the query type is vector or hybrid and `debug_info` is True."
+          },
+          "next_page_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Page Token",
+            "description": "Reserved for future use. Will be a pagination token that can be used to retrieve the next page of results."
+          }
+        },
+        "type": "object",
+        "required": [
+          "results"
+        ],
+        "title": "SearchResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
