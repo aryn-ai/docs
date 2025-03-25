@@ -59,7 +59,7 @@
           {
             "group": "DocParse",
             "openapi": {
-              "source": "api-reference/endpoint/docparse/openapi.yaml"
+              "source": "api-reference/endpoint/docparse/openapi.json"
             }
           },
           {

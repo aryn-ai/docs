@@ -4,11 +4,16 @@
     "title": "FastAPI",
     "version": "0.1.0"
   },
+  "tags": [
+    {
+      "name": "Document",
+      "description": "Operations related to document management"
+    }],
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
       "get": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "List Docs",
         "description": "List documents in a DocSet with pagination.\n\nArgs:\n    docset_id: The ID of the DocSet\n    next_token: Token for the next page of results\n    page_size: Number of items per page (default 100)\n    filter_dict: JSON string containing filter parameters\n\nReturns:\n    List[DocumentMetadata]: Paginated list of document metadata in the DocSet",
@@ -118,7 +123,7 @@
     "/v1/storage/docsets/{docset_id}/docs/{doc_id}": {
       "get": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "Get Doc",
         "description": "Get a document from a DocSet.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    Document: Document data including elements, embeddings, metadata, and binary data",
