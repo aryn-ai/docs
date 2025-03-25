@@ -132,6 +132,28 @@
   "background": {
     "decoration": "windows"
   },
+  "redirects": [
+  {
+    "source": "/docparse/tables",
+    "destination": "/docparse/tutorials/tables"
+  },
+  {
+    "source": "/docparse/images",
+    "destination": "/docparse/tutorials/images"
+  },
+  {
+    "source": "/docparse/chunking_tutorial",
+    "destination": "/docparse/tutorials/chunking_tutorial"
+  },
+  {
+    "source": "/docparse/async_requests_tutorial",
+    "destination": "/docparse/tutorials/async_requests_tutorial"
+  },
+  {
+    "source": "/docparse/output_walkthrough",
+    "destination": "/docparse/tutorials/output_walkthrough"
+  }
+],
   "navbar": {
     "links": [
       {
