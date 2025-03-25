@@ -32,11 +32,16 @@
               "docparse/processing_options",
               "docparse/formats_supported",
               "docparse/output_label_options_walkthrough",
-              "docparse/output_walkthrough",
-              "docparse/tables",
-              "docparse/images",
-              "docparse/chunking_tutorial",
-              "docparse/async_requests_tutorial"
+              {
+                "group": "Tutorials",
+                "pages": [
+                  "docparse/tutorials/tables",
+                  "docparse/tutorials/images",
+                  "docparse/tutorials/chunking_tutorial",
+                  "docparse/tutorials/async_requests_tutorial",
+                  "docparse/tutorials/output_walkthrough"
+                ]
+              }
             ]
           },
           {
