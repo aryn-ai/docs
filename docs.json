@@ -32,11 +32,16 @@
               "docparse/processing_options",
               "docparse/formats_supported",
               "docparse/output_label_options_walkthrough",
-              "docparse/output_walkthrough",
-              "docparse/tables",
-              "docparse/images",
-              "docparse/chunking_tutorial",
-              "docparse/async_requests_tutorial"
+              {
+                "group": "Tutorials",
+                "pages": [
+                  "docparse/tutorials/tables",
+                  "docparse/tutorials/images",
+                  "docparse/tutorials/chunking_tutorial",
+                  "docparse/tutorials/async_requests_tutorial",
+                  "docparse/tutorials/output_walkthrough"
+                ]
+              }
             ]
           },
           {
@@ -127,6 +132,28 @@
   "background": {
     "decoration": "windows"
   },
+  "redirects": [
+  {
+    "source": "/docparse/tables",
+    "destination": "/docparse/tutorials/tables"
+  },
+  {
+    "source": "/docparse/images",
+    "destination": "/docparse/tutorials/images"
+  },
+  {
+    "source": "/docparse/chunking_tutorial",
+    "destination": "/docparse/tutorials/chunking_tutorial"
+  },
+  {
+    "source": "/docparse/async_requests_tutorial",
+    "destination": "/docparse/tutorials/async_requests_tutorial"
+  },
+  {
+    "source": "/docparse/output_walkthrough",
+    "destination": "/docparse/tutorials/output_walkthrough"
+  }
+],
   "navbar": {
     "links": [
       {
