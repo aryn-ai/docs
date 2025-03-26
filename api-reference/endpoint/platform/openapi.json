@@ -4,11 +4,12 @@
     "title": "FastAPI",
     "version": "0.1.0"
   },
+
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
       "get": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "List Docs",
         "description": "List documents in a DocSet with pagination.\n\nArgs:\n    docset_id: The ID of the DocSet\n    next_token: Token for the next page of results\n    page_size: Number of items per page (default 100)\n    filter_dict: JSON string containing filter parameters\n\nReturns:\n    List[DocumentMetadata]: Paginated list of document metadata in the DocSet",
@@ -118,7 +119,7 @@
     "/v1/storage/docsets/{docset_id}/docs/{doc_id}": {
       "get": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "Get Doc",
         "description": "Get a document from a DocSet.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    Document: Document data including elements, embeddings, metadata, and binary data",
@@ -185,7 +186,7 @@
       },
       "delete": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "Delete Doc",
         "description": "Remove a document from a DocSet and delete the file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document to remove",
@@ -245,7 +246,7 @@
     "/v1/storage/docsets/{docset_id}/docs/{doc_id}/properties": {
       "patch": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "Update Doc Properties",
         "description": "Updates the properties of an individual document in place. This call can\nbe used to replace one or more properties with a new value. The update\nsyntax is based on [JSON Patch](https://jsonpatch.com), though we\ncurrently support only the replace operation.",
@@ -319,7 +320,7 @@
     "/v1/storage/docsets/{docset_id}/docs/{doc_id}/binary": {
       "get": {
         "tags": [
-          "document"
+          "Document"
         ],
         "summary": "Get Doc Binary",
         "description": "Get binary original source file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
@@ -377,7 +378,7 @@
     "/v1/storage/docsets": {
       "get": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "List Docsets",
         "description": "List all DocSets in the system.\n\nReturns:\n    list[DocSetMetadata]: A list of DocSet metadata objects\n\nNote:\n    Will be paginated in v2",
@@ -457,7 +458,7 @@
       },
       "post": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Create Docset",
         "description": "Create a new DocSet.\n\nArgs:\n    name (str): The name for the new DocSet\n\nReturns:\n    DocSetMetadata: Metadata of the newly created DocSet",
@@ -507,7 +508,7 @@
     "/v1/storage/docsets/{docset_id}": {
       "get": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Get Docset",
         "description": "Get metadata for a specific DocSet.\n\nArgs:\n    docset_id (str): The unique identifier of the DocSet\n\nReturns:\n    DocSetMetadata: Metadata object containing DocSet information",
@@ -558,7 +559,7 @@
       },
       "patch": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Update Docset",
         "description": "Updates the metadata associated with a docset.\n\nCurrently, this will replace any field that is set (non-None) in the update. In\nv2 we will add support for proper update masks a la AIP-134.\n\nAt present, the prompts and query_schema fields will be completely\nreplaced -- there is not currently a mechanism to update a subfield.",
@@ -619,7 +620,7 @@
       },
       "delete": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Delete Docset",
         "description": "Delete a specific DocSet.\n\nArgs:\n    docset_id (str): The unique identifier of the DocSet\n\nReturns:\n    DocSetMetadata: Metadata object containing DocSet information",
@@ -672,7 +673,7 @@
     "/v1/storage/docsets/{docset_id}/clone": {
       "post": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Clone Docset",
         "operationId": "clone_docset_v1_storage_docsets__docset_id__clone_post",
@@ -722,7 +723,7 @@
     "/v1/storage/docsets/{docset_id}/readonly/{value}": {
       "post": {
         "tags": [
-          "docset"
+          "DocSet"
         ],
         "summary": "Set Readonly Docset",
         "description": "Sets the read-only status of the DocSet.",
@@ -784,7 +785,7 @@
     "/v1/jobs/extract-properties": {
       "post": {
         "tags": [
-          "transform"
+          "Transform"
         ],
         "summary": "Extract Properties",
         "description": "Extract properties given in the schema from the DocSet.",
@@ -846,7 +847,7 @@
     "/v1/jobs/delete-properties": {
       "post": {
         "tags": [
-          "transform"
+          "Transform"
         ],
         "summary": "Delete Properties",
         "description": "Delete properties given in the schema from the DocSet.",
@@ -908,10 +909,10 @@
     "/v1/query/search/{docset_id}": {
       "post": {
         "tags": [
-          "search"
+          "Query"
         ],
-        "summary": "Query",
-        "description": "Run a query.",
+        "summary": "Search",
+        "description": "Run a search query.",
         "operationId": "query_v1_query_search__docset_id__post",
         "security": [
           {
