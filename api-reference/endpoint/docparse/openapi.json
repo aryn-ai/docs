@@ -13,6 +13,9 @@
   "paths": {
     "/v1/document/partition": {
       "post": {
+        "tags": [
+          "Partition"
+        ],
         "summary": "Partition Document",
         "operationId": "_sync_partition_document_v1",
         "security": [
@@ -124,6 +127,9 @@
     "/v1/async/submit/document/partition": {
       "post": {
         "summary": "Submit Document for Async Partitioning",
+        "tags": [
+          "Partition"
+        ],
         "operationId": "_async_partition_document_submit_v1",
         "security": [
           {
@@ -230,6 +236,9 @@
     "/v1/async/result/{task_id}": {
       "get": {
         "summary": "Get Async Task Status",
+        "tags": [
+          "Partition"
+        ],
         "operationId": "_async_partition_document_status_v1",
         "security": [
           {
@@ -359,6 +368,9 @@
     "/v1/async/cancel/{task_id}": {
       "post": {
         "summary": "Cancel Async Task",
+        "tags": [
+          "Partition"
+        ],
         "operationId": "_async_partition_document_cancel_v1",
         "security": [
           {
@@ -463,6 +475,9 @@
     "/v1/async/list": {
       "get": {
         "summary": "List Async Tasks",
+        "tags": [
+          "Partition"
+        ],
         "operationId": "_async_partition_document_list_v1",
         "security": [
           {
