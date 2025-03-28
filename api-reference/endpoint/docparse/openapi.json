@@ -635,7 +635,17 @@
               "extract_images": {
                 "type": "boolean",
                 "title": "Extract Images",
-                "description": "A boolean value indicating whether to crop images detected in the document and return them in ppm format converted to base64 within the binary_representation of returned image elements.\n"
+                "description": "A boolean value indicating whether to crop images detected in the document and return them in the specified format converted to base64 within the binary_representation of returned image elements.\n"
+              },
+              "extract_image_format": {
+                "type": "string",
+                "enum": [
+                  "ppm",
+                  "png",
+                  "jpeg"
+                ],
+                "title": "Extract Image Format",
+                "description": "The format to use for extracted images. Defaults to ppm.\n"
               },
               "extract_table_structure": {
                 "type": "boolean",
