@@ -66,6 +66,7 @@ You can easily search over your documents and the associated metadata by using t
 
 from aryn_sdk.client.client import Client, SearchRequest
 
+myClient = Client()
 results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
 ```
 
