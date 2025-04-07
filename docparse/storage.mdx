@@ -12,7 +12,7 @@ For more information about DocParse storage limits, visit the [Docparse pricing 
 
 ## Adding document to storage
 
-DocParse stores parsed documents in DocSets, and provides a default DocSet (named `docparse_storage`) to use. Think of a DocSet like a folder for your processed Docs, and it's optimized to store and index the elements and metadata from each Doc.
+DocParse stores parsed documents in DocSets, and provides a default DocSet (named `docparse_storage`) to use. Documents are automatically added to it for Free Trial customers, unless you create and specify a different DocSet. Think of a DocSet like a folder for your processed Docs, and it's optimized to store and index the elements and metadata from each Doc.
 
 By default, DocParse will add your processed Doc to the default DocSet named `docparse_storage`. You can create a new DocSet using the Aryn UI or `create-docset` API, and specify it using the `add_to_docset_id` when partitioning a document:
 
@@ -25,7 +25,7 @@ with open("mydocument.pdf", "rb") as f:
 
 You can find your DocSet ID in the Storage page in the Aryn UI or using the `list-docsets` API.
 
-Documents are automatically added for Free Trial customers. For Pay As You Go (PAYG) customers, you can opt-out of storing your documents in two ways:
+For Pay As You Go (PAYG) customers, you can opt-out of storing your documents in two ways:
 
 1. Specify an empty string for the `add_to_docset_id` parameter in the `Partition` API.
 2. Opt-out of data storage on the Settings page in the Aryn UI. This will disable storage for all `Partition` API calls.
