@@ -1,0 +1,75 @@
+---
+title: 'Using Sycamore for document ETL'
+description: 'Preparing data using the Sycamore document ETL pipelines'
+icon: 'timeline'
+---
+
+You can use the open source Sycamore document ETL library for advanced data transformation, data cleaning, customer chunking, and more, and load the output as a new DocSet in Aryn. You can write highly customizable data pipelines in Python, and quickly iterate on your pipelines using a Jupyter notebook. Sycamore is also effective at extracting and transforming the Properties extracted from the Documents in your DocSet.
+
+Sycamore works hand-in-hand with Aryn, as both are built around the DocSet and Document abstractions. Sycamore can parse documents, extract tables, do OCR, and more using Aryn's [DocParse service](https://www.aryn.ai/docparse), and can scale to efficiently process thousands of documents using a [Ray](https://github.com/ray-project/ray) backend.
+
+NEED EXAMPLE NOTEBOOK
+
+Visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/index.html) to learn more.
+
+
+## Writing to Aryn
+
+You can use the Aryn connector to write your DocSet to Aryn. You can either specify a DocSet ID to write to a specific DocSet, or provide a DocSet name to create a new DocSet with that name.
+
+
+**Vector embedding configuration**
+
+The DocSet you write must use vector embeddings created with the OpenAI Text Embedding 3 model. If the source DocSet for your Sycamore job is from Aryn, your Documents will already have the properly configured embeddings. If you are reading and processing documents from elsewhere, you will need to include this embedding step in your pipeline:
+
+```
+...
+docset.embed(OpenAIEmbedder(model_name="text-embedding-3-small"))
+...
+```
+
+
+**Adding Properties extracted in pipeline to Aryn DocSet Properties Schema***
+
+Your Sycamore ETL pipeline may extract Properties using LLM-powered transforms or enrich your Documents with metadata from other data sources. For Aryn to use these Properties with its query engine, your Sycamore job will also need to update the Aryn DocSet Properties Schema, which it does with the ```update_properties_schema``` parameter. By default, this is set to ```True```.
+
+Sycamore only adds Property ```name``` and ```value``` to Aryn's Property Schema, so you will need to update other fields like ```description``` directly in the Property Schema. You can do that with the [```update_docset```](https://docs.aryn.ai/api-reference/docset/update-docset) API, get the current Properties Schema (using [```get_docset```](https://docs.aryn.ai/api-reference/docset/get-docset)), add the additional paramters (like ```description), and the pass in a new Properties Schema with the added values.
+
+
+**Writing to an existing Aryn DocSet**
+
+If you write to an exisitng DocSet, the Sycamore job will overwrite Documents with the same Doc_ID. This would happen if the input DocSet was the same as the target DocSet in your job.
+
+
+```
+...
+docset.write.aryn(
+	docset_id="<YOUR-DOCSET-ID>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+	)
+```
+
+**Writing to a new Aryn DocSet**
+
+To create a new Aryn DocSet and write to it:
+
+```
+...
+docset.write.aryn(
+	name="<NEW-DOCSET-NAME>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+```
+
+
+## Reading from Aryn
+
+
+To read a DocSet from Aryn, you will also use the Aryn connector:
+
+
+```
+...
+docset.read.aryn(
+	docset_id="<YOUR-DOCSET-ID>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+```

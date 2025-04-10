@@ -1,0 +1,85 @@
+---
+title: Introduction
+description: 'Welcome to Aryn DocParse!'
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.svg"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.svg"
+  alt="Hero Dark"
+/>
+
+Aryn DocParse is a composite AI system for parsing, chunking, enriching, and storing unstructured documents at scale. It uses a set of purpose-built AI models for document segmentation, optical character recognition (OCR), and extracting tables, images, metadata, and more. 
+
+**Key Features**
+
+* Return the structured output of each document in JSON or Markdown, and provide labeled bounding boxes for titles, tables, table rows and columns, images, and regular text.
+
+* High quality AI models for complex table extraction, optical character recognition (OCR), image summarization, and more.
+
+* Process over 30 types of document formats, including PDFs, Microsoft Word, Microsoft PowerPoint, text, and more. 
+
+* Store and index processed documents, extract metadata using GenAI, search your documents at scale with vector (semantic) or keyword search.
+
+* Optional integration with Python document ETL pipelines using the open source [Sycamore document ETL library](https://github.com/aryn-ai/sycamore). Customize your pipeline with additional data transforms, LLM-based entity extraction, data enrichment, data cleaning, and loading vector databases and search engines.
+
+You can use DocParse to prepare complex, unstructured data for retrieval-augmented generation (RAG) applications, document processing workflows, extracting content from documents (like tables), and semantic search systems. 
+
+[Sign-up here for free](https://console.aryn.ai/signup/) to get an API Key and use the [DocParse Playground UI](http://app.aryn.ai/docparse/) to visualize how your document is processed.
+
+You can learn more from our [introduction video](https://www.aryn.ai/?name=ArynPartitioningService_Intro)) or get started with a [Quickstart](./quickstart).
+
+
+## Getting started
+
+[Sign-up here for free](https://console.aryn.ai/signup/)) for an API Key to get started with DocParse. 
+
+<CardGroup cols={2}>
+  <Card
+    title="Quickstart"
+    icon="play"
+    href="./quickstart"
+  >
+    Get Started with Aryn DocParse
+  </Card>
+  <Card
+    title="Use the Aryn-SDK"
+    icon="rectangle-terminal"
+    href="docparse/aryn_sdk"
+  >
+    Using the Aryn-SDK to call DocParse
+  </Card>
+    <Card
+    title="Use DocParse UI"
+    icon="palette"
+    href="http://app.aryn.ai/docparse/"
+  >
+    Access the DocParse UI to visualize how your documents will be partitioned
+  </Card>
+    <Card
+    title="Slack Community"
+    icon="slack"
+    href="https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
+  >
+    Join the Slack community for any questions
+  </Card>
+    <Card
+    title="API Reference"
+    icon="webhook"
+    href="api-reference/introduction"
+  >
+    Aryn DocParse API Reference
+  </Card>
+    <Card
+    title="Aryn DocParse SDK Reference"
+    icon="python"
+    href="sdk-reference/partition"
+  >
+    Aryn DocParse Python SDK Reference
+  </Card>
+</CardGroup>
