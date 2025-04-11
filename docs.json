@@ -1,6 +1,6 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "Aryn Documentation",
   "description": "Aryn is a document intelligence platform that helps you extract and understand structured data from unstructured documents.",
   "colors": {
@@ -8,146 +8,14 @@
     "light": "#417586",
     "dark": "#417586"
   },
-  "favicon": "aryn_logo.png",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Documentation",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "aryn_playground_cloud_console"
-            ]
-          },
-          {
-            "group": "DocParse",
-            "pages": [
-              "docparse/aryn_sdk",
-              "docparse/output_structure",
-              "docparse/storage",
-              "docparse/chunking_strategies",
-              "docparse/processing_options",
-              "docparse/formats_supported",
-              "docparse/output_label_options_walkthrough",
-              {
-                "group": "Tutorials",
-                "pages": [
-                  "docparse/tutorials/tables",
-                  "docparse/tutorials/images",
-                  "docparse/tutorials/chunking_tutorial",
-                  "docparse/tutorials/async_requests_tutorial",
-                  "docparse/tutorials/output_walkthrough"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "DocParse",
-            "openapi": {
-              "source": "api-reference/endpoint/docparse/openapi.json"
-            }
-          },
-          {
-            "group": "Aryn Platform",
-            "openapi": {
-              "source": "api-reference/endpoint/platform/openapi.json"
-            }
-          }
-        ]
-      },
-      {
-        "tab": "Python SDK Reference",
-        "groups": [
-          {
-            "group": "Aryn SDK Reference",
-            "pages": [
-              "sdk-reference/partition",
-              "sdk-reference/storage",
-              "sdk-reference/query"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Recipes",
-        "groups": [
-          {
-            "group": "Recipes",
-            "pages": [
-              "example-code/introduction"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Status Page",
-          "href": "https://aryn.instatus.com/",
-          "icon": "signal"
-        },
-        {
-          "anchor": "Aryn Blog",
-          "href": "https://www.aryn.ai/blog",
-          "icon": "newspaper"
-        },
-        {
-          "anchor": "Slack Community",
-          "href": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Sycamore - Document ETL",
-          "href": "https://github.com/aryn-ai/sycamore",
-          "icon": "bars-staggered"
-        }
-      ]
-    }
-  },
   "logo": {
     "light": "/logo/aryn_logo_full.png",
     "dark": "/logo/aryn_logo_full.png"
   },
+  "favicon": "aryn_logo.png",
   "background": {
     "decoration": "windows"
   },
-  "redirects": [
-  {
-    "source": "/docparse/tables",
-    "destination": "/docparse/tutorials/tables"
-  },
-  {
-    "source": "/docparse/images",
-    "destination": "/docparse/tutorials/images"
-  },
-  {
-    "source": "/docparse/chunking_tutorial",
-    "destination": "/docparse/tutorials/chunking_tutorial"
-  },
-  {
-    "source": "/docparse/async_requests_tutorial",
-    "destination": "/docparse/tutorials/async_requests_tutorial"
-  },
-  {
-    "source": "/docparse/output_walkthrough",
-    "destination": "/docparse/tutorials/output_walkthrough"
-  }
-],
   "navbar": {
     "links": [
       {
@@ -161,8 +29,197 @@
       "href": "https://www.aryn.ai/"
     }
   },
-  "seo": {
-    "indexing": "all"
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Status Page",
+          "icon": "signal",
+          "href": "https://aryn.instatus.com/"
+        },
+        {
+          "anchor": "Aryn Blog",
+          "icon": "newspaper",
+          "href": "https://www.aryn.ai/blog"
+        },
+        {
+          "anchor": "Slack Community",
+          "icon": "slack",
+          "href": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
+        },
+        {
+          "anchor": "Sycamore - Document ETL",
+          "icon": "bars-staggered",
+          "href": "https://github.com/aryn-ai/sycamore"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "introduction",
+                  "quickstart",
+                  "aryn_playground_cloud_console"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "pages": [
+                  "docparse/aryn_sdk",
+                  "docparse/output_structure",
+                  "docparse/storage",
+                  "docparse/chunking_strategies",
+                  "docparse/processing_options",
+                  "docparse/formats_supported",
+                  "docparse/output_label_options_walkthrough",
+                  {
+                    "group": "Tutorials",
+                    "pages": [
+                      "docparse/tutorials/tables",
+                      "docparse/tutorials/images",
+                      "docparse/tutorials/chunking_tutorial",
+                      "docparse/tutorials/async_requests_tutorial",
+                      "docparse/tutorials/output_walkthrough"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "API Documentation",
+                "pages": [
+                  "api-reference/introduction"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "openapi": {
+                  "source": "api-reference/endpoint/docparse/openapi.json"
+                }
+              },
+              {
+                "group": "Aryn Platform",
+                "openapi": {
+                  "source": "api-reference/endpoint/platform/openapi.json"
+                }
+              }
+            ]
+          },
+          {
+            "tab": "Python SDK Reference",
+            "groups": [
+              {
+                "group": "Aryn SDK Reference",
+                "pages": [
+                  "sdk-reference/partition",
+                  "sdk-reference/storage",
+                  "sdk-reference/query"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Recipes",
+            "groups": [
+              {
+                "group": "Recipes",
+                "pages": [
+                  "example-code/introduction"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "language": "es",
+        "tabs": [
+          {
+            "tab": "Documentation",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "es/introduction",
+                  "es/quickstart",
+                  "es/aryn_playground_cloud_console"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "pages": [
+                  "es/docparse/aryn_sdk",
+                  "es/docparse/output_structure",
+                  "es/docparse/storage",
+                  "es/docparse/chunking_strategies",
+                  "es/docparse/processing_options",
+                  "es/docparse/formats_supported",
+                  "es/docparse/output_label_options_walkthrough"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "API Documentation",
+                "pages": [
+                  "es/api-reference/introduction"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "openapi": {
+                  "source": "api-reference/endpoint/docparse/openapi.json"
+                }
+              },
+              {
+                "group": "Aryn Platform",
+                "openapi": {
+                  "source": "api-reference/endpoint/platform/openapi.json"
+                }
+              }
+            ]
+          },
+          {
+            "tab": "Python SDK Reference",
+            "groups": [
+              {
+                "group": "Aryn SDK Reference",
+                "pages": [
+                  "es/sdk-reference/partition",
+                  "es/sdk-reference/storage",
+                  "es/sdk-reference/query"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Recipes",
+            "groups": [
+              {
+                "group": "Recipes",
+                "pages": [
+                  "es/example-code/introduction"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "footer": {
     "socials": {
@@ -170,5 +227,30 @@
       "github": "https://github.com/aryn-ai",
       "linkedin": "https://www.linkedin.com/company/aryn-ai"
     }
-  }
+  },
+  "seo": {
+    "indexing": "all"
+  },
+  "redirects": [
+    {
+      "source": "/docparse/tables",
+      "destination": "/docparse/tutorials/tables"
+    },
+    {
+      "source": "/docparse/images",
+      "destination": "/docparse/tutorials/images"
+    },
+    {
+      "source": "/docparse/chunking_tutorial",
+      "destination": "/docparse/tutorials/chunking_tutorial"
+    },
+    {
+      "source": "/docparse/async_requests_tutorial",
+      "destination": "/docparse/tutorials/async_requests_tutorial"
+    },
+    {
+      "source": "/docparse/output_walkthrough",
+      "destination": "/docparse/tutorials/output_walkthrough"
+    }
+  ]
 }
