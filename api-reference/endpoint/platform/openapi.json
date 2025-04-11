@@ -4,7 +4,6 @@
     "title": "FastAPI",
     "version": "0.1.0"
   },
-
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
       "get": {
@@ -1613,6 +1612,19 @@
             ],
             "title": "Debug Info",
             "description": "When `True`, the server returns additional debug information (the embedding calculated for a vector or hybrid query) in the response.",
+            "default": false
+          },
+          "include_element_embedding": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Include Element Embedding",
+            "description": "When `False`, and return_type is \"element\", the server does not return the embeddings of elements in the response.",
             "default": false
           }
         },
