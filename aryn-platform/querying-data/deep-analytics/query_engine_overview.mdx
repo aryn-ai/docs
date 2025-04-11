@@ -1,1 +1,38 @@
-placeholder
+---
+title: 'Query engine overview'
+description: 'An overview of how Aryn's query engine generates plans and runs them'
+icon: 'bolt'
+---
+
+Aryn's query engine consists of a number of pieces that work together to provide an end-to-end natural-language query processing system over complex, unstructured data. The architecture of this system is also described in our Conference for Innovative Data Systems (CIDR) paper titled [The Design of an LLM-powered Unstructured Analytics System](https://arxiv.org/abs/2409.00847).
+
+
+## Query planning
+
+The agentic query planner in Aryn's engine execute queries against DocSets. During query planning, Aryn provides the planner with the Properties Schema of the DocSet, which consists of the properties contained in the documents, along with their descriptions, data types, and sample values, along with a "text-representation" field representing the entire contents of each Document. It will then create the plan, which is a DAG using the engine's available query operators, and perform several optimization and validation steps before finalizing it.
+
+UIs like Aryn's Workspaces enable you to easily modify the query plans using natural language, if an edit is needed.
+
+### Query operators
+
+Aryn provides a set of high-level logical operators for query planning purposes, and rewrites the resulting logical plan into lower-level physical operators before execution. This makes it more robust to execute, and easier for you to understand the plan and debug the execution, if required.
+
+Many simple logical operators map one-to-one to physical operators, including single-pass per-document operations like map, filter, and llm-extract, but for operations that span multiple documents, we have found it often works better to have more specific operators rather than low-level primitives.
+
+#### Database operators
+
+FILL THIS IN
+
+#### Semantic operators
+
+FILL THIS IN
+
+
+## Running query plans
+
+After plan rewriting and optimization, the logical query plan is compiled into the physical plan for execution.  Execution on large datasets benefits from distributed processing, allowing Aryn to scale out workloads with minimal overhead.
+
+
+### Output
+
+FILL THIS IN
