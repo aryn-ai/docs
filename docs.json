@@ -165,7 +165,17 @@
                   "es/docparse/chunking_strategies",
                   "es/docparse/processing_options",
                   "es/docparse/formats_supported",
-                  "es/docparse/output_label_options_walkthrough"
+                  "es/docparse/output_label_options_walkthrough",
+                  {
+                    "group": "Tutorials",
+                    "pages": [
+                      "es/docparse/tutorials/tables",
+                      "es/docparse/tutorials/images",
+                      "es/docparse/tutorials/chunking_tutorial",
+                      "es/docparse/tutorials/async_requests_tutorial",
+                      "es/docparse/tutorials/output_walkthrough"
+                    ]
+                  }
                 ]
               }
             ]
