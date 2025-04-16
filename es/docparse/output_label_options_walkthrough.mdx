@@ -1,0 +1,83 @@
+---
+title: Opciones de Post-procesamiento para Etiquetas
+description: Uso de Etiquetas de Salida para aplicar heurísticas y ajustar la salida
+icon: toolbox
+---
+
+A veces la salida que obtienes de Aryn DocParse no es exactamente lo que deseas. Puedes mitigar esto especificando el`output_label_options` opción que aplicará heurísticas simples para corregir la salida. Actualmente las dos heurísticas que soportamos son`promote_title` y`orientation_correction`.
+
+1. `promote_title` que verificará si no hay título en la primera página del documento y luego elegirá inteligentemente uno de los otros elementos en la primera página para promoverlo a título.
+2. `orientation_correction` corregirá la orientación de las páginas rotadas durante el paso de preprocesamiento.
+
+## Ejemplo
+
+Veamos el ejemplo a continuación:
+
+<Frame>
+  <img src="/images/ntsb_incorrect_caption.png" />
+</Frame>
+
+Notarás que "Aviation Investigation Final Report" se detecta incorrectamente como "Caption" aquí. Para arreglar esto cuando uses el`aryn-sdk`, puedes llamar`partition_file` con el`output_label_options` parámetro:
+
+```python
+output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": False}
+partitioned_file = partition_file(
+    file,
+    aryn_api_key,
+    extract_table_structure=True,
+    output_label_options=output_label_options
+)
+```
+
+Esto devolverá la siguiente salida:
+
+<Frame>
+  <img src="/images/ntsb_correct_title.png" />
+</Frame>
+
+La heurística elige promover un elemento en la primera página cuyo tipo está en la lista`title_candidate_elements` y tiene el tamaño de fuente más grande.
+
+Veamos otro ejemplo donde el documento tiene páginas que están rotadas.
+
+<Frame>
+  <img src="/images/rotated_page.png" />
+</Frame>
+
+Puedes establecer`orientation_correction` como True para corregir automáticamente la orientación de las páginas rotadas, asegurando una extracción precisa de información.
+
+```python
+output_label_options = {"orientation_correction": True}
+partitioned_file = partition_file(
+    file,
+    aryn_api_key,
+    extract_table_structure=True,
+    output_label_options=output_label_options
+)
+```
+
+Esto devolverá la siguiente salida:
+
+<Frame>
+  <img src="/images/rotated_pdf_extraction.png" />
+</Frame>
+
+## Especificar Opciones de Etiquetas de Salida usando curl
+
+Así es como puedes usar curl para especificar estas opciones:
+
+```python
+curl -v -v -s -N "https://api.aryn.cloud/v1/document/partition"
+-H "Authorization: Bearer $ARYN_API_KEY" 
+-F "file=@path/to/your/file"
+-F 'options={"output_label_options": {"promote_title": true, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": true}}'
+```
+
+## Especificar Opciones de Etiquetas de Salida a través de Sycamore
+
+Así es como puedes especificar estas opciones a través de sycamore:
+
+```python
+partitioner = ArynPartitioner(
+        ...
+        output_label_options = {"promote_title": True, "title_candidate_elements":["Section-header", "Caption"], "orientation_correction": True})
+```

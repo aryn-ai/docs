@@ -1,0 +1,89 @@
+---
+title: Estrategias de Fragmentación
+description: Las estrategias de fragmentación soportadas por Aryn DocParse
+icon: hive
+---
+
+Al llamar a DocParse, puede especificar una estrategia de fragmentación para la`partition_file` llamada. Puede habilitar las opciones de fragmentación predeterminadas especificando un`dict`:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, chunking_options={})
+```
+
+Aquí hay un ejemplo especificando una opción de fragmentación particular:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, 
+      chunking_options={
+         "strategy": "context_rich",
+         "tokenizer": "openai_tokenizer",
+         "tokenizer_options": {
+            "model_name": "text-embedding-3-small"
+         },
+         "merge_across_pages": True,
+         "max_tokens": 512,
+      }
+   )
+```
+
+## Opciones
+
+Las opciones que puede especificar en el`dict` incluyen lo siguiente:
+
+* `strategy`: Una cadena que especifica la estrategia a usar para la fragmentación. Los valores válidos son`context_rich` y `maximize_within_limit`. El fragmentador predeterminado y recomendado es`context_rich` como`{'strategy': 'context_rich'}`.
+  * Comportamiento de`context_rich` chunker: El objetivo de esta estrategia es agregar contexto a los fragmentos. Crea fragmentos combinando elementos adyacentes hasta que el fragmento alcance la longitud del límite máximo de tokens especificado. Cada fragmento contendrá una copia del encabezado o título de sección visto más recientemente. Los encabezados o títulos de sección que están uno tras otro se agruparán como un gran encabezado de sección durante la fragmentación.
+
+  * Comportamiento de `maximize_within_limit` chunker: El objetivo del `maximize_within_limit` chunker es hacer los fragmentos tan grandes como sea posible. Combina elementos en el conjunto de elementos combinados más reciente a menos que hacerlo haga que su conteo de tokens exceda `max_tokens`. En ese caso, mantendría el nuevo elemento separado y comenzaría a combinar los elementos subsiguientes en ese, siguiendo la misma regla. A todos los elementos que son resultado de fusiones se les asigna el tipo 'Section'. Combina elementos en diferentes páginas, a menos que `merge_across_pages` esté configurado en `False`.
+
+* `max_tokens`: Un entero que especifica el límite máximo de tokens para un fragmento. El valor predeterminado es 512.
+
+* `tokenizer`: Una cadena que especifica el tokenizador a usar cuando se convierte texto en tokens. Los valores válidos son `openai_tokenizer`, `character_tokenizer`, y `huggingface_tokenizer`. El valor predeterminado es `openai_tokenizer`.
+
+* `tokenizer_options`: Un árbol con claves de cadena que especifica las opciones para el tokenizador elegido. El valor predeterminado es `{'model_name': 'text-embedding-3-small'}`, que funciona con el tokenizador de OpenAI.
+  * Opciones disponibles para `openai_tokenizer`:
+    * `model_name`: Acepta todos los modelos soportados por el [tokenizador tiktoken](https://github.com/openai/tiktoken). El valor predeterminado es "text-embedding-3-small"
+  * Opciones disponibles para `HuggingFaceTokenizer`:
+    * `model_name`: Acepta todos los tokenizadores de huggingface del [repositorio huggingface/tokenizers](https://github.com/huggingface/tokenizers).
+  * `character_tokenizer` no toma ninguna opción.
+
+* `merge_across_pages`: Un `boolean` que cuando `True` el chunker seleccionado intentará combinar fragmentos a través de los límites de página. El valor predeterminado es `True`.
+
+## Salida
+
+La salida de DocParse cuando especificas una estrategia de fragmentación será una `JSON` lista de objetos que consisten en los siguientes campos:
+
+```text
+{"type": type of element (str),
+"bbox": Coordinates of bounding box around element (float),
+"properties": { "score": confidence score (float),
+                "page_number": page number element occurs on (int)},
+"text_representation": for elements with associated text (str),
+"binary_representation": for Image elements when extract_table_structure is enabled (bytes)}
+```
+
+Cada entrada en la lista siempre tendrá un `type`, `bbox`, `properties`, y `text_representation` campo. El `type` campo indica el tipo del elemento (por ejemplo, texto, imagen, tabla, etc.), el `properties` campo contiene información adicional sobre el elemento (por ejemplo, puntuación de confianza, número de página, etc.), y el `text_representation` campo contiene el contenido de texto del elemento. En el contexto de fragmentación, el `properties.score` campo y el `bbox` campo deben ignorarse.
+
+Se proporciona un ejemplo de elemento a continuación:
+
+```json
+{
+    "type": "Text",
+    "bbox": [
+      0.10383546717026654,
+      0.31373721036044033,
+      0.8960905187270221,
+      0.39873851429332385
+    ],
+    "properties": {
+      "score": 0.9369918704032898,
+      "page_number": 1
+    },
+    "text_representation": "It is often useful to process different parts of a document separately. For example you\nmight want to process tables differently than text paragraphs, and typically small chunks\nof text are embedded separately for vector search. In Aryn DocParse, these\nchunks are called elements.\n"
+}
+```
+
+Para ver ejemplos de cómo usar estas estrategias de fragmentación, por favor lee [aquí](/docparse/tutorials/chunking_tutorial).

@@ -1,0 +1,95 @@
+---
+{}
+---
+
+* `file`: Requerido. Un `file` abierto en modo binario para analizar o una ruta expresada como un `str` o un `PathLike` objeto
+  especificando dónde está el archivo a analizar.
+
+* `threshold`: Un `float` entre `0.0` y `1.0`, inclusive, que sirve como punto de corte para determinar qué cuadros delimitadores del archivo se devuelven o una cadena `auto` (el valor predeterminado) donde el servicio utiliza un método de procesamiento para encontrar la mejor predicción para cada posible cuadro delimitador.
+  Solo se devolverán los cuadros delimitadores que el modelo predice con una puntuación de confianza superior al umbral especificado. Un valor más bajo
+  incluirá más objetos pero puede tener superposiciones, mientras que un valor más alto reducirá el número de superposiciones pero puede perder objetos legítimos. Si
+  estableces el umbral manualmente, recomendamos comenzar con un valor de `0.32`.
+
+* `use_ocr`: Un valor booleano que, cuando se establece en `True`, hace que DocParse extraiga texto usando un modelo OCR. Esto es
+  útil cuando el texto no es directamente extraíble del PDF, como cuando el texto es parte de una imagen o cuando el
+  texto está rotado. Cuando se establece en `False`, DocParse extrae texto incrustado del documento de entrada. El valor predeterminado es `False`.
+
+* `text_extraction_options`: Un mapa con claves de cadena que especifica opciones para la extracción de texto.
+  * `ocr_text_mode`: Una cadena que especifica el modo a usar para la extracción de texto OCR. El valor predeterminado es `standard`, que utiliza el pipeline OCR clásico convencional para procesar documentos. La otra opción es `vision`, que utiliza un modelo de visión para OCR. Ten en cuenta que `vision` solo está disponible para elementos que no son tablas (`standard` se usará para elementos de tabla) y solo para usuarios PAYG.
+
+* `extract_table_structure`: Un booleano que, cuando es `True`, permite que DocParse extraiga tablas y su contenido
+  estructural usando un modelo de extracción de tablas específicamente diseñado. Si se establece en `False`, las tablas aún se identifican pero
+  no se analizan por su estructura; como resultado, las celdas de la tabla y sus cuadros delimitadores no se incluyen en la respuesta.
+  El valor predeterminado es `False`.
+
+* `table_extraction_options`: Un mapa con claves de cadena que especifica opciones para la extracción de tablas. Solo se aplica cuando `extract_table_structure` es `True`. El valor predeterminado es vacío (`{}`)
+  * `include_additional_text`: Booleano. Cuando es `True`, DocParse intentará mejorar la estructura de la tabla fusionando tokens de la extracción de texto. Esto puede ser útil para trabajar con tablas que tienen texto faltante o mal alineado. El valor predeterminado es `False`
+  * `model_selection`: Cadena. Una expresión para instruir a DocParse sobre cómo seleccionar el modelo de tabla a usar para la extracción. El valor predeterminado es `"pixels > 500 -> deformable_detr; table_transformer"`, que significa "si la dimensión más grande de la tabla es más de 500 píxeles, usa deformable\_detr; de lo contrario usa table\_transformer." Para usar solo deformable\_detr o table\_transformer, establece `model_selection="deformable_detr"` o `model_selection="table_transformer"`. Las expresiones de selección tienen la forma
+
+    ```
+    metric cmp threshold -> model; metric cmp threshold -> model; model
+    ```
+
+    Y deben leerse como una serie de `if metric compares to threshold, then use model` declaraciones. Las declaraciones se procesan de izquierda a derecha.
+
+    * Los modelos soportados son `table_transformer`, que tiende a funcionar bien con tablas más pequeñas, y `deformable_detr`, que tiende a funcionar mejor con tablas más grandes.
+    * Las métricas soportadas son `pixels`, que corresponde a la dimensión máxima del cuadro delimitador que contiene la tabla (encontramos que esto es más fácil de razonar que el número total de píxeles que depende de dos números), y `chars`, que corresponde al número total de caracteres dentro de la tabla según lo determinado por el paso de OCR/extracción de texto.
+    * Los umbrales deben ser numéricos.
+    * Los operadores de comparación soportados son `<, >, <=, >=, ==, !=`.
+
+    Una declaración sin métrica, comparación y umbral puede considerarse como predeterminada, donde las declaraciones después de la predeterminada no se procesarán. Si no se incluye tal declaración 'incondicional' y ninguna condición coincide, DocParse usará por defecto table\_transformer. Cualquier cosa después de la declaración incondicional no será procesada.
+    Ejemplos:
+
+    * `table_transformer` => usar siempre table transformer
+    * `pixels > 500 -> deformable_detr; table_transformer` => si la dimensión más grande de la tabla es mayor que 500 píxeles usa deformable detr. De lo contrario usa table\_transformer.
+    * `pixels>50->table_transformer; chars<30->deformable_detr;chars>35->table_transformer;pixels>2->deformable_detr;table_transformer;comment` => si la dimensión más grande es más de 50 píxeles usa table transformer. Si no, si el número total de caracteres en la tabla es menor que 30 usa deformable\_detr. Si no, si hay más de 35 caracteres usa table transformer. Si no, si hay más de 2 píxeles en la dimensión más grande usa deformable detr. De lo contrario usa table transformer. el comentario no se procesa.
+
+* `extract_images`: Un booleano que determina si se extraen imágenes del documento. El formato está determinado por el valor de `extract_image_format`. Predeterminado: `False`.
+
+* `extract_image_format`: Una cadena que indica en qué formato se deben devolver las imágenes extraídas. Debe ser uno de `ppm`, `png`, o `jpeg`. En todos los casos, el resultado será codificado en base64 antes de ser devuelto. Predeterminado: `ppm`.
+
+* `summarize_images`: (Solo PAYG) Un booleano que, cuando `True`, genera un resumen de las imágenes en el documento y lo devuelve como el `text_representation`. Cuando `False`, las imágenes no se resumen. El valor predeterminado es `False`.
+
+* `selected_pages`: Una lista que especifica páginas individuales (indexadas desde 1) y rangos de páginas del documento para particionar. Las páginas individuales se especifican como enteros y los rangos se especifican como listas con dos entradas enteras en orden ascendente. Un ejemplo válido de valor para selected\_pages es `[1, 10, [15, 20]]` que incluiría las páginas 1, 10, 15, 16, 17 ..., 20.
+
+  `selected_pages` es `None` por defecto, lo que resulta en que todas las páginas del documento sean analizadas.
+
+* `chunking_options`: Un diccionario de opciones para especificar el comportamiento de fragmentación. La fragmentación solo se realiza cuando esta opción está presente, y se eligen opciones predeterminadas cuando `chunking_options` se especifica como `{}`.
+  * `strategy`: Una cadena que especifica la estrategia a usar para combinar y dividir fragmentos. Los valores válidos son `context_rich`
+    y `maximize_within_limit`. El fragmentador predeterminado y recomendado es `context_rich` como
+    `{'strategy': 'context_rich'}`.
+    * Comportamiento del `context_rich` fragmentador: El objetivo de esta estrategia es añadir contexto a fragmentos de tamaño uniforme. Esto es más útil para aplicaciones GenAI basadas en recuperación. La fragmentación rica en contexto combina `section-header`
+      y `title` elementos en un nuevo `section-header` elemento. Combina elementos en un fragmento con su más reciente
+      `section-header`. Si el fragmento contendría demasiados tokens, entonces comienza un nuevo fragmento copiando el encabezado de sección al inicio de este nuevo fragmento y continúa. Combina elementos en diferentes páginas, a menos que`merge_across_pages` esté configurado como `False`.
+    * Comportamiento del `maximize_within_limit` fragmentador: El objetivo del `maximize_within_limit` fragmentador es hacer los fragmentos tan grandes como sea posible. Combina elementos en el conjunto más reciente de elementos fusionados a menos que hacerlo haga que su conteo de tokens exceda `max_tokens`. En ese caso, mantendría el nuevo elemento separado y comenzaría a fusionar los elementos subsiguientes en ese, siguiendo la misma regla. Combina elementos en diferentes páginas, a menos que`merge_across_pages` esté configurado como `False`.
+  * `max_tokens`: Un entero que especifica el límite para dividir fragmentos que son demasiado grandes. El valor predeterminado es 512.
+  * `tokenizer`: Una cadena que especifica el tokenizador a usar cuando se determina cómo se agrupan los caracteres en un fragmento. Los valores válidos son `openai_tokenizer`, `character_tokenizer`, y `huggingface_tokenizer`. El valor predeterminado es `openai_tokenizer`.
+  * `tokenizer_options`: Un diccionario anidado con claves de cadena que especifica las opciones para el tokenizador elegido. El valor predeterminado es
+    `{'model_name': 'text-embedding-3-small'}`, que funciona con el tokenizador de OpenAI.
+    * Opciones disponibles para `openai_tokenizer`:
+      * `model_name`: Acepta todos los modelos soportados por el[tokenizador tiktoken](https://github.com/openai/tiktoken). El valor predeterminado es "text-embedding-3-small"
+    * Opciones disponibles para `HuggingFaceTokenizer`:
+      * `model_name`: Acepta todos los tokenizadores de huggingface del[repositorio huggingface/tokenizers](https://github.com/huggingface/tokenizers).
+    * `character_tokenizer` no toma ninguna opción.
+  * `merge_across_pages`: Un `boolean` que cuando es `True` el fragmentador seleccionado intentará combinar fragmentos a través de los límites de página. No se aplica al fusionador `mixed_multi_column`, que nunca combina a través de páginas. El valor predeterminado es
+    `True`.
+
+* `output_format`: Una cadena que controla la representación de salida. El valor predeterminado es `json` que produce un array llamado
+  `elements` que contiene los elementos particionados, representados en JSON. Si se establece en `markdown` la respuesta del servicio incluirá en su lugar un campo llamado `markdown` que contiene una cadena que representa todo el documento en formato Markdown.
+
+* `output_label_options`: Un diccionario de opciones para especificar qué heurística aplicar para forzar ciertas salidas de etiquetas. Si esta opción no se especifica, no se aplica ninguna heurística. Las opciones que admite el diccionario se enumeran a continuación.
+  * `promote_title`: Un booleano que especifica si promover un elemento a título si no hay título en la salida.
+  * `title_candidate_elements`: Una lista de cadenas que son elementos candidatos para ser promovidos a título.
+  * `orientation_correction`: Un valor booleano que especifica si corregir la orientación de las páginas rotadas durante el paso de preprocesamiento.
+
+* `markdown_options`: Un diccionario de opciones para especificar qué incluir en la salida markdown.
+  * `include_pagenum`: Un booleano que especifica si incluir números de página en la salida markdown. El valor predeterminado es `False`.
+  * `include_headers`: Un booleano que especifica si incluir encabezados en la salida markdown. El valor predeterminado es `False`.
+  * `include_footers`: Un booleano que especifica si se incluirán pies de página en la salida markdown. El valor predeterminado es `False`.
+
+* `ssl_verify`: Un `boolean` que controla si el cliente verifica el certificado SSL del servidor DocParse elegido. ssl\_verify es `True` por defecto, aplicando la verificación SSL.
+
+* `aryn_config`: Un objeto ArynConfig (definido en[aryn\_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), usado para encontrar una clave api. Si aryn\_api\_key está establecido, anulará esto. El ArynConfig predeterminado busca en la variable de entorno `ARYN_API_KEY`
+  y luego en el archivo \~/.aryn/config.yaml. El valor predeterminado es None (aryn-sdk buscará en el parámetro aryn\_api\_key, en tus variables de entorno, y luego en \~/.aryn/config.yaml).
+
+* `aryn_api_key`: Una clave API de Aryn, proporcionada como cadena de texto. Puedes obtener una gratis en [aryn.ai/get-started](https://www.aryn.ai/get-started). El valor predeterminado es `None` (Si no se proporciona, el sdk lo buscará en la variable de entorno `ARYN_API_KEY` o buscará en aryn\_config como se especificó anteriormente).

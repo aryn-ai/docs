@@ -1,0 +1,65 @@
+---
+title: Query
+description: Documentación sobre cómo llamar a las APIs de Query usando el SDK de Aryn
+---
+
+A continuación encontrarás la documentación de las funciones que llaman a las APIs de Query usando el SDK. Todos los parámetros son opcionales a menos que se especifique lo contrario.
+
+## Búsqueda
+
+Busca en un conjunto de documentos y obtén documentos o elementos que coincidan con tus criterios de búsqueda.
+
+<AccordionGroup>
+  <Accordion title="Parameters">
+    <PartitionOptions />
+
+    * `docset_id`: Una cadena que especifica el id del conjunto de documentos sobre el que estás buscando.
+    * `query`: Una cadena que especifica qué término estás buscando dentro del contenido de tus documentos. El parámetro query\_type especificado a continuación controlará exactamente cómo se usa este parámetro de consulta para buscar en tus documentos.
+    * `query_type`: Una enumeración que puede ser`keyword`,`vector`, o`lexical`:
+      * Cuando`keyword`se especifica, la llamada de búsqueda realizará una coincidencia de subcadena y devolverá resultados que contengan cadenas que contengan el término de consulta especificado.
+      * Cuando`vector`se especifica, la llamada de búsqueda incrustará internamente la consulta con la función de incrustación asociada al conjunto de documentos que estás consultando y realizará una búsqueda de k vecinos más cercanos para recuperar los resultados.
+      * Cuando`lexical`se especifica, la llamada de búsqueda realizará una coincidencia exacta de cadena y devolverá resultados donde la cadena de consulta aparece como una palabra independiente.
+    * `properties_filter`: Una cadena que especifica una expresión booleana. Esta expresión especifica la condición a usar cuando se extraen documentos o elementos del conjunto de documentos. La expresión booleana es una cadena que consiste en condiciones separadas por las palabras clave AND/OR. Aquí hay algunos ejemplos:
+      * "(company\_name='Microsoft' AND year='2024')"
+      * "(company\_ticker='AMZN' AND year='2023') AND (quarter='Q2' or quarter='Q4')"
+    * `k`: El número de registros a devolver.
+    * `return_type`: Una enumeración que puede ser`doc`o`element`. Cuando`doc`se especifica, se devuelven los documentos que coinciden con los criterios de búsqueda. Cuando`element`se especifica, se devuelven secciones específicas del documento (es decir, elementos).
+    * `page_token`: Una cadena utilizada para fines de paginación. Si se proporciona, esto indicará al servidor dónde comenzar el siguiente conjunto de registros a devolver. Válido por 24 horas.
+  </Accordion>
+
+  <Accordion title="Example">
+    ```python
+    from aryn_sdk.client.client import Client, SearchRequest
+
+    results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter=[your-filter-string], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+
+    ```
+  </Accordion>
+
+  <Accordion title="Return Value">
+    Un objeto SearchResponse que contiene los siguientes atributos:
+
+    * `results`: Una lista que contiene los documentos o elementos que coincidieron con los criterios de búsqueda.
+    * `query_embedding`: Si el query\_type seleccionado es 'vector', este campo indica el vector de incrustación que se usó para realizar la búsqueda.
+    * `next_page_token`: El token de paginación. Si es None, no hay más resultados de búsqueda para recuperar. Si no es None, el llamador puede usar esto para recuperar más resultados para la consulta particular.
+  </Accordion>
+
+  <Accordion title="Exceptions">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Solución: Por favor proporciona una clave API ya sea como parámetro o especifícala en la variable de entorno`ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Solución: Por favor proporciona una clave API válida ya sea como parámetro o especifícala en la variable de entorno`ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Solución: Por favor, obtenga una nueva clave de API[aquí](https://console.aryn.ai/api-keys).
+    * `HTTPError: Error:status_code 404`. Razón: `"Docset not found error"`
+      * Solución: Por favor, intente de nuevo con un ID de docset válido.
+    * `HTTPError: Error:status_code 400`. Razón: `"Incorrect input"`
+      * Solución: Por favor, intente de nuevo con una entrada correcta.
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón: `Internal Server Error`
+  </Accordion>
+</AccordionGroup>

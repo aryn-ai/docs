@@ -1,0 +1,116 @@
+---
+title: "Tutorial: Llamando a DocParse de forma Asíncrona"
+description: Vea cómo puede llamar a DocParse de forma asíncrona
+icon: clock
+---
+
+Las siguientes funciones se pueden usar juntas para enviar archivos a DocParse para particionar de forma asíncrona:
+
+`partition_file_async_submit` - función que hace una solicitud para particionar el archivo y devuelve un task\_id que puede usar para realizar un seguimiento de su solicitud de partición del archivo
+
+`partition_file_async_result` - función que puede llamar para obtener el resultado de la tarea partition\_file que acaba de enviar. Devolverá un diccionario que indica un estado (`“done”` o `“pending”`)
+
+Aquí hay un ejemplo de cómo puede procesar múltiples archivos al mismo tiempo:
+
+```python
+import time
+from aryn_sdk.partition import partition_file_async_submit, partition_file_async_result
+import os
+
+YOUR_DIRECTORY_NAME = ""
+## Get a list of all files you are interested in parsing
+files = os.listdir(YOUR_DIRECTORY_NAME)
+task_ids = [None] * len(files)
+
+## Iterate through all the files to submit a task to partition each file
+## and create a list of running tasks
+for i, file_name in enumerate(files):
+    file_path = f"{YOUR_DIRECTORY_NAME}/{file_name}"
+    if os.path.isfile(file_path):
+        try:
+            print(f"Submitting {file_path}")
+            task_ids[i] = partition_file_async_submit(file_path)["task_id"]
+        except Exception as e:
+            print(f"Failed to submit {file_path}: {e}")
+
+results = [None] * len(files)
+
+## Wait for all tasks to finish
+for i, task_id in enumerate(task_ids):
+    while True:
+        result = partition_file_async_result(task_id)
+        # if particular task is done, break
+        if result["task_status"] != "pending":
+            print(f"Task {task_id} done.")
+            break
+
+        # else sleep
+        time.sleep(1)
+
+    if result["task_status"] == "done":
+        results[i] = result
+
+## print the results will be None if task failed
+for file_name, result in zip(files, results):
+  print(file_name,": ", result)
+```
+
+Es importante tener en cuenta que enviar múltiples tareas de particionamiento asíncronas al mismo tiempo no garantiza que se ejecuten simultáneamente.
+
+## Usando un webHook
+
+Opcionalmente, también puede establecer un webhook para que los servicios de Aryn lo llamen cuando su tarea esté completada:
+
+```python
+partition_file_async_submit("/path/to/my/file.docx", webhook_url="https://example.com/alert")
+```
+
+Aryn enviará una solicitud POST que contiene un cuerpo como el siguiente a la URL del webhook:
+
+```json
+{"done": [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}
+```
+
+Si desea listar todas las tareas partition\_file asíncronas que se están ejecutando y aún no se han completado en su cuenta, puede llamar a la siguiente función:
+
+```python
+>> partition_file_async_list()
+{'aryn:t-wewbyn5zyh9uxzgghgi5ehf': {'task_status': 'pending'},
+ 'aryn:t-3kuln0wm0zqex2ks7ue0kvi': {'task_status': 'pending'},
+ 'aryn:t-o38deeglw3hkl6p939gdyyk': {'task_status': 'pending'},
+ 'aryn:t-zxzjrwmaifj8ql5ar1zttye': {'task_status': 'pending'},
+ 'aryn:t-fn6j1sbuhsohrx51r4eom9n': {'task_status': 'pending'},
+ 'aryn:t-luldbdt5d2kn8cact61mao8': {'task_status': 'pending'}}
+```
+
+Si desea cancelar una tarea partition\_file asíncrona específica, puede llamar a la siguiente función:
+
+```python
+>> partition_file_async_cancel("aryn:t-47gpd3604e5tz79z1jro5fc")
+```
+
+## Usando cURL
+
+También puede llamar a las APIs asíncronas directamente sin python a través de cURL:
+
+```bash
+curl -X POST https://api.aryn.cloud/v1/async/submit/document/partition -F "file=@path/to/file.pdf" -F 'options={"use_ocr": true}' -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+Puede consultar su resultado con el comando a continuación. Use el ID de llamada que el comando devolvió como salida.
+
+```bash
+curl https://api.aryn.cloud/v1/async/result/aryn:t-bipwgqesiqixfz2kyew3j8d -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+Para listar las tareas pendientes use el comando a continuación:
+
+```bash
+curl https://api.aryn.cloud/v1/async/list -H "Authorization: Bearer MY_ARYN_API_KEY"
+```
+
+Puede cancelar una tarea pendiente con el comando a continuación:
+
+```bash
+curl -X POST https://api.aryn.cloud/v1/async/cancel/aryn:t-bipwgqesiqixfz2kyew3j8d -H "Authorization: Bearer MY_ARYN_API_KEY"
+```

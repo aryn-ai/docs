@@ -1,0 +1,174 @@
+---
+title: "Tutorial: DocParse Intro"
+description: Análisis y extracción de elementos de un documento
+icon: person-walking
+---
+
+## Introducción
+
+En [este ejemplo](https://colab.research.google.com/drive/120STOQ5wGIpFUbgS7Gcld_PVW-CfLWOg#scrollTo=bTu2a1K-F19w), usaremos DocParse para extraer datos de un informe NTSB usando el `aryn-sdk`. Revisaremos los fragmentos de código importantes a continuación para ver qué está sucediendo. Para los propósitos de este tutorial, nos enfocamos en la página 2 del documento, que se muestra a continuación.
+
+<Frame>
+  <img src="/images/59_page2.png" />
+</Frame>
+
+## Obteniendo el Documento Analizado
+
+### Realizando una Llamada a DocParse
+
+```python text_demo.py
+with open(file_name, 'rb') as file:
+  ## Make a call to the partitioning service and set extract_images to true.
+  partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, use_ocr=False, selected_pages=[2])
+```
+
+Usamos la función `partition_file` de `aryn_sdk.partition` para extraer texto e imágenes del documento. El `aryn_api_key` es tu clave API de Aryn. En este ejemplo, establecemos `use_ocr` en `False` para evitar OCR y usar texto incrustado, y establecemos `extract_images` y `extract_table_structure` en `True` para extraer imágenes y tablas. Usamos `selected_pages=[2]` para enfocarnos en la página 2. Este documento también se agrega a [tu almacenamiento](http://app.aryn.ai/storage/), donde puedes visualizar las cajas delimitadoras etiquetadas y los elementos extraídos.
+
+### Visualizando la Salida JSON
+
+```json output.json
+{'status': ['Incremental status will be shown here during execution.',
+  "Until you get a line that matches '  ]\n', you can convert the partial",
+  'output to a json document by appending \'""]}\' to the partial output.',
+  '',
+  'T+   0.00: Server version managed-service-22-model-1-4 Model version 1.4',
+  'T+   0.00: Received request with aryn_call_id=REDACTED',
+  'T+   0.00: Waiting for scheduling',
+  'T+   0.01: Preprocessing document',
+  'T+   0.01: Done preprocessing document',
+  'T+   0.51: Completed work on page 2',
+  ''],
+ 'elements': [{'type': 'Image',
+   'bbox': [0.0873676793715533,
+    0.08911955399946733,
+    0.8548237161075367,
+    0.5357984508167614],
+   'properties': {'score': 0.873895525932312,
+    'image_size': [1324, 1003],
+    'image_mode': 'RGB',
+    'page_number': 2},
+   'binary_representation': ...
+ }
+```
+
+Arriba, puedes ver la salida JSON de la llamada a Aryn DocParse. La salida es un objeto JSON con un`status` campo que muestra el estado de la llamada y un`elements` campo que contiene una lista de elementos extraídos del documento. El ID de la llamada ha sido redactado por razones de privacidad.
+
+## Examinando Elementos Individuales
+
+### Extrayendo una Imagen del Documento
+
+```json image.json
+{ 
+  type': 'Image',
+ 'bbox': [0.0873676793715533,
+  0.08911955399946733,
+  0.8548237161075367,
+  0.5357984508167614],
+ 'properties': {'score': 0.873895525932312,
+  'image_size': [1324, 1003],
+  'image_mode': 'RGB',
+  'page_number': 2},
+ 'binary_representation': ...
+}
+```
+
+El primer elemento que vemos es una imagen. Recibimos un cuadro delimitador y una representación binaria de la imagen, que podemos usar para mostrar la imagen. Los cuadros delimitadores se dan en el formato`[x1, y1, x2, y2]`, donde`(x1, y1)` es la esquina superior izquierda y`(x2, y2)` es la esquina inferior derecha del cuadro delimitador.
+
+### Extrayendo Leyendas del Documento
+
+```json caption.json
+
+{'type': 'Caption',
+ 'bbox': [0.08805406458237591,
+  0.5466218150745739,
+  0.8386106244255515,
+  0.5634380548650568],
+ 'properties': {'score': 0.6033732891082764,
+  'page_number': 2},
+ 'text_representation': 'Figure 1. Accident airplane as it came to rest (Source: Federal Aviation Administration)\n'}
+```
+
+El segundo elemento que vemos es una leyenda. Recibimos un cuadro delimitador y el contenido de texto de la leyenda.
+
+### Extrayendo Texto del Documento
+
+```json text.json
+{'type': 'Text',
+ 'bbox': [0.08857761158662684,
+  0.5770943936434659,
+  0.5373964197495404,
+  0.5928012917258523],
+ 'properties': {'score': 0.589328944683075,
+  'page_number': 2},
+ 'text_representation': 'The wreckage was retained for further examination. \n'}
+```
+
+El tercer elemento que vemos es un elemento de texto. Recibimos un cuadro delimitador y el contenido de texto del elemento.
+
+### Extrayendo una Tabla del Documento
+
+```json table.json
+
+{ 
+ 'type': 'table',
+ 'bbox': [0.09319061279296875,
+  0.6873569003018466,
+  0.9122876694623162,
+  0.8174545010653409],
+ 'properties': {'score': 0.8106631636619568,
+  'title': None,
+  'columns': None,
+  'rows': None,
+  'page_number': 2},
+ 'text_representation': None,
+ 'table': {'cells': [{'content': 'Aircraft Make:',
+    'rows': [0],
+    'cols': [0],
+    'is_header': True,
+    'bbox': {'x1': 0.09705882369281045,
+     'y1': 0.6968232236868688,
+     'x2': 0.27310294133986934,
+     'y2': 0.7097020113257576},
+    'properties': {}},
+   {'content': 'MARC JONES',
+    'rows': [0],
+    'cols': [1],
+    'is_header': True,
+    'bbox': {'x1': 0.31151960800653594,
+     'y1': 0.6968232236868688,
+     'x2': 0.43984150343137257,
+     'y2': 0.7097020113257576},
+    'properties': {}},...
+}
+```
+
+El cuarto elemento que vemos es una tabla. Recibimos un cuadro delimitador y la estructura de la tabla, que incluye las celdas de la tabla y sus propiedades.
+
+Analizando la primera celda arriba, vemos que hay 6 atributos:`content`,`rows`,`cols`,`is_header`,`bbox`, y`properties`. El`content` atributo contiene el contenido de texto de la celda, el`rows` atributo contiene el índice de fila de la celda, el`cols` atributo contiene el índice de columna de la celda, el`is_header` atributo indica si la celda es una celda de encabezado y es opcional, el`bbox` atributo contiene el cuadro delimitador de la celda, y el`properties` atributo contiene propiedades adicionales de la celda.
+
+#### Mostrando la Tabla
+
+Aquí mostramos la tabla en formato markdown limpio a continuación. Limpiamos los encabezados de columna para hacerlos una fila separada en la tabla.
+
+```python display_table.py
+import pandas as pd
+pandas = tables_to_pandas(partitioned_file)
+# Let's display the pandas DataFrame
+table = pandas[4][1]
+table = pd.concat([pd.DataFrame([table.columns], columns=table.columns), table], ignore_index=True)
+
+table.columns = ['' for col in table.columns] # Optionally reset the column headers
+
+table
+```
+
+La salida se muestra a continuación:
+
+|    |                                 |                  |                             |         |
+| -: | :------------------------------ | :--------------- | :-------------------------- | :------ |
+|  0 | Marca de Aeronave:              | MARC JONES       | Matrícula:                  | N512P   |
+|  1 | Modelo/Serie:                   | PITTS MODEL 12   | Categoría de Aeronave:      | Avión   |
+|  2 | Construcción Amateur:           |                  |                             |         |
+|  3 | Operador:                       | M12 AVIATION LLC | Certificado(s) de Operación | Ninguno |
+|    |                                 |                  | Vigente:                    |         |
+|  4 | Código Designador del Operador: |                  |                             |         |
