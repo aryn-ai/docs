@@ -26,7 +26,7 @@
             "group": "Aryn Platform",
             "pages": [
               "aryn-platform/core_concepts",
-              "aryn-platform/loading_data"
+              "aryn-platform/loading_data",
               {
                 "group": "Data Preparation",
                 "pages": [
@@ -50,7 +50,7 @@
                       "aryn-platform/querying-data/search/using_search_ui",
                      "aryn-platform/querying-data/search/integrating_search_using_SDK"
                     ]
-                  },
+                  }
                   ]
                 },  
               {
