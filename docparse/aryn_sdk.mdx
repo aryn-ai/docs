@@ -42,7 +42,7 @@ with open("mydocument.pdf", "rb") as f:
 ```python
 from aryn_sdk.partition import partition_file, table_elem_to_dataframe, draw_with_boxes
 with open("mydocument.pdf", "rb") as f:
-   data = partition_file(f, extract_table_structure=True, use_ocr=True, extract_images=True, threshold=0.35)
+   data = partition_file(f, extract_table_structure=True, text_mode="standard_ocr", extract_images=True, threshold=0.35)
 
 # Produce a pandas DataFrame representing one of the extracted tables
 table_elements = [elt for elt in data['elements'] if elt['type'] == 'table']
