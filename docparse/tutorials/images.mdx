@@ -20,10 +20,9 @@ file = open('my-document.pdf', 'rb')
 aryn_api_key = 'YOUR-KEY-HERE'
 
 ## Make a call to Aryn DocParse 
-## param use_ocr (boolean): extract text using an OCR model instead of extracting embedded text in PDF. default: False
 ## param extract_images (boolean):  extract image contents. default: False
 ## returns: JSON object with elements representing information inside the PDF
-partitioned_file = partition_file(file, aryn_api_key, extract_images=True, use_ocr=True)
+partitioned_file = partition_file(file, aryn_api_key, extract_images=True)
 ```
 
 

@@ -635,6 +635,7 @@
               "extract_images": {
                 "type": "boolean",
                 "title": "Extract Images",
+                "default": false,
                 "description": "A boolean value indicating whether to crop images detected in the document and return them in the specified format converted to base64 within the binary_representation of returned image elements.\n"
               },
               "extract_image_format": {
@@ -645,11 +646,13 @@
                   "jpeg"
                 ],
                 "title": "Extract Image Format",
+                "default": "ppm",
                 "description": "The format to use for extracted images. Defaults to ppm.\n"
               },
               "extract_table_structure": {
                 "type": "boolean",
                 "title": "Extract Table Structure",
+                "default": false,
                 "description": "A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n"
               },
               "table_extraction_options": {
@@ -660,11 +663,13 @@
                   "include_additional_text": {
                     "type": "boolean",
                     "title": "Include Additional Text",
+                    "default": false,
                     "description": "Attempts to merge text within the table bounding box but missed by the table due to misalignment issues.\n"
                   },
                   "model_selection": {
                     "type": "string",
                     "title": "Model Selection",
+                    "default": "pixels > 500 -> deformable_detr; table_transformer",
                     "description": "An expression to instruct DocParse how to select the table model to use for extraction. Default is `\"pixels > 500 -> deformable_detr; table_transformer\"`, which means \"if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer.\" To use only deformable_detr or table_transformer, set `model_selection=\"deformable_detr\"` or `model_selection=\"table_transformer\"`. Refer to the [full documentation](processing_options) for more details.\n"
                   }
                 }
@@ -672,11 +677,25 @@
               "summarize_images": {
                 "type": "boolean",
                 "title": "Summarize Images",
+                "default": false,
                 "description": "(PAYG Only) A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.\n"
               },
+              "text_mode": {
+                    "type": "string",
+                    "enum": [
+                      "vision_ocr",
+                      "standard_ocr",
+                      "standard",
+                      "fine_grained"
+                    ],
+                    "default": "standard",
+                    "title": "Text Mode",
+                    "description": "The mode to use for text extraction. Defaults to `standard`. Note that the `vision_ocr` mode is only available for PAYG users.\n"
+                  },
               "use_ocr": {
                 "type": "boolean",
                 "title": "Use OCR",
+                "deprecated": true,
                 "description": "A boolean value indicating whether to use OCR or not on the document.\n"
               },
               "text_extraction_options": {
@@ -691,7 +710,13 @@
                       "standard"
                     ],
                     "title": "OCR Text Mode",
+                    "deprecated": true,
                     "description": "The mode to use for OCR text extraction on non-table elements. Defaults to `standard`. Note that the `vision` mode is only available for PAYG users.\n"
+                  },
+                  "remove_line_breaks": {
+                    "type": "boolean",
+                    "title": "Remove Line Breaks",
+                    "description": "A boolean value indicating whether to remove line breaks from the extracted text.\n"
                   }
                 }
               },
@@ -775,6 +800,7 @@
                   "welsh"
                 ],
                 "title": "OCR Language",
+                "default": "english",
                 "description": "The language to use for OCR. Defaults to `english`.\n"
               },
               "threshold": {
@@ -792,6 +818,7 @@
                   }
                 ],
                 "title": "Threshold",
+                "default": "auto",
                 "description": "A number between 0 and 1 indicating the threshold for document segmentation. Defaults to auto, which uses an automatic threshold.\n"
               },
               "chunking_options": {
@@ -842,6 +869,7 @@
                   "markdown"
                 ],
                 "title": "Output Format",
+                "default": "json",
                 "description": "The format of the output. Defaults to json.\n"
               },
               "output_label_options": {
@@ -858,11 +886,13 @@
                   "promote_title": {
                     "type": "boolean",
                     "title": "promote_title",
+                    "default": false,
                     "description": "A boolean that specifies whether to promote an element to title. Defaults to false.\n"
                   },
                   "orientation_correction": {
                     "type": "boolean",
                     "title": "orientation_correction",
+                    "default": false,
                     "description": "A boolean value indicating whether to correct the orientation of the pages. Defaults to false.\n"
                   }
                 },
@@ -874,14 +904,20 @@
                 "properties": {
                   "include_pagenum": {
                     "type": "boolean",
+                    "title": "Include Page Numbers",
+                    "default": false,
                     "description": "A boolean value indicating whether to include page numbers in the markdown output. Defaults to false.\n"
                   },
                   "include_headers": {
                     "type": "boolean",
+                    "title": "Include Headers",
+                    "default": false,
                     "description": "A boolean value indicating whether to include page headers in the markdown output. Defaults to false.\n"
                   },
                   "include_footers": {
                     "type": "boolean",
+                    "title": "Include Footers",
+                    "default": false,
                     "description": "A boolean value indicating whether to include page footers in the markdown output. Defaults to false.\n"
                   }
                 },

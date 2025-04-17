@@ -29,7 +29,7 @@ with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
         aryn_api_key="MY-ARYN-API-KEY",
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
         extract_images=True
     )
@@ -80,7 +80,7 @@ from aryn_sdk.partition import partition_file_async_submit
 with open("my-favorite-pdf.pdf", "rb") as f:
     response = partition_file_async_submit(
         f,
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
     )
 
@@ -207,7 +207,7 @@ ssl_verify is `True` by default, enforcing SSL verification.
 from aryn_sdk.partition import partition_file_async_submit, partition_file_async_cancel
 task_id = partition_file_async_submit(
             "path/to/file.pdf",
-            use_ocr=True,
+            text_mode="standard_ocr",
             extract_table_structure=True,
             extract_images=True,
         )["task_id"]
@@ -363,7 +363,7 @@ with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
         aryn_api_key="MY-ARYN-API-KEY",
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
         extract_images=True
     )
@@ -399,7 +399,7 @@ from aryn_sdk.partition import partition_file, table_elem_to_dataframe
 with open("partition-me.pdf", "rb") as f:
     data = partition_file(
         f,
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
         extract_images=True
     )
@@ -443,7 +443,7 @@ with open("my-favorite-pdf.pdf", "rb") as f:
     data = partition_file(
         f,
         aryn_api_key="MY-ARYN-API-KEY",
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
         extract_images=True
     )
