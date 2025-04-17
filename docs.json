@@ -12,7 +12,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Aryn Platform",
         "groups": [
           {
             "group": "Get Started",
@@ -60,8 +60,13 @@
                 ]
               }
             ]
-          },
-          {
+          }
+        ]
+      },
+      {
+        "tab": "DocParse",
+        "groups": [
+           {
             "group": "DocParse",
             "pages": [
               "docparse/introduction",
@@ -138,11 +143,6 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Status Page",
-          "href": "https://aryn.instatus.com/",
-          "icon": "signal"
-        },
-        {
           "anchor": "Aryn Blog",
           "href": "https://www.aryn.ai/blog",
           "icon": "newspaper"
@@ -194,6 +194,10 @@
       {
         "label": "Get Support",
         "href": "mailto:info@aryn.ai"
+      },
+      {
+        "label": "Status Page",
+        "href": "https://aryn.instatus.com/"
       }
     ],
     "primary": {
