@@ -7,11 +7,11 @@ You can use Aryn DocParse to easily chunk and extract data from complex document
 
 We show you how to get started with DocParse through the DocParse UI, the Python ``aryn-sdk`` client, or ``curl``. For building multi-stage document ETL pipelines that use DocParse for parsing, visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).
 
-You will need an Aryn DocParse API Key, which you can get and use for free at [aryn.ai/get-started](https://www.aryn.ai/get-started).
+For this Quickstart, you will need an Aryn account. You can get one and use for free [here](https://console.aryn.ai/signup/). 
 
 ## Using the DocParse UI
 
-After you sign-up and get your Aryn DocParse API key, go to the [DocParse UI](http://app.aryn.ai/docparse/). 
+After you sign-up, go to the [Aryn UI](http://app.aryn.ai/) and click on the DocParse tab in the left nav to go the DocParse UI.
 
 Next, select a document to parse, and choose the options for DocParse (e.g. OCR). Click on "Chunk document," and DocParse will process the first 25 pages of your PDF. If you have a larger document, use the ``aryn-sdk`` (the UI is limited to 25 pages per document).
 
@@ -25,7 +25,9 @@ For additional questions on getting started, please join the Slack community [he
 
 The DocParse ``aryn-sdk`` client is a thin python library that calls Aryn DocParse and provides a few utility methods around it. It is the easiest way to add Aryn DocParse to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
 
-For more information, see the [Aryn SDK documentation](docparse/aryn_sdk) or [API reference](api-reference/introduction). 
+You will need to use the API key for your account with the Aryn SDK. To retrieve it, click on the API key tab in the left nav in the Aryn UI.
+
+For more information, see the [Aryn SDK documentation](docparse/aryn_sdk) or [API reference](api-reference/partition). 
 
 
 ## Using ``curl``
@@ -37,7 +39,7 @@ We recommend using the ``aryn-sdk``, but you can also use ``curl`` to access Ary
 ```bash
 curl http://arxiv.org/pdf/1706.03762 -o document.pdf
 ```
-Change ``PUT API KEY HERE`` below to your Aryn DocParse API key. If you have a different document, change ``@document.pdf`` to ``@/path/to/your/document.pdf`` below.
+Change ``PUT API KEY HERE`` below to your Aryn API key. If you have a different document, change ``@document.pdf`` to ``@/path/to/your/document.pdf`` below.
 
 ```bash
 export ARYN_API_KEY="PUT API KEY HERE"
@@ -69,3 +71,5 @@ curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authori
 * To extract tables from your documents and run analytics on them, visit [here](docparse/tutorials/tables).
 
 * To extract images from your documents and process them directly, visit [here](docparse/tutorials/images).
+
+* If you're interested in building an end-to-end system to query and search your documents, [learn more about the Aryn Platform](aryn-platform/core_concepts). It uses DocParse under the hood for parsing and processing your documents when ingesting them.
