@@ -4,15 +4,15 @@ description: 'Storage and search for your parsed documents.'
 icon: 'database'
 ---
 
-DocParse includes storage, search, and metadata enrichment for your parsed documents. You can view the bounding boxes (segmentation) and extracted elements from your documents in the DocParse UI. You can also use GenAI to extract metadata from your documents (PAYG feature), or download the parsed document. 
+DocParse includes storage, search, and metadata enrichment for your parsed documents using DocSets in the Aryn Platform. DocParse will send the parsed output to a DocSet in the Aryn Platform, where you can use the features in the platform on this data.
 
-DocParse's storage enables you to search your stored documents with vector (semantic) or keyword search using the Aryn UI or API.
+You can view the bounding boxes (segmentation) and extracted elements from your documents in the [Aryn Platform DocSets UI](https://app.aryn.ai/docsets). You can also use GenAI to extract metadata from your documents, or download the parsed document. You can also search your stored documents with vector (semantic) or keyword search using the Aryn Platform UI or API.
 
-For more information about DocParse storage limits, visit the [Docparse pricing page](https://www.aryn.ai/pricing). PAYG customers can opt-out of DocParse storage.
+For more information about Aryn storage limits, visit the [Aryn pricing page](https://www.aryn.ai/pricing). PAYG customers can opt-out of storing DocParse output in the Aryn Platform on the [Settings page](https://app.aryn.ai/settings).
 
 ## Adding document to storage
 
-DocParse stores parsed documents in DocSets, and provides a default DocSet (named `docparse_storage`) to use. Documents are automatically added to it for Free Trial customers, unless you create and specify a different DocSet. Think of a DocSet like a folder for your processed Docs, and it's optimized to store and index the elements and metadata from each Doc.
+DocParse stores parsed documents in DocSets in the Aryn Platform, and provides a default DocSet (named `docparse_storage`) to use. Documents are automatically added to it for Free Trial customers, unless you create and specify a different DocSet. Think of a DocSet like a folder for your processed Docs, and it's optimized to store and index the elements and metadata from each Doc.
 
 By default, DocParse will add your processed Doc to the default DocSet named `docparse_storage`. You can create a new DocSet using the Aryn UI or `create-docset` API, and specify it using the `add_to_docset_id` when partitioning a document:
 
@@ -23,7 +23,7 @@ with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, add_to_docset_id:[your-docset-ID])
 ```
 
-You can find your DocSet ID in the Storage page in the Aryn UI or using the `list-docsets` API.
+You can find your DocSet ID in the DocSets page in the Aryn UI or using the `list-docsets` API.
 
 For Pay As You Go (PAYG) customers, you can opt-out of storing your documents in two ways:
 
@@ -33,16 +33,16 @@ For Pay As You Go (PAYG) customers, you can opt-out of storing your documents in
 
 ## Viewing stored documents
 
-You can view the parsed documents in your DocSet on the Storage page in the Aryn UI. Select your DocSet, and then select a Doc. In the UI, you will see the labeled bounding boxes for each element in your document, and the contents of each element. You can also view the metadata (called `properties`) extracted from your document.
+You can view the parsed documents in your DocSet on the DocSet page in the Aryn UI. Select your DocSet, and then select a Doc. In the UI, you will see the labeled bounding boxes for each element in your document, and the contents of each element. You can also view the metadata (called `properties`) extracted from your document.
 
 You can also use the `get-doc` API to retrieve the parsed Doc, or `get-doc-binary` to get the original document.
 
 
 ## Extracting metadata from your documents
 
-You can easily extract metadata (called `properties`) from your documents using GenAI for documents in DocParse storage. Properties are stored as part of your document in key:value pairs (property_name:property_value), and extracted using an LLM from all the documents in your DocSet. This feaure is available for Pay-As-You-Go customers. You can use the Extract Properties feature in the DocSet page (under Storage) or using the `extract-properties` API.
+You can easily extract metadata (called `properties`) from your documents using GenAI for documents in Aryn DocSets. Properties are stored as part of your document in key:value pairs (property_name:property_value), and extracted using an LLM from all the documents in your DocSet. You can use the Extract Properties feature on the DocSet page or using the `extract-properties` API.
 
-From the Storage tab, click on your DocSet to open it. Then, click on the Extract Properties button, and then select Add Property. You can add up to 15 properties in the UI, and hundreds when using the API directly. Next, add the information to guide the GenAI model to properly extract your property:
+From the DocSets tab in the left nav, click on your DocSet to open it. Then, click on the Extract button, and then select Add Property. You can add up to 15 properties in the UI, and hundreds when using the API directly. Next, add the information to guide the GenAI model to properly extract your property:
 
 `Name`: The name of the property. This is the key in the key:value pair.
 `Type`: The type of value to extract. Choose between `String`, `Number`, or `Boolean`.
@@ -51,16 +51,25 @@ From the Storage tab, click on your DocSet to open it. Then, click on the Extrac
 `Examples`: These are comma separated example property values. The LLM will use these as examples of what a value might be for a specific property.
 
 
-After providing this information, click Add Property. Then, click Extract. DocParse will run a job to extract the properties specified, and share a Task ID so you can monitor the task's progress. Completed Tasks will disappear from the Tasks page when complete.
+After providing this information, click Add Property. Then, click Extract. Aryn will run a job to extract the properties specified, and share a Task ID so you can monitor the task's progress. Completed Tasks will disappear from the Tasks page when complete.
 
 You can view your newly extracted properties when viewing a document in the DocSet by selecting the Properties tab in the Document viewer.
 
 
-## Searching stored documents
+## Querying and searching stored documents
+
+Now that your documents are stored in an Aryn DocSet, you can leverage the Aryn Platforms Deep Analytics and search features on this data.
+
+### Running Deep Analytics
+
+You can query your parsed documents using Aryn's Deep Analytics query engine. For more information on how to use a Workspace to query your data, visit the [Workspaces documentation](aryn-platform/querying-data/deep-analytics/using_workspaces).
+
 
 ### Using vector and keyword search
 
-You can easily search over your documents and the associated metadata by using the search API. Once you have added documents to a docset and extracted properties, you can simply use the search API as follows: 
+You can easily search over your documents and the associated metadata by using Aryn's search API. Once you have added documents to a docset and extracted properties, you can simply use the [Search UI](aryn-platform/querying-data/search/using_search_ui).
+
+Or, you can use the search API as follows: 
 
 ```python
 
@@ -78,6 +87,6 @@ SearchResponse(results=[], query_embedding=[your-query-embedded], next_page_toke
 
 the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/query.mdx).
 
-### Finding docs in the DocSet Explorer
+### Filtering docs on the DocSet page
 
-You can also search over your documents through the docset explorer. From the Storage tab, click on view to open your DocSet. Then, click on "Filter" and populate the form with your search criteria. You can specify specific properties you'd like to search on by clicking the "+Add property" button and then choosing the property you'd like to filter on.
+You can also filter your documents on the DocSet page. From the Storage tab, click on view to open your DocSet. Then, click on "Filter" and populate the form with your search criteria. You can specify specific properties you'd like to search on by clicking the "+Add property" button and then choosing the property you'd like to filter on.

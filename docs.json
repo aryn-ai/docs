@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "Aryn Documentation",
-  "description": "Aryn is a document intelligence platform that helps you extract and understand structured data from unstructured documents.",
+  "description": "Aryn is an agentic unstructured data warehouse that enables deep analyitcs and seach on documents at scale.",
   "colors": {
     "primary": "#417586",
     "light": "#417586",
@@ -12,19 +12,65 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Aryn Platform",
         "groups": [
           {
             "group": "Get Started",
             "pages": [
               "introduction",
               "quickstart",
-              "aryn_playground_cloud_console"
+              "account_management"
             ]
           },
           {
+            "group": "Aryn Platform",
+            "pages": [
+              "aryn-platform/core_concepts",
+              "aryn-platform/loading_data",
+              {
+                "group": "Data Preparation",
+                "pages": [
+                  "aryn-platform/data-preparation/document_properties",
+                  "aryn-platform/data-preparation/sycamore_document_etl"
+                ]
+              },
+                {
+                  "group": "Querying Data",
+                  "pages": [
+                  {
+                    "group": "Deep Analytics",
+                    "pages": [
+                      "aryn-platform/querying-data/deep-analytics/query_engine_overview",
+                      "aryn-platform/querying-data/deep-analytics/using_workspaces"
+                    ]
+                  },
+                  {
+                    "group": "Search",
+                    "pages": [
+                      "aryn-platform/querying-data/search/using_search_ui",
+                     "aryn-platform/querying-data/search/integrating_search_using_SDK"
+                    ]
+                  }
+                  ]
+                },  
+              {
+                "group": "Tutorials",
+                "pages": [
+                  
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "DocParse",
+        "groups": [
+           {
             "group": "DocParse",
             "pages": [
+              "docparse/introduction",
+              "docparse/quickstart",
               "docparse/aryn_sdk",
               "docparse/output_structure",
               "docparse/storage",
@@ -97,11 +143,6 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Status Page",
-          "href": "https://aryn.instatus.com/",
-          "icon": "signal"
-        },
-        {
           "anchor": "Aryn Blog",
           "href": "https://www.aryn.ai/blog",
           "icon": "newspaper"
@@ -153,6 +194,10 @@
       {
         "label": "Get Support",
         "href": "mailto:info@aryn.ai"
+      },
+      {
+        "label": "Status Page",
+        "href": "https://aryn.instatus.com/"
       }
     ],
     "primary": {

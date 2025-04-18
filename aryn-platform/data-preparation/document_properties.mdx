@@ -1,0 +1,97 @@
+---
+title: 'Adding and managing Document properties'
+description: 'Extracting and updating Document Properties'
+icon: 'list'
+---
+
+Aryn's agentic query engine uses additional metadata from your Documents to create accurate query plans and as input into several query operators (e.g. filter). This metadata are called Properties, which are key/value pairs included in every Document in your DocSet.
+
+Aryn stores the list of Properties for your DocSet in a Properties Schema, which you can set when creating your DocSet. You can also add and remove properties from this Schema using Extract or Delete, respectively. Aryn will automatically extract the Properties specified in the Schema from new documents added to your DocSet. 
+
+You can use Extract Properties to specify and extract new properties from your DocSet, and this also adds the Property to the Schema. Aryn uses LLMs to extract this metadata with high quality.
+
+
+## Adding Property Schema when creating a DocSet
+
+**Using the Console**
+
+Click the New DocSet button on the DocSet list page. In the pop-up, select Properties Schema. Add the Properties and specifc the configuration for each:
+
+* ```Name```: The name of the property. This is the key in the key:value pair. 
+* ```Type```: The type of value to extract. Choose between ```String```, ```Number```, or ```Boolean```. 
+* (optional) ```Description```: The description of the property being extracted. The Aryn query engine will use this description when creating query plans.
+* (optional) ```Default Value```: If the LLM does not find a value to exract, this is what will be placed as the value for the property. ```NULL``` is default.
+* (optional)```Examples```: These are comma separated example property values. The LLM will use these as examples of what a value might be for a specific property. 
+
+
+When adding new documents to your DocSet, Aryn will automatically extract the Properties specified in your Properties Schema.
+
+**Using the Aryn SDK**
+
+When using [create_docset](https://docs.aryn.ai/sdk-reference/storage#create-docset), specify a Properties Schema:
+
+```
+ ...
+  "properties_schema": {
+    "property_config": [
+      {
+        "name": "<string>",
+        "property_type": "<string>",
+        "default": "<any>",
+        "description": "<string>",
+        "examples": [
+          "<any>"
+        ]
+      }
+    ]
+  }
+...
+```
+
+## Viewing the Properties Schema on a DocSet
+
+**Using the Console**
+
+Click on Manage Properties button on the DocSet page. The Properties Schema will be in the pop-up, including the configuration for each Property.
+
+
+**Using the Aryn SDK**
+Use the [get_docset](https://docs.aryn.ai/sdk-reference/storage#return-value) function. The Properties Schema is returned.
+
+
+
+## Specifying and extracting additional Properties
+
+If you didn't specify a Properties Schema when creating your DocSet or want to add additional Properties to your Documents, you can specify and extract Properties at any time.
+
+**Using the Console**
+
+On your DocSet page, click the Extract button to go to the Extract Properties page. Add the Properties you want to extract using the same configuration options as described above. Click Extract, and Aryn will add these Properties to your Properties Schema and extract them from the Documents in your DocSet. You can monitor the progress of this Task on the Tasks page.
+
+Once complete, you can refresh the DocSet page and view the properties in the right-side panel.
+
+**Using the Aryn SDK**
+
+Use the [extract_properties](https://docs.aryn.ai/sdk-reference/storage#extract-properties) function.
+
+
+## Updating Property values on a Document
+
+**Using the Console**
+
+Go to the Document on the DocSet page, and select the Properties viewer on the right panel. Hover over the Property you want to edit, and click the pencil icon to the right of the value. Change the value, and click Save to update it.
+
+**Using the Aryn SDK**
+
+Use the [update_doc_properties](https://docs.aryn.ai/sdk-reference/storage#update-document-properties) function.
+
+
+## Removing a Property from your DocSet
+
+**Using the Console**
+
+On your DocSet page, click the Delete Properties button on the top right. In the pop-up, select the Properties in the Properties Schema you would like to remove from the Documents in your DocSet. Then, click the Delete button to remove these Properties. Because these Properties are also removed from your Properties Schema, Aryn will not extract these when adding new documents to your DocSet.
+
+**Using the Aryn SDK**
+
+Use the [delete_properties](https://docs.aryn.ai/sdk-reference/storage#delete-properties) function.

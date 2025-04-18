@@ -1,0 +1,59 @@
+---
+title: 'Loading Data'
+description: 'Creating DocSets and adding documents to Aryn'
+icon: 'upload'
+---
+
+Aryn stores documents in DocSets, which can scale to millions of documents. When adding a document to Aryn, it automatically parses and chunks it into labeled Elements (e.g. Section Header, Table, Image, Text, and more), and stores this JSON respresentation as a Document along with the original document. It uses Aryn's [DocParse technology](https://www.aryn.ai/docparse) under the hood to do this, and there are a variety of options like OCR, Image Summarization, and more you can choose to enable. 
+
+Aryn indexes the Documents in your DocSets in scalable vector and keyword indexes.
+
+
+## Creating a DocSet
+
+**Using the Console**
+
+To create a DocSet, click to the DocSets tab on the left nav. Next, click the New Docset button in the top right.
+
+Enter the Name and optional Description of your DocSet. You can also optionally choose to specify the properties/metadata you would like to extract from each document added to your DocSet. However, you can always configure this at any time using the Extract Properties feature.
+
+Click Create Docset to create your DocSet.
+
+**Using the Aryn SDK**
+
+Use the [create_docset](https://docs.aryn.ai/sdk-reference/storage#example) function. 
+
+
+## Adding documents to your DocSet
+
+**Using the Console**
+
+When adding documents to your DocSet, Aryn automatically parses and processes them using its compound AI model [DocParse technology](https://www.aryn.ai/docparse). This includes segmentation, OCR, table extraction, image summarization, chunking, vector embedding, and more. Processed documents are structured in the Document format, and added to your DocSet.
+
+
+You can add documents to your DocSet on the DocSet Explorer page in the Aryn UI. Select your DocSet, and then click the blue "+" icon at the bottom of the Document list. 
+
+Select or Drag & Drop your files into the pop-up. You can adjust the default ingestion settings and click Upload.
+
+Aryn will create an asynchronous Task to load each document, and you can view them on the Tasks page.
+
+If you have properties/metadata specified for your DocSet, they will be extracted and added to your Document when adding it to your DocSet.
+
+Looking for a specific connector to load data from a storage system into Aryn? Send us a request: info@aryn.ai
+
+
+**Using the Aryn SDK**
+
+TODO - ADD LINK TO ADD_DOC
+
+
+**Using Sycamore document ETL**
+
+TODO - ADD INFORMATION ABOUT WRITE TO ARYN
+
+
+**Using DocParse (legacy)**
+
+When you add documents to Aryn, it is using DocParse technology under the hood for parsing and processing. However, documents directly parsed with DocParse using the DocParse UI or API are also sent to a DocSet in Aryn. This was known as "DocParse storage" before Aryn's launch.
+
+By default, parsed Documents are stored in a DocSet named "docparse_storage". However, you can specify a different DocSet to use when parsing your document. Visit the [DocParse storage](https://docs.aryn.ai/docparse/storage) documentation to learn more.
