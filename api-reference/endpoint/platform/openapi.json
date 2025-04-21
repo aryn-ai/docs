@@ -782,6 +782,152 @@
         }
       }
     },
+    "/v1/query/plan": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Generate Plan",
+        "description": "Generate a query plan for the given query, but do not run it.",
+        "operationId": "generate_plan_v1_query_plan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Query"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalPlan-Output"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Edit Plan",
+        "description": "Take an existing plan and user feedback to rewrite it.",
+        "operationId": "edit_plan_v1_query_plan_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_edit_plan_v1_query_plan_patch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalPlan-Output"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/query": {
+      "post": {
+        "tags": [
+          "query"
+        ],
+        "summary": "Run Query",
+        "description": "Run the given query.\n\nIf the `stream` parameter is set to true, the result will be streamed back to the client as a series of SSE events.\nOtherwise, the result will be returned as a QueryResult object.",
+        "operationId": "run_query_v1_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Query"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/v1/jobs/extract-properties": {
       "post": {
         "tags": [
@@ -1055,6 +1201,23 @@
           "name"
         ],
         "title": "Body_create_docset_v1_storage_docsets_post"
+      },
+      "Body_edit_plan_v1_query_plan_patch": {
+        "properties": {
+          "query": {
+            "$ref": "#/components/schemas/Query"
+          },
+          "feedback": {
+            "type": "string",
+            "title": "Feedback"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "feedback"
+        ],
+        "title": "Body_edit_plan_v1_query_plan_patch"
       },
       "Body_get_doc_v1_storage_docsets__docset_id__docs__doc_id__get": {
         "properties": {
@@ -1433,12 +1596,258 @@
         "title": "HTTPValidationError"
       },
       "JsonValue": {},
+      "LogicalPlan-Input": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Node-Input"
+            },
+            "type": "object",
+            "title": "Nodes"
+          },
+          "result_node": {
+            "type": "integer",
+            "title": "Result Node"
+          },
+          "llm_prompt": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Prompt"
+          },
+          "llm_plan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Plan"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "nodes",
+          "result_node"
+        ],
+        "title": "LogicalPlan"
+      },
+      "LogicalPlan-Output": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Node-Output"
+            },
+            "type": "object",
+            "title": "Nodes"
+          },
+          "result_node": {
+            "type": "integer",
+            "title": "Result Node"
+          },
+          "llm_prompt": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Prompt"
+          },
+          "llm_plan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Plan"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "nodes",
+          "result_node"
+        ],
+        "title": "LogicalPlan",
+        "description": "Represents a logical query plan.\n\nArgs:\n    query: The query that the plan is for.\n    nodes: A mapping of node IDs to nodes.\n    result_node: The node that is the result of the query.\n    llm_prompt: The LLM prompt that was used to generate this query plan.\n    llm_plan: The LLM plan that was used to generate this query plan."
+      },
+      "Node-Input": {
+        "properties": {
+          "node_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Node Type"
+          },
+          "node_id": {
+            "type": "integer",
+            "title": "Node Id"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "exclude_from_comparison": true
+          },
+          "inputs": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Inputs",
+            "default": []
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "node_id"
+        ],
+        "title": "Node"
+      },
+      "Node-Output": {
+        "properties": {
+          "node_type": {
+            "type": "string",
+            "title": "Node Type",
+            "description": "The type of this node."
+          },
+          "node_id": {
+            "type": "integer",
+            "title": "Node Id",
+            "description": "A unique integer ID representing this node."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "A detailed description of why this operator was chosen for this query plan.",
+            "exclude_from_comparison": true
+          },
+          "inputs": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Inputs",
+            "description": "A list of node IDs that this operation depends on.",
+            "default": []
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id"
+        ],
+        "title": "Node",
+        "description": "Represents a node in a logical query plan.\n\nArgs:\n    node_id: The ID of the node.\n    _inputs: The nodes that this node depends on."
+      },
       "PromptType": {
         "type": "string",
         "enum": [
           "CHAT_SYSTEM"
         ],
         "title": "PromptType"
+      },
+      "Query": {
+        "properties": {
+          "docset_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Docset Id"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query"
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LogicalPlan-Input"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "default": false
+          },
+          "bookmark_source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bookmark Source"
+          },
+          "bookmark_target": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bookmark Target"
+          }
+        },
+        "type": "object",
+        "title": "Query",
+        "description": "Query a DocSet with a given natural language query string. One of 'query' or 'plan' must be provided."
       },
       "ReplaceOperation": {
         "properties": {
