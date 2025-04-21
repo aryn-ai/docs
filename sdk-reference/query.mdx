@@ -94,3 +94,33 @@ A `LogicalPlan` object.
 - `HTTPError 5xx`: Internal Server Error
 </Accordion>
 </AccordionGroup>
+
+
+## Edit Plan
+Edit a plan.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="query" type="Query" required>The query to edit.</ParamField>
+<ParamField path="feedback" type="string" required>The changes to the plan you would like.</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, edit_plan
+c = Client()
+c.edit_plan(query=myQuery, feedback="Add a filter to select just documents that mention inflation.")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A `LogicalPlan` object.
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
