@@ -124,3 +124,32 @@ A `LogicalPlan` object.
 - `HTTPError 5xx`: Internal Server Error
 </Accordion>
 </AccordionGroup>
+
+
+## Query
+Run a query either from a `Query` based on a string or a `Query` based on a plan.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="query" type="Query" required>The query to run.</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, query
+c = Client()
+c.query(query=myQuery)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+Either a `QueryResult` or an `Iterator[QueryEvent]`.
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
