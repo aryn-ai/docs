@@ -4,7 +4,6 @@
     "title": "FastAPI",
     "version": "0.1.0"
   },
-
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
       "get": {
@@ -875,8 +874,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Schema",
-                "description": "A Schema of the fields to delete from the DocSet"
+                "$ref": "#/components/schemas/SchemaPropertyNames",
+                "description": "A list of field names to delete from the DocSet"
               }
             }
           }
@@ -1538,6 +1537,24 @@
         ],
         "title": "SchemaField",
         "description": "Represents a field in a DocSet schema."
+      },
+      "SchemaPropertyNames": {
+        "properties": {
+          "names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Names",
+            "description": "A list of names of properties that belong to a schema."
+          }
+        },
+        "type": "object",
+        "required": [
+          "names"
+        ],
+        "title": "SchemaPropertyNames",
+        "description": "Represents the names of properties belonging to a DocSet schema."
       },
       "SearchRequest": {
         "properties": {
