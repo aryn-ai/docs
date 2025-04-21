@@ -77,7 +77,7 @@ A `Query` object describing the query to build and return a `LogicalPlan` for.
 from aryn_sdk.client.client import Client, generate_plan, Query
 c = Client()
 c.generate_plan(query=Query(
-    docset_id="aryn:ds-b34kr4... myDocSetId here",
+    docset_id="aryn:ds-u3915kxzdi8fosmv542ynv4",
     query="What was the breakdown of aircraft types for incidents with substantial damage?"
 ))
 ```
@@ -91,7 +91,6 @@ A `LogicalPlan` object.
 - `HTTPError 403`: "No Aryn API Key provided"
 - `HTTPError 403`: "Invalid Aryn API key"
 - `HTTPError 403`: "Expired Aryn API key"
-- `HTTPError 404`: "DocSet not found"
 - `HTTPError 5xx`: Internal Server Error
 </Accordion>
 </AccordionGroup>
