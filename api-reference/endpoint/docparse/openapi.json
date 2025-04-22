@@ -846,7 +846,15 @@
                   },
                   "tokenizer_options": {
                     "type": "object",
-                    "description": "The options for the tokenizer. See the [full documentation here](processing_options)\n"
+                    "description": "The options for the tokenizer.",
+                    "properties": {
+                      "model_name": {
+                        "type": "string",
+                        "default": "text-embedding-3-small",
+                        "title": "Model Name",
+                        "description": "The model to use for the tokenizer. Supports all tokenizers tiktoken and huggingface's transformers support so long as they do not run remote code\n"
+                      }
+                    }
                   },
                   "max_tokens": {
                     "type": "integer",
