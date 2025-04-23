@@ -12,11 +12,13 @@ export ARYN_API_KEY="PUT API KEY HERE"
 ```
 
 All of the available options are listed below, and are optional unless specified otherwise.
-- `use_ocr`: A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
-- `text_extraction_options`: A map with string keys specifying options for text extraction.
-    - `ocr_text_mode`: A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for non-table elements (`standard` will be used for table elements) and for PAYG users only.
 - `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response. Default is `False`.
 - `add_to_docset_id`: A string that specifies the DocSet ID to store your parsed document in. By default, DocParse will use the DocSet named `docparse_storage` unless you have disabled data retention.
+- `extract_images`: A boolean that determines whether to extract images from the document. The format is determined by the value of `extract_image_format`. Default: `False`.
+- `extract_image_format`: A string indicating what in what format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
+- `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
+- `ocr_language`: A string that specifies the language to use for OCR. The default is `english` (English). The full list of supported languages can be found [here](./formats_supported).
+- `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition. Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A valid example value for selected_pages is `[1, 10, [15, 20]]` which would include pages 1, 10, 15, 16, 17 ..., 20.  `selected_pages` is `None` by default, which results in all pages of the document being parsed.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
   - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `False`
   - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
@@ -34,12 +36,11 @@ All of the available options are listed below, and are optional unless specified
         - `table_transformer` => always use table transformer
         - `pixels > 500 -> deformable_detr; table_transformer` => if the biggest dimension of the table is greater than 500 pixels use deformable detr. Otherwise use table_transformer.
         - `pixels>50->table_transformer; chars<30->deformable_detr;chars>35->table_transformer;pixels>2->deformable_detr;table_transformer;comment` => if the biggest dimension is more than 50 pixels use table transformer. Else if the total number of chars in the table is less than 30 use deformable_detr. Else if there are mode than 35 chars use table transformer. Else if there are more than 2 pixels in the biggest dimension use deformable detr. Otherwise use table transformer. comment is not processed.
-
-- `extract_images`: A boolean that determines whether to extract images from the document. The format is determined by the value of `extract_image_format`. Default: `False`.
-- `extract_image_format`: A string indicating what in what format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
-- `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
-- `ocr_language`: A string that specifies the language to use for OCR. The default is `english` (English). The full list of supported languages can be found [here](./formats_supported).
-- `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition. Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A valid example value for selected_pages is `[1, 10, [15, 20]]` which would include pages 1, 10, 15, 16, 17 ..., 20.  `selected_pages` is `None` by default, which results in all pages of the document being parsed.
+- `text_mode`: A string that specifies the mode to use for text extraction. The default is `standard`, which extracts the embedded text. The other options are `fine_grained`, which extracts embedded text in a more fine_grained manner,  `standard_ocr` which uses the classical OCR pipeline, and `vision_ocr` which uses a vision model for OCR. 
+Note that `vision_ocr` is only available for PAYG users only.
+- `text_extraction_options`: A map with string keys specifying options for text extraction.
+    - `ocr_text_mode` (deprecated): A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
+    - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `False`.
 - `chunking_options`: A dictionary of options for specifying chunking behavior. Chunking is only performed when this option is present, and default options are chosen when `chunking_options` is specified as `{}`.
     - `strategy`: A string specifying the strategy to use to combine and split chunks. Valid values are `context_rich` and `maximize_within_limit`. The default and recommended chunker is `context_rich` as `{'strategy': 'context_rich'}`.
         - Behavior of `context_rich` chunker: The goal of this strategy is to add context to evenly-sized chunks. This is most useful for retrieval based GenAI applications. The context_rich chunking combines adjacent `Section-header` and `Title` elements into a new `Section-header` element. It merges elements into a chunk with its most recent `Section-header`. If the chunk would contain too many tokens, it starts a new chunk by copying the Section-header to the start of this new chunk and continues. The chunker merges elements on different pages, unless `merge_across_pages` is set to `False`.
@@ -66,6 +67,7 @@ All of the available options are listed below, and are optional unless specified
     - `include_pagenum`: A boolean that specifies whether to include page numbers in the markdown output. Default is `False`.
     - `include_headers`: A boolean that specifies whether to include headers in the markdown output. Default is `False`.
     - `include_footers`: A boolean that specifies whether to include footers in the markdown output. Default is `False`.
+- `use_ocr` (deprecated): A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
 
 Here is an example of how you can use some of these options in a curl command or in Python code with the [Aryn SDK](./aryn_sdk).
 
@@ -74,7 +76,7 @@ Here is an example of how you can use some of these options in a curl command or
 
 ```bash curl
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"use_ocr": true, "extract_table_structure": true, "threshold": 0.2}' | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"text_mode": "standard_ocr", "extract_table_structure": true, "threshold": 0.2}' | tee document.json
 ```
 
 ```python aryn_sdk.py
@@ -85,7 +87,7 @@ os.environ["ARYN_API_KEY"] = "PUT API KEY HERE"
 with open("document.pdf", "rb") as f:
     ans = partition_file(
         file=f,
-        use_ocr=True,
+        text_mode="standard_ocr",
         extract_table_structure=True,
         threshold=0.2
     )

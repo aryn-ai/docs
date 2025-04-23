@@ -94,7 +94,7 @@ If you want to cancel a particular asynchronous partition_file task you can call
 You can also call the async APIs directly without python through cURL:
 
 ```bash
-curl -X POST https://api.aryn.cloud/v1/async/submit/document/partition -F "file=@path/to/file.pdf" -F 'options={"use_ocr": true}' -H "Authorization: Bearer MY_ARYN_API_KEY"
+curl -X POST https://api.aryn.cloud/v1/async/submit/document/partition -F "file=@path/to/file.pdf" -F 'options={"text_mode": "standard_ocr"}' -H "Authorization: Bearer MY_ARYN_API_KEY"
 ```
 
 You can poll your result with the command below. Use the call id the command returned as output.
