@@ -1,71 +1,47 @@
 ---
 title: 'Quickstart'
-description: 'Getting Started with Aryn DocParse'
+description: 'Getting Started with Aryn'
 ---
 
-You can use Aryn DocParse to easily chunk and extract data from complex documents, and return a structured output in JSON or Markdown. DocParse can process 30+ document formats, including PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](docparse/formats_supported).
+You can use Aryn to ingest, enrich, store, and query your complex documents at scale using Deep Analytics and search. Aryn supports 30+ document formats, including PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](docparse/formats_supported). If you just want to get started with DocParse, visit the [DocParse Quickstart](docparse/quickstart).
 
-We show you how to get started with DocParse through the DocParse UI, the Python ``aryn-sdk`` client, or ``curl``. For building multi-stage document ETL pipelines that use DocParse for parsing, visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).
+We show you how to get started with Aryn through the Aryn UI. For more information on using the Aryn Python SDK, [click here](aryn-platform/loading_data).
 
-You will need an Aryn DocParse API Key, which you can get and use for free at [aryn.ai/get-started](https://www.aryn.ai/get-started).
+You will need an Aryn account, which you can get for free [here](https://console.aryn.ai/signup/). You can also sign-up and log-in with your Google or GitHub credentials.
 
-## Using the DocParse UI
+### Creating and loading a DocSet
 
-After you sign-up and get your Aryn DocParse API key, go to the [DocParse UI](http://app.aryn.ai/docparse/). 
+After you sign-up for Aryn, go to the [Aryn UI](http://app.aryn.ai/). 
 
-Next, select a document to parse, and choose the options for DocParse (e.g. OCR). Click on "Chunk document," and DocParse will process the first 25 pages of your PDF. If you have a larger document, use the ``aryn-sdk`` (the UI is limited to 25 pages per document).
+First, you will create and load your documents into a DocSet. A DocSet is a collection of Documents, including chunks (or elements) and metadata (or properties), and can be though of similarly to a table in a data warehouse, but for unstructured documents. When we add documents to our DocSet, Aryn will use a composite set of AI models to parse, extract, and process them (including OCR and more - it uses [DocParse](https://www.aryn.ai/docparse) under the hood).
 
-Once the document is processed, you will see a visualized document segmentation with labeled bounding boxes. You can choose to download and check out the structured JSON output, which is the output of DocParse. Additionally, you can download the visual of the segmented PDF. If you prefer markdown output, please use the ``aryn-sdk``.
+Click the "DocSet" page in the left nav, and then the "New DocSet" button on the DocSets page. In the popup, enter the Name of your DocSet and an optional description, and then click "Create DocSet".
 
-Now that you have seen how DocParse can segment complex documents, extract tables, and more, you can use the ``aryn-sdk`` to leverage DocParse in your application or the [Sycamore document ETL library](https://github.com/aryn-ai/sycamore) to load the output into vector databases. 
+Next, click on your new DocSet in the DocSet list to go to the DocSet page. Click on the blue "+" icon at the bottom of the Documents panel to add documents to your DocSet. In the popup, you can drag and drop files or click on it to open a file browser. You can optionally change the Processing Options to include OCR and more. Click "Upload" to add and process your documents. You can go to the Tasks page in the left nav to see the progress of your docs.
 
-For additional questions on getting started, please join the Slack community [here](https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg) or [email us](mailto:info@aryn.ai).
-
-## Using the DocParse ``aryn-sdk``
-
-The DocParse ``aryn-sdk`` client is a thin python library that calls Aryn DocParse and provides a few utility methods around it. It is the easiest way to add Aryn DocParse to your applications or custom data processing pipelines. You can view an example in [this notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
-
-For more information, see the [Aryn SDK documentation](docparse/aryn_sdk) or [API reference](api-reference/introduction). 
+Once your documents are added, you can view them in the Documents panel on the DocSet page. You can click the "Elements" tab in the right nav to view how Aryn parsed your docuemnt, and view extracted properties (metadata) on the "Properties" tab. We didn't specify any properties to be extracted...yet...so this should be empty. Aryn's agentic query engine uses these properties when creating query plans, so it will be important to enrich your documents as you productionize your DocSet.
 
 
-## Using ``curl``
+### Querying your DocSet in a Workspace
 
-We recommend using the ``aryn-sdk``, but you can also use ``curl`` to access Aryn DocParse directly.
+Now that you've added documents, let's query them using the Workspaces UI. From the Docsets page, click the Open in Workspaces button. This will take you to a new Workspace configured to query your DocSet. You can rename this Workspace using the "Rename" button.
 
-``curl`` an example document to use with DocParse, if you do not have one already.
+You can enter your query in the Query Box using natural language. After you submit your query, Aryn will generate and share a query plan showing the steps it will take to execute your query. You can then choose to run the query, cancel the query, or edit the query using natural language instructions on what to change.
 
-```bash
-curl http://arxiv.org/pdf/1706.03762 -o document.pdf
-```
-Change ``PUT API KEY HERE`` below to your Aryn DocParse API key. If you have a different document, change ``@document.pdf`` to ``@/path/to/your/document.pdf`` below.
+After you start running the query, you'll see the status of each step in the query plan. Each step is an operator (Aryn has both database style and LLM-powered operators), and Aryn will execute the plan and return a result. You can choose to Bookmark the result using the Bookmark icon at the top of the Query cell. A Bookmark is a saved result set from a query that can be used with an Workspace, and you can run subsequent Queries on that Bookmark.
 
-```bash
-export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
-```
-Your results have been saved to ``document.json``.
+Congrats! You've created a DocSet, added and procesed your documents, and ran a query. We call the process of navigating through and querying your documents Deep Analytics.
 
-```bash
-cat document.json
-```
 
-### Different File Formats
+### Next steps
 
-```bash
-export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.docx" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.doc" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pptx" | tee document.json
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.ppt" | tee document.json
-```
+So, now what? Here are some next steps to move beyond the 101 of Aryn to prepare your DocSet for deeper analytics:
 
-## Next steps
+* Use LLMs to [extract properties from your documents](aryn-platform/data-preparation/document_properties) to be used by Aryn's query engine.
+* Learn about [different parsing and chunking options](docparse/processing_options) when adding your documents to your DocSet.
+* Learn more about [Aryn's agentic query engine](aryn-platform/querying-data/deep-analytics/query_engine_overview) and its operators.
+* Use the open source [Sycamore document ETL library](aryn-platform/data-preparation/sycamore_document_etl) for custom ETL, chunking, and data cleaning steps to prepare your data.
+* [Leverage traditional hybrid, vector, and keyword search](aryn-platform/querying-data/search/using_search_ui) on your documents.
 
-* To load your parsed documents into a vector database, use [Sycamore](https://github.com/aryn-ai/sycamore) to create a document ETL pipeline in Python for additional processing and loading. Sycamore is a scalable, open source document ETL library that integrates with DocParse. You can check out an example notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb).
 
-* To use DocParse with Langchain, you can check out [this example notebook here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb).
-
-* To extract tables from your documents and run analytics on them, visit [here](docparse/tutorials/tables).
-
-* To extract images from your documents and process them directly, visit [here](docparse/tutorials/images).
+For additional questions on getting started, please join our Slack community [here](https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg) or [email us](mailto:info@aryn.ai).

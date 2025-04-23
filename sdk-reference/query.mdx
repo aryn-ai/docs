@@ -12,7 +12,6 @@ Search over a docset and get back documents or elements that match your search c
 
 <AccordionGroup>
 <Accordion title="Parameters">
-<PartitionOptions />
 - `docset_id`: A string specifying the id of the docset you are searching over. 
 - `query`: A string that specifies what term you are searching for within the contents of your documents. The query_type parameter specified below will control exactly how this query parameter is used to search over your documents.   
 - `query_type`: An enum that can be either `keyword`, `vector`, or `lexical`:
@@ -59,5 +58,98 @@ User errors:
 
 Other errors:
 - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+</Accordion>
+</AccordionGroup>
+
+
+## Generate Plan
+Generate a query plan for the given query, but do not run it.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="query" type="Query" required>
+A `Query` object describing the query to build and return a `LogicalPlan` for.
+</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, generate_plan, Query
+c = Client()
+c.generate_plan(query=Query(
+    docset_id="aryn:ds-u3915kxzdi8fosmv542ynv4",
+    query="What was the breakdown of aircraft types for incidents with substantial damage?"
+))
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A `LogicalPlan` object.
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+
+## Edit Plan
+Edit a plan.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="query" type="Query" required>The query to edit.</ParamField>
+<ParamField path="feedback" type="string" required>The changes to the plan you would like.</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, edit_plan
+c = Client()
+c.edit_plan(query=myQuery, feedback="Add a filter to select just documents that mention inflation.")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A `LogicalPlan` object.
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+
+## Query
+Run a query either from a `Query` based on a string or a `Query` based on a plan.
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField path="query" type="Query" required>The query to run.</ParamField>
+</Accordion>
+
+<Accordion title="Example">
+```python
+from aryn_sdk.client.client import Client, query
+c = Client()
+c.query(query=myQuery)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+Either a `QueryResult` or an `Iterator[QueryEvent]`.
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 5xx`: Internal Server Error
 </Accordion>
 </AccordionGroup>

@@ -144,6 +144,49 @@ The metadata of the deleted DocSet
 ## Document Functions
 Functions for managing individual documents within DocSets.
 
+### Add Document
+Add a single document to the Aryn platform.
+
+This API calls DocParse to partition the document, and automatically extracts any properties registered as part of the DocSet schema. 
+
+<AccordionGroup>
+<Accordion title="Parameters">
+<ParamField body="file" type="BinaryIO | str | PathLike" required>
+  A `file` opened in binary mode or a path specified as either a `str` or `PathLike` instance indicating the document to add. The path can either be a local path or an Amazon S3 url starting with `s3://`. In the latter case, you must have boto3 installed and AWS credentials set up in your environment. 
+</ParamField>
+
+<ParamField path="docset_id" type="str" required>
+  The id of the DocSet into which to add the document.
+</ParamField>
+
+<ParamField body="options" type="str">
+  DocParse options to use for partitioning the specified document. You can find more about specific options [here](/sdk-reference/partition#parameters)
+</ParamField>
+
+</Accordion>
+
+<Accordion title="Example">
+```python
+doc = client.add_doc(file="/path/to/myfile.pdf", docset_id="your-docset-id")
+```
+</Accordion>
+
+<Accordion title="Return Value">
+A `DocumentMetadata` object containing
+<DocumentMetadata />
+</Accordion>
+
+<Accordion title="Exceptions">
+- `HTTPError 403`: "No Aryn API Key provided"
+- `HTTPError 403`: "Invalid Aryn API key"
+- `HTTPError 403`: "Expired Aryn API key"
+- `HTTPError 404`: "DocSet not found"
+- `HTTPError 5xx`: Internal Server Error
+</Accordion>
+</AccordionGroup>
+
+
+
 ### List Documents
 List all documents in a DocSet.
 <AccordionGroup>

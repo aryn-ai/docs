@@ -1,0 +1,54 @@
+---
+title: 'Using Workspaces'
+description: 'Use the Workspaces UI for Deep Analytics'
+icon: 'atom'
+---
+
+The easiest way to get started with Deep Analytics is by using Aryn's [Workspaces UI](https://app.aryn.ai/workspaces). Deep Analytics is the ability to run complex, multi-operation analytics queries on your unstructured data at scale, and it is enabled by Aryn's agentic query engine.
+
+A Workspace enables several interactions:
+
+* Run iterative natural language queries on a DocSet
+* Retrieve the results of a query, which can include text, tables, and lists of relevant documents
+* Save the results of a query as a Bookmark, and query the Bookmark
+* Adjust the query plan in natural language before running it
+* View the input and output into each query step (for debugging purposes)
+
+
+## Running a query
+
+Go to the [Workspaces UI](https://app.aryn.ai/workspaces) by clicking on it in the left nav, and then select the DocSet you want to query. Or, go to your DocSet in the DocSet list page and click the Open Workspace button.
+
+Once you have selected your DocSet in the Workspace UI, type in a query in natural langauge in the query box. The bottom of the box has the Dataset selector, which defaults to the DocSet you selected for your Workspace. If you create a Bookmark in your Workspace (see below), you can select it here to query it.
+
+After you submit your query, Aryn will generate and show you the query plan, or steps it will take to execute your query. You can choose to run the plan by clicking the Run plan button, or cancel the query by clicking the Cancel query button. This will allow you to submit a new query.
+
+###Editing query plans
+
+If you need to adjust the query plan, select the Edit plan button. You can instruct Aryn to change the plan in natural language using the query box. Submit your instructions, and you should then see the query plan change. Once you are satisfied with the plan, click the Run plan button.
+
+## Query results
+
+Aryn returns a result and a trace from your query.
+
+### Query result
+
+Depending on the query, Aryn will return results in different formats:
+
+* List of documents: The output of a query can be a new DocSet. For example, a query could filter a DocSet and return the filtered set.
+* Table: The output of a query can be a table with derived values, like counts.
+* String: The output of a query can be a natural lanauge answer, like a summary or question-answering text.
+
+You may also get a summary of your results as an overivew, if relevant.
+
+### Query trace
+
+Aryn includes a query trace with the query results, which is a list of Documents in the DocSet that were processed at each stage/node of the query plan. You can view this in the Steps section for that query, and you will see the number of Docs processed in each stage. You can click that link, and open up a list of those documents to inspect.
+
+## Using Bookmarks
+
+You can use Bookmarks to save the output of a query as a working DocSet and query it. For example, you might have filtered your inital DocSet into a smaller working set of data, and it would be more efficient to use it in your subsequent queries. Bookmarks are only accessible within the Workspace they were created in.
+
+To do this, click the Bookmark icon at the top of the cell with the query output you want to save. Then, input the name of your Bookmark in the text field to the right of the icon and hit return. You will see your Bookmark appear in the Bookmarks section on the right nav, and you can also now select it in the Dataset Selector in the bottom right of the query box.
+
+If you want to delete your Bookmark, you can remove it from the right nav by clicking the bookmark icon with an "x" when hovering over it. Or, go to the cell where you created the bookmark, and click the same icon when hovering over the bookmark name.

@@ -1,0 +1,46 @@
+---
+title: 'Integrating your app using the Aryn SDK'
+description: 'Using the Aryn SDK for searching DocSets'
+icon: 'magnifying-glass-arrow-right'
+---
+
+Outside of using Aryn's agentic query engine, you can run direct search queries on your DocSet. Aryn is built on OpenSearch, and leverages its keyword and vector indexing for this feature set. 
+
+You can easily add search capabilities to your application using the Aryn SDK. To learn more about using the Aryn UI for ad hoc searches, [click here](aryn-platform/querying-data/search/using_search_ui). 
+
+
+### Running a search query
+
+You can use the [search](https://docs.aryn.ai/sdk-reference/query#example) function in the Aryn SDK to run a search query on your DocSet:
+
+
+```
+from aryn_sdk.client.client import Client, SearchRequest
+
+myClient = Client()
+results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[query-type], return_type=[DOC|ELEMENT], k=[num-results-to-return]))
+```
+
+**Query Type**
+
+You can choose different ways to search your DocSet:
+
+* Hybrid: Combines keyword and vector search.
+* Vector (Semantic): Finds similar items in a dataset by comparing their numerical representations (vector embeddings) using a k-NN algorithm.
+* Lexical: Using BM25, the search call will perform an exact string match and return results where the query string shows up as a standalone word.
+* Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
+
+
+**Properties Filter**
+
+You can filter your search results using your DocSet's Properties. The filter is a boolean expression, specifying the condition to use. It is a string consisting of conditions separated by the AND/OR keywords. The following are a few examples:
+
+```
+“(company_name=‘Microsoft’ AND year=‘2024’)”
+“(company_ticker=‘AMZN’ AND year=‘2023’) AND (quarter=‘Q2’ or quarter=‘Q4’)”
+```
+
+**Return Type**
+
+You can return Document chunks (elements) with ```element``` or full documents with ```doc```.
+

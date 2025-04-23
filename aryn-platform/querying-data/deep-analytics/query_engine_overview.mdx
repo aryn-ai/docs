@@ -1,0 +1,76 @@
+---
+title: 'Query engine overview'
+description: 'Overview of how the query engine generates plans and runs them'
+icon: 'bolt'
+---
+
+Aryn's query engine consists of a number of pieces that work together to provide an end-to-end natural-language query processing system over complex, unstructured data. The architecture of this system is also described in our Conference for Innovative Data Systems (CIDR) paper titled [The Design of an LLM-powered Unstructured Analytics System](https://arxiv.org/abs/2409.00847).
+
+If you want to just get started querying your data, you don't need to know all of these specifics - just [use the Workspaces UI](aryn-platform/querying-data/deep-analytics/using_workspaces). 
+
+
+## Query planning
+
+The agentic query planner in Aryn's engine execute queries against DocSets. During query planning, Aryn provides the planner with the Properties Schema of the DocSet, which consists of the properties contained in the documents, along with their descriptions, data types, and sample values, along with a "text-representation" field representing the entire contents of each Document. It will then create the plan, which is a DAG using the engine's available query operators, and perform several optimization and validation steps before finalizing it.
+
+UIs like Aryn's Workspaces enable you to easily modify the query plans using natural language, if an edit is needed.
+
+### Query operators
+
+Aryn provides a set of high-level logical operators for query planning purposes, and rewrites the resulting logical plan into lower-level physical operators before execution. This makes it more robust to execute, and easier for you to understand the plan and debug the execution, if required.
+
+Many simple logical operators map one-to-one to physical operators, including single-pass per-document operations like map, filter, and llm-extract, but for operations that span multiple documents, we have found it often works better to have more specific operators rather than low-level primitives.
+
+#### Database operators
+
+These query operators use Aryn's underlying indexing and database functionality, making them fast and efficient to sweep through and process data.
+
+
+| Operator              | Description                                                                                                           |
+| --------              | -------------------------------------                                                                                 |
+| Filter                | Filters records based on a range or match filter. Can be combined with the Query Database operator.                      |
+| Count                 | Returns a count of the number of records provided in the input. It can optionally count the distinct records.         |
+| Limit                 | Limits the number of records returned.                                                                                |
+| Math                  | Performs arithmetic operation on two input numbers. Returns a number.                                                 |
+| Query Database        | Retrieves data from Aryn's keyword index using a full-text, term-level, and other query types. Uses OpenSearch Query DSL.     | 
+| Query Vector Database | Retrieves data from Aryn's vector index using vector search, and returns the top k records. Uses OpenSearch Query DSL.    | 
+| Sort                  | Sorts the records based on the value of a Property.                                                                      |
+| Group By              | Finds the top K frequent occurences of values for a particular field |
+
+
+
+#### Semantic operators
+
+These query operators use Large Language Models (LLMs) to enable flexible procesing that requires understanding of semantic details or generation of new text. These operations incur additional latency from the LLM calls, and it's recommended to filter records in a query plan before using a semantic operator.
+
+
+| Operator              | Description                                                                                                           |
+| --------              | -------------------------------------                                                                                 |
+| LLM Extract Entity    | Adds a new Property by extracting information from an existing text-representation or Property.                       |
+| LLM Filter            | Filters records based on the value of a field. Used when the semantic understanding of a field is needed.             |
+| Summarize Data        | This operation generates an English response to a request based on the input data provided.                           |
+
+
+## Executing query plans
+
+After plan rewriting and optimization, the logical query plan is compiled into the physical plan for execution.  Execution on large datasets benefits from distributed processing, allowing Aryn to scale out workloads with minimal overhead.
+
+
+### Output
+
+Aryn will return a result and trace from a query execution. You can also choose to stream the query trace during execution.
+
+#### Query result
+
+Depending on the query, Aryn will return results in different formats:
+
+* List of documents: The output of a query can be a new DocSet. For example, a query could filter a DocSet and return the filtered set.
+* Table: The output of a query can be a table with derived values, like counts.
+* String: The output of a query can be a natural lanauge answer, like a summary or question-answering text.
+
+
+#### Query trace
+
+Aryn includes a query trace with the query results, which is a list of Documents in the DocSet that were processed at each stage/node of the query plan. This is helpful when debugging the query, or wanting to validate what documents were included. If you are streaming results, you will get a Document Trace in real-time as Documents are being processed during the query execution.
+
+
