@@ -6,7 +6,7 @@ icon: 'bolt'
 
 Aryn's query engine consists of a number of pieces that work together to provide an end-to-end natural-language query processing system over complex, unstructured data. The architecture of this system is also described in our Conference for Innovative Data Systems (CIDR) paper titled [The Design of an LLM-powered Unstructured Analytics System](https://arxiv.org/abs/2409.00847).
 
-If you want to just get started querying your data, you don't need to know all of these specifics - just use the Workspaces UI. NEED LINK!!!
+If you want to just get started querying your data, you don't need to know all of these specifics - just [use the Workspaces UI](aryn-platform/querying-data/deep-analytics/using_workspaces). 
 
 
 ## Query planning
@@ -35,7 +35,7 @@ These query operators use Aryn's underlying indexing and database functionality,
 | Query Database        | Retrieves data from Aryn's keyword index using a full-text, term-level, and other query types. Uses OpenSearch Query DSL.     | 
 | Query Vector Database | Retrieves data from Aryn's vector index using vector search, and returns the top k records. Uses OpenSearch Query DSL.    | 
 | Sort                  | Sorts the records based on the value of a Property.                                                                      |
-| Group By              | TBD NEED THIS FROM BOHOU |
+| Group By              | Finds the top K frequent occurences of values for a particular field |
 
 
 
