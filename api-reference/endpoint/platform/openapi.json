@@ -4,9 +4,69 @@
     "title": "FastAPI",
     "version": "0.1.0"
   },
-
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
+      "post": {
+        "tags": [
+          "Document"
+        ],
+        "summary": "Add Doc",
+        "description": "Add a single document to the Aryn platform.\n\nThis API calls DocParse to partition the document, and automatically\nextracts any properties registered as part of the DocSet schema. This\nmethod can take some time, so callers should consider invoking it via the\nasync endpoint.",
+        "operationId": "add_doc_v1_storage_docsets__docset_id__docs_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the docset to which to add the doc.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the docset to which to add the doc."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_add_doc_v1_storage_docsets__docset_id__docs_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentMetadata"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "tags": [
           "Document"
@@ -95,6 +155,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Docs V1 Storage Docsets  Docset Id  Docs Get"
                 }
               }
@@ -782,6 +843,152 @@
         }
       }
     },
+    "/v1/query/plan": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Generate Plan",
+        "description": "Generate a query plan for the given query, but do not run it.",
+        "operationId": "generate_plan_v1_query_plan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Query"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalPlan"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Edit Plan",
+        "description": "Take an existing plan and user feedback to rewrite it.",
+        "operationId": "edit_plan_v1_query_plan_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_edit_plan_v1_query_plan_patch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogicalPlan"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/query": {
+      "post": {
+        "tags": [
+          "Query"
+        ],
+        "summary": "Run Query",
+        "description": "Run the given query.\n\nIf the `stream` parameter is set to true, the result will be streamed back to the client as a series of SSE events.\nOtherwise, the result will be returned as a QueryResult object.",
+        "operationId": "run_query_v1_query_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Query"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/v1/jobs/extract-properties": {
       "post": {
         "tags": [
@@ -813,7 +1020,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Schema",
+                "$ref": "#/components/schemas/Schema-Input",
                 "description": "A Schema describing the fields to extract from the DocSet"
               }
             }
@@ -875,8 +1082,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Schema",
-                "description": "A Schema of the fields to delete from the DocSet"
+                "$ref": "#/components/schemas/SchemaPropertyNames",
+                "description": "A list of field names to delete from the DocSet"
               }
             }
           }
@@ -1002,6 +1209,34 @@
   },
   "components": {
     "schemas": {
+      "Body_add_doc_v1_storage_docsets__docset_id__docs_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "The file to add to the Aryn platform."
+          },
+          "options": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Options",
+            "description": "DocParse options to use during partitioning"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_add_doc_v1_storage_docsets__docset_id__docs_post"
+      },
       "Body_create_docset_v1_storage_docsets_post": {
         "properties": {
           "name": {
@@ -1025,7 +1260,7 @@
           "schema": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/Schema-Input"
               },
               {
                 "type": "null"
@@ -1055,6 +1290,24 @@
           "name"
         ],
         "title": "Body_create_docset_v1_storage_docsets_post"
+      },
+      "Body_edit_plan_v1_query_plan_patch": {
+        "properties": {
+          "query": {
+            "$ref": "#/components/schemas/Query"
+          },
+          "feedback": {
+            "type": "string",
+            "title": "Feedback",
+            "description": "Feedback about the existing plan or instructions to modify it."
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "feedback"
+        ],
+        "title": "Body_edit_plan_v1_query_plan_patch"
       },
       "Body_get_doc_v1_storage_docsets__docset_id__docs__doc_id__get": {
         "properties": {
@@ -1127,16 +1380,15 @@
             "title": "Size",
             "description": "The size of the DocSet in bytes."
           },
-          "query_schema": {
+          "schema": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/Schema-Output"
               },
               {
                 "type": "null"
               }
-            ],
-            "description": "The schema of the DocSet."
+            ]
           },
           "prompts": {
             "additionalProperties": {
@@ -1191,7 +1443,7 @@
           "query_schema": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/Schema-Input"
               },
               {
                 "type": "null"
@@ -1236,6 +1488,7 @@
             "default": []
           },
           "properties": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Properties",
             "description": "A map of properties for the Document.",
@@ -1301,6 +1554,7 @@
           "properties": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -1364,6 +1618,7 @@
             "description": "The vector embedding of the Element."
           },
           "properties": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Properties",
             "description": "A map of properties for the Element.",
@@ -1433,12 +1688,168 @@
         "title": "HTTPValidationError"
       },
       "JsonValue": {},
+      "LogicalPlan": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query",
+            "description": "The query that the plan is for."
+          },
+          "nodes": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Node"
+            },
+            "type": "object",
+            "title": "Nodes",
+            "description": "A mapping of node IDs to nodes in the query plan."
+          },
+          "result_node": {
+            "type": "integer",
+            "title": "Result Node",
+            "description": "The ID of the node that is the result of the query."
+          },
+          "llm_prompt": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Prompt",
+            "description": "The LLM prompt that was used to generate this query plan."
+          },
+          "llm_plan": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Llm Plan",
+            "description": "The result generated by the LLM."
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "nodes",
+          "result_node"
+        ],
+        "title": "LogicalPlan",
+        "description": "A logical query plan used to evaluate a query."
+      },
+      "Node": {
+        "properties": {
+          "node_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Node Type",
+            "description": "The type of this node."
+          },
+          "node_id": {
+            "type": "integer",
+            "title": "Node Id",
+            "description": "A unique integer ID representing this node."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "A detailed description of why this operator was chosen for this query plan.",
+            "exclude_from_comparison": true
+          },
+          "inputs": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Inputs",
+            "description": "A list of node IDs that this operation depends on.",
+            "default": []
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "node_id"
+        ],
+        "title": "Node",
+        "description": "A single operation in a logical plan."
+      },
       "PromptType": {
         "type": "string",
         "enum": [
           "CHAT_SYSTEM"
         ],
         "title": "PromptType"
+      },
+      "Query": {
+        "properties": {
+          "docset_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Docset Id",
+            "description": "The docset against which to run the query"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Query",
+            "description": "The natural language query to run. if specified, `plan` must not be set."
+          },
+          "plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LogicalPlan"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The logical query plan to run. If specified, `query` must not be set."
+          },
+          "stream": {
+            "type": "boolean",
+            "title": "Stream",
+            "description": "If true, query results will be streamed back to the client as they are generated. Applies only when calling the query api.",
+            "default": false
+          },
+          "summarize_result": {
+            "type": "boolean",
+            "title": "Summarize Result",
+            "description": "If true, an english summary of the result in context of the original query will be returned.\nApplies only when calling the query API and only available when `stream=True`",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "Query",
+        "description": "A query against a DocSet. Contains either a natural language string or a query plan."
       },
       "ReplaceOperation": {
         "properties": {
@@ -1465,30 +1876,48 @@
         ],
         "title": "ReplaceOperation"
       },
-      "Schema": {
+      "Schema-Input": {
         "properties": {
-          "fields": {
+          "properties": {
             "items": {
-              "$ref": "#/components/schemas/SchemaField"
+              "$ref": "#/components/schemas/SchemaProperty-Input"
             },
             "type": "array",
-            "title": "Fields",
-            "description": "A list of fields belong to this schema."
+            "title": "Properties",
+            "description": "A list of properties belong to this schema."
           }
         },
         "type": "object",
         "required": [
-          "fields"
+          "properties"
         ],
         "title": "Schema",
         "description": "Represents the schema of a DocSet."
       },
-      "SchemaField": {
+      "Schema-Output": {
+        "properties": {
+          "properties": {
+            "items": {
+              "$ref": "#/components/schemas/SchemaProperty-Output"
+            },
+            "type": "array",
+            "title": "Properties",
+            "description": "A list of properties belong to this schema."
+          }
+        },
+        "type": "object",
+        "required": [
+          "properties"
+        ],
+        "title": "Schema",
+        "description": "Represents the schema of a DocSet."
+      },
+      "SchemaProperty-Input": {
         "properties": {
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "The name of the field."
+            "description": "The name of the property."
           },
           "field_type": {
             "type": "string",
@@ -1503,7 +1932,7 @@
               }
             ],
             "title": "Default",
-            "description": "The default value for the field."
+            "description": "The default value for the property."
           },
           "description": {
             "anyOf": [
@@ -1515,7 +1944,7 @@
               }
             ],
             "title": "Description",
-            "description": "A natural language description of the field."
+            "description": "A natural language description of the property."
           },
           "examples": {
             "anyOf": [
@@ -1528,7 +1957,7 @@
               }
             ],
             "title": "Examples",
-            "description": "A list of example values for the field."
+            "description": "A list of example values for the property."
           }
         },
         "type": "object",
@@ -1536,8 +1965,82 @@
           "name",
           "field_type"
         ],
-        "title": "SchemaField",
+        "title": "SchemaProperty",
         "description": "Represents a field in a DocSet schema."
+      },
+      "SchemaProperty-Output": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "The name of the property."
+          },
+          "property_type": {
+            "type": "string",
+            "title": "Property Type",
+            "description": "The type of the field."
+          },
+          "default": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default",
+            "description": "The default value for the property."
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description",
+            "description": "A natural language description of the property."
+          },
+          "examples": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Examples",
+            "description": "A list of example values for the property."
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "property_type"
+        ],
+        "title": "SchemaProperty",
+        "description": "Represents a field in a DocSet schema."
+      },
+      "SchemaPropertyNames": {
+        "properties": {
+          "names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Names",
+            "description": "A list of names of properties that belong to a schema."
+          }
+        },
+        "type": "object",
+        "required": [
+          "names"
+        ],
+        "title": "SchemaPropertyNames",
+        "description": "Represents the names of properties belonging to a DocSet schema."
       },
       "SearchRequest": {
         "properties": {
