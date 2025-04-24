@@ -27,7 +27,7 @@ You can choose different ways to search your DocSet:
 
 * Hybrid: Combines keyword and vector search.
 * Vector (Semantic): Finds similar items in a dataset by comparing their numerical representations (vector embeddings) using a k-NN algorithm.
-* Lexical: Using BM25, the search call will perform an exact string match and return results where the query string shows up as a standalone word.
+* Lexical: Uses the BM25 algorithm, a ranking function used by search engines to estimate the relevance of documents to a given search query. The search call will perform an exact string match and return results where the query string shows up as a standalone word.
 * Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
 
 
@@ -37,7 +37,7 @@ You can filter your search results using your DocSet's Properties. The filter is
 
 ```
 “(company_name=‘Microsoft’ AND year=‘2024’)”
-“(company_ticker=‘AMZN’ AND year=‘2023’) AND (quarter=‘Q2’ or quarter=‘Q4’)”
+“(company_ticker=‘AMZN’ AND year=‘2023’) AND (quarter=‘Q2’ OR quarter=‘Q4’)”
 ```
 
 **Return Type**
