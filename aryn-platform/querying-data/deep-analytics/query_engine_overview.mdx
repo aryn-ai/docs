@@ -11,7 +11,7 @@ If you want to just get started querying your data, you don't need to know all o
 
 ## Query planning
 
-The agentic query planner in Aryn's engine execute queries against DocSets. During query planning, Aryn provides the planner with the Properties Schema of the DocSet, which consists of the properties contained in the documents, along with their descriptions, data types, and sample values, along with a "text-representation" field representing the entire contents of each Document. It will then create the plan, which is a DAG using the engine's available query operators, and perform several optimization and validation steps before finalizing it.
+The agentic query planner in Aryn's engine execute queries against DocSets. During query planning, Aryn provides the planner with the Properties Schema of the DocSet, which consists of the properties contained in the documents, along with their descriptions, data types, and sample values, along with a "text-representation" field representing the entire contents of each Document. The agentic query planner will then create an optimized plan, which is a directed acyclic graph (DAG) of Aryn's query operators.
 
 UIs like Aryn's Workspaces enable you to easily modify the query plans using natural language, if an edit is needed.
 
@@ -35,13 +35,13 @@ These query operators use Aryn's underlying indexing and database functionality,
 | Query Database        | Retrieves data from Aryn's keyword index using a full-text, term-level, and other query types. Uses OpenSearch Query DSL.     | 
 | Query Vector Database | Retrieves data from Aryn's vector index using vector search, and returns the top k records. Uses OpenSearch Query DSL.    | 
 | Sort                  | Sorts the records based on the value of a Property.                                                                      |
-| Group By              | Finds the top K frequent occurences of values for a particular field |
+| Group By              | Returns the count of unique values for a given unique Property key |
 
 
 
 #### Semantic operators
 
-These query operators use Large Language Models (LLMs) to enable flexible procesing that requires understanding of semantic details or generation of new text. These operations incur additional latency from the LLM calls, and it's recommended to filter records in a query plan before using a semantic operator.
+These query operators use Large Language Models (LLMs) to enable flexible processing that requires understanding of semantic details or generation of new text. These operations incur additional latency from the LLM calls, and it's recommended to filter records in a query plan before using a semantic operator.
 
 
 | Operator              | Description                                                                                                           |
@@ -58,7 +58,7 @@ After plan rewriting and optimization, the logical query plan is compiled into t
 
 ### Output
 
-Aryn will return a result and trace from a query execution. You can also choose to stream the query trace during execution.
+Aryn will return a [result](aryn-platform/querying-data/deep-analytics/query_engine_overview#query-result) and [trace](aryn-platform/querying-data/deep-analytics/query_engine_overview#query-trace) from a query execution. You can also choose to stream the query trace during execution.
 
 #### Query result
 

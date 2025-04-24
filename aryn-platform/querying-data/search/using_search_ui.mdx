@@ -16,9 +16,8 @@ Navigate to the Search UI using the left nav, and select your DocSet to search u
 
 * Hybrid: Combines keyword and vector search.
 * Vector (Semantic): Finds similar items in a dataset by comparing their numerical representations (vector embeddings) using a k-NN algorithm.
-* Lexical: BM25
-* Keyword: Substring
-
+* Lexical: Uses the BM25 algorithm, a ranking function used by search engines to estimate the relevance of documents to a given search query. The search call will perform an exact string match and return results where the query string shows up as a standalone word.
+* Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
 
 Aryn's search will return the most relevant Document chunks in your DocSet. If you click on a chunk, you will see the full document and other relevant chunks in that document in the Document Viewer.
 

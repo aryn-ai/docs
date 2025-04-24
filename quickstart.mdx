@@ -13,13 +13,13 @@ You will need an Aryn account, which you can get for free [here](https://console
 
 After you sign-up for Aryn, go to the [Aryn UI](http://app.aryn.ai/). 
 
-First, you will create and load your documents into a DocSet. A DocSet is a collection of Documents, including chunks (or elements) and metadata (or properties), and can be though of similarly to a table in a data warehouse, but for unstructured documents. When we add documents to our DocSet, Aryn will use a composite set of AI models to parse, extract, and process them (including OCR and more - it uses [DocParse](https://www.aryn.ai/docparse) under the hood).
+First, you will create and load your documents into a DocSet. A DocSet is a collection of Documents, including chunks (or elements) and metadata (or properties), and can be thought of similarly to a table in a data warehouse, but for unstructured documents. When we add documents to our DocSet, Aryn will use a composite set of AI models to parse, extract, and process them (including OCR and more - it uses [DocParse](https://www.aryn.ai/docparse) under the hood).
 
 Click the "DocSet" page in the left nav, and then the "New DocSet" button on the DocSets page. In the popup, enter the Name of your DocSet and an optional description, and then click "Create DocSet".
 
 Next, click on your new DocSet in the DocSet list to go to the DocSet page. Click on the blue "+" icon at the bottom of the Documents panel to add documents to your DocSet. In the popup, you can drag and drop files or click on it to open a file browser. You can optionally change the Processing Options to include OCR and more. Click "Upload" to add and process your documents. You can go to the Tasks page in the left nav to see the progress of your docs.
 
-Once your documents are added, you can view them in the Documents panel on the DocSet page. You can click the "Elements" tab in the right nav to view how Aryn parsed your docuemnt, and view extracted properties (metadata) on the "Properties" tab. We didn't specify any properties to be extracted...yet...so this should be empty. Aryn's agentic query engine uses these properties when creating query plans, so it will be important to enrich your documents as you productionize your DocSet.
+Once your documents are added, you can view them in the Documents panel on the DocSet page. You can click the "Elements" tab in the right nav to view how Aryn parsed your document, and view extracted properties (metadata) on the "Properties" tab. We didn't specify any properties to be extracted...yet...so this should be empty. Aryn's agentic query engine uses these properties when creating query plans, so it will be important to enrich your documents as you prepare your DocSet for complex query workloads.
 
 
 ### Querying your DocSet in a Workspace
@@ -41,7 +41,7 @@ So, now what? Here are some next steps to move beyond the 101 of Aryn to prepare
 * Learn about [different parsing and chunking options](docparse/processing_options) when adding your documents to your DocSet.
 * Learn more about [Aryn's agentic query engine](aryn-platform/querying-data/deep-analytics/query_engine_overview) and its operators.
 * Use the open source [Sycamore document ETL library](aryn-platform/data-preparation/sycamore_document_etl) for custom ETL, chunking, and data cleaning steps to prepare your data.
-* [Leverage traditional hybrid, vector, and keyword search](aryn-platform/querying-data/search/using_search_ui) on your documents.
+* [Leverage traditional hybrid, vector, keyword, and lexical search](aryn-platform/querying-data/search/using_search_ui) on your documents.
 
 
 For additional questions on getting started, please join our Slack community [here](https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg) or [email us](mailto:info@aryn.ai).

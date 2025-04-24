@@ -28,7 +28,11 @@ Use the [create_docset](https://docs.aryn.ai/sdk-reference/storage#example) func
 
 **Using the Console**
 
-When adding documents to your DocSet, Aryn automatically parses and processes them using its compound AI model [DocParse technology](https://www.aryn.ai/docparse). This includes segmentation, OCR, table extraction, image summarization, chunking, vector embedding, and more. Processed documents are structured in the Document format, and added to your DocSet.
+When adding documents to your DocSet, Aryn automatically parses and processes them using its compound AI model [DocParse technology](https://www.aryn.ai/docparse). This includes segmentation, OCR, table extraction, image summarization, chunking, vector embedding, and more. 
+
+Once a document is added to an Aryn DocSet, Aryn will store an it using an internal structured representation called [Document](docparse/output_structure#json-format). This is the same output format of DocParse and how documents are stored in [Sycamore DocSets](https://sycamore.readthedocs.io/en/stable/sycamore/APIs/document.html). This structured representation contains a list of Elements (images, tables, text, etc.) found within the document as well as a map of document Properties.
+
+Processed documents are structured in the Document format, and added to your DocSet.
 
 
 You can add documents to your DocSet on the DocSet Explorer page in the Aryn UI. Select your DocSet, and then click the blue "+" icon at the bottom of the Document list. 
@@ -49,7 +53,7 @@ You can use the [Add Document function](https://docs.aryn.ai/sdk-reference/stora
 
 **Using Sycamore document ETL**
 
-You can write to a an Aryn DocSet using [Sycamore](https://github.com/aryn-ai/sycamore), an open source document ETL framework. This is helpful if you require custom processing, enrichment, or chunking for your documents. For more information on using Aryn as a target for a Sycamore pipeline, [click here](aryn-platform/data-preparation/sycamore_document_etl).
+You can write to an Aryn DocSet using [Sycamore](https://github.com/aryn-ai/sycamore), an open source document ETL framework. This is helpful if you require custom processing, enrichment, or chunking for your documents. For more information on using Aryn as a target for a Sycamore pipeline, [click here](aryn-platform/data-preparation/sycamore_document_etl).
 
 
 **Using DocParse**
