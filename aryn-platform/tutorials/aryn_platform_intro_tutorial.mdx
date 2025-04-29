@@ -1,0 +1,162 @@
+---
+title: 'Tutorial: Aryn Platform Intro'
+description: 'Using the Aryn UI for Deep Analytics'
+icon: 'person-walking'
+---
+
+## Introduction
+
+In this tutorial, you'll use the Aryn Platform UI to perform Deep Analytics on a set of complex PDFs. We define Deep Analytics as advanced queries on unstructured data, where you need a query plan with analytics and semantic operators to get the result. You will:
+
+* Create a DocSet
+* Load and process a set of PDFs, including parsing and table extraction
+* Create a Workspace and run a query
+* Use a Bookmark to create a view
+* Write a follow-up query on the Bookmarked DocSet
+* Use LLM-based query operators
+
+## Sample set of documents
+
+For our documents, we'll use a selection of [aviation incident reports](https://www.ntsb.gov/Pages/AviationQueryv2.aspx) from the [National Transportation Securty Board (NTSB)](https://www.ntsb.gov/Pages/home.aspx) that describe different aviation incidents. The NTSB is a U.S. government investigative agency for civil transport incident investigations. Each aviation incident is reported in a PDF that contains a mix of specific required fields and free-form analysis of the incident in text. An example report can be found [here](https://data.ntsb.gov/carol-repgen/api/Aviation/ReportMain/GenerateNewestReport/103753/pdf), and an excerpt is below:
+
+![Sample Doc](/aryn-platform/tutorials/intro_tutorial_images/SampleNTSBDoc.png)
+
+These documents are complex, and contain various tables, sections, images, and headers/footers, and text. There are also similarities across the documents, because they are all incident reports, like a location where it happened, the type of aircraft, day and time, and more. These properties across the document collection will be important when we enrich each document with metadata for use with Aryn's query engine.
+
+Download the collection of 10 NTSB reports [here](https://aryn-public.s3.us-east-1.amazonaws.com/aryn-intro-tutorial/Aryn_Intro_Tutorial_Dataset.zip) in a zip file, so you can load them into an Aryn DocSet in the next section.
+
+## Creating a DocSet
+
+To run queries on our document collection, we first need to load them into Aryn and prepare them. Aryn stores and indexes collections of documents in DocSets, which can be thought of similar to how you store data in tables in a data warehouse. DocSets also include data and metadata related to each document in a hierarchical way - this will become important as we parse and enrich each document.
+
+Let's create our DocSet! Log into the [Aryn UI](https://app.aryn.ai/), and you will land on the DocSets page. Click the "New" button to get the Create DocSet popup:
+
+![Create DocSet](/aryn-platform/tutorials/intro_tutorial_images/CreateDocSet.png)
+
+Enter NTSB-Demo as the name, and you can provide an optional description. We'll skip the "Properties" section in the pop-up - Properties are metadata stored in key/value pairs that Aryn extracts to enrich your documents using LLMs. Instead, we'll extract properties after we've loaded our documents in a later section. 
+
+Click "Create DocSet" to create it. Now, it's time to load our documents into our DocSet.
+
+## Loading and parsing your documents
+
+Click on your new DocSet (NTSB-Demo) on the DocSets page to go to the DocSet explorer page. Next, click the "+" icon in the document list to open the Add Documents pop-up. Click on the pop-up to open the file selector, and select the NTSB reports that you downloaded. 
+
+When adding documents, Aryn will also process them so they can be properly queried. Under the hood, Aryn uses DocParse, a composite AI system for parsing, extracting, and chunking your documents before loading them into your DocSet. It uses a set of purpose-built AI models for document segmentation, optical character recognition (OCR), and extracting tables, images, metadata, and more. We will use the default parsing and chunking settings in this tutorial, but you can open the "Processing Options" drop-down to view the different options.
+
+Click "Upload" to add your documents. Aryn will create a Task for each document (which you can view on the Tasks page from the left nav), and process and add your documents. This may take a few minutes.
+
+Your DocSet will show each new document as it gets added. Click on one of the documents in the Document List, and it will appear in the center pane. Because we have not extracted any Properties yet, the Properties tab in the right nav will be empty. However, we can inspect the parsing of our document by clicking on the Elements tab in the right nav. You should see something like this:
+
+![View Elements](/aryn-platform/tutorials/intro_tutorial_images/DocumentViewer.png)
+
+Aryn visualizes the labeled bounding boxes used in parsing your document. Each bounding box contains an Element, which is the most granular segmentation of your document into smaller parts. If you selected a chunking strategy, Aryn will combine Elements into larger chunks based on the strategy. You can see the actual content (text, table, etc.) extracted in each element in the right nav.
+
+## Enriching your documents with Properties
+
+To create query plans for Deep Analytics, Aryn's agentic query engine utilizes additional metadata from the documents in your DocSet. This metadata is called Properties, and you must extract this information from your documents, and Aryn makes this easy using its LLM-powered Extract Properties feature.
+
+<Note>You can use a [Sycamore document ETL](https://github.com/aryn-ai/sycamore) job to add Properties to your documents from an existing source, like a database. That's beyond the scope of this intro tutorial, though!</Note>
+
+Go to your DocSet page, and click the "Extract" button. You will extract three useful Properties from the documents in your DocSet: ```date_time```, ```incident_location```, and ```aircraft```
+
+For the first Property, click the "Add Property" button. Fill this information in:
+
+![Extract Property](/aryn-platform/tutorials/intro_tutorial_images/ExtractProperty.png)
+
+* **Name:** date_time
+* **Type:** String
+* **Description:** The date and time of the incident. Format this in DateTime format.
+* **Default Value:** [leave blank]
+* **Examples:** 2024-08-14T11:30:00, 2024-07-10T08:30:00
+
+Then, click "Add Property". You should see this Property added to the list. Next, let's add the other two Properties to our list before we run an Extract job.
+
+For ```incident_location```:
+
+* **Name:** incident_location_state
+* **Type:** String
+* **Description:** The state in the USA where the incident occurred.
+* **Default Value:** [leave blank]
+* **Examples:** Ohio, Florida
+
+And for ```aircraft```:
+
+* **Name:** aircraft
+* **Type:** String
+* **Description:** The type of aircraft in the incident.
+* **Default Value:** [leave blank]
+* **Examples:** Cessna, Gulfstream
+
+You should see all three of your Property Extraction configurations in the table. Now, click "Extract". Aryn will run a job using a LLM to extract this information from each document in your DocSet, and store the values as Properties. You can see the progress of this on the Tasks page, which you can navigate to from the left nav.
+
+![View Tasks](/aryn-platform/tutorials/intro_tutorial_images/TasksPage.png) 
+
+When you add new documents to your DocSet, Aryn will automatically extract the Properties that have been specified from it. Let's see it in action!
+
+Download another [NTSB report here](https://aryn-public.s3.us-east-1.amazonaws.com/aryn-intro-tutorial/194547.pdf), and use the Add Docs feature you used above to add it. Once it's added, you can see the automatically extracted Properties in the right panel on the DocSet page.
+
+![Extracted Properties](/aryn-platform/tutorials/intro_tutorial_images/NewProperties.png)
+
+## Query your documents using Workspaces
+
+Aryn's Workspaces UI is purpose built for iterative Deep Analytics on documents, and we'll run through an example on how to use it.
+
+Create a Workspace from your DocSet page by clicking the "Workspace" button. Once your Workspace loads, click the "Rename" button and rename it to "NTSB-Demo" or something to easily remember it.
+
+You can see at the top that the DocSet this workspace is attached to is "NTSB-Demo" - so you'll be querying the documents in that DocSet (or Bookmarks from that DocSet...stay tuned).
+
+Let's write our first query in the Workspace query box: "Which incidents happened in Texas?" and hit Enter or the play/submit button. Aryn's agentic query engine will return with a query plan, and display the plan to you before running it.
+
+![Generated Query Plan](/aryn-platform/tutorials/intro_tutorial_images/GeneratePlan.png)
+
+In this example, the plan shows a single step that runs a filter on the ```location``` Property looking for values that include ```Texas```. This plan makes sense, so click "Run plan" to run it!
+
+The Workspace shows two results from our query. First, we get an AI overview, which is an LLM-generated summary of the query results and citations:
+
+![AI Summary](/aryn-platform/tutorials/intro_tutorial_images/AISummary.png)
+
+Under the summary is the Results Table, which includes a list of documents for the incidents that happened in Texas. This section of the query output is the actual result from the query plan - in our query, there were 5 incidents that happened in Texas.
+
+![Results Table](/aryn-platform/tutorials/intro_tutorial_images/ResultsTable.png)
+
+## Using bookmarks
+
+If we want to ask a follow-up question on the output of a previous query, we can use Aryn's Bookmark feature. A Bookmark is the saved output of a query, that you can reference as an input to another query. It's similar in concept to a materialized view in a data warehouse.
+
+![Bookmark](/aryn-platform/tutorials/intro_tutorial_images/Bookmark.png)
+
+To create a Bookmark, hover over the top of your query cell and click on the Bookmark icon. Name your Bookmark, and hit enter. You should see the name of your Bookmark appear in the Bookmarks section in the top right nav.
+
+## Multi-step queries with LLM-operators
+
+For the next query, we will use the Bookmark instead of the full dataset. Select the Bookmark in the bottom left corner of the query input box.
+
+![Select Bookmark](/aryn-platform/tutorials/intro_tutorial_images/SelectBookmark.png)
+
+Query the Texas incidents with the question "Which incidents happened in the morning versus the afternoon?". You should generate this multi-step query plan:
+
+![Multi-Step Query Plan](/aryn-platform/tutorials/intro_tutorial_images/MultiStepPlan.png)
+
+Though we did extract DateTime as a Property in extraction step, we didn't classify that time as "morning" or "afternoon". Aryn's agentic query engine recognizes this, and included an extraction step in the plan to create a new Property called ```incident_time_of_day``` to classify the report as happening in the morning or afternoon. Then, the plan will use that Property in a group by operation to count the incidents for each value.
+
+This plan looks good, so let's run it! We'll get both the AI Overview and actual result in the Result table:
+
+![Query Answer](/aryn-platform/tutorials/intro_tutorial_images/MultiStepAnswer.png)
+
+To validate how Aryn computed this answer, you can explore the query trace under the "Steps" dropdown. Click on it to expand the Query Plan:
+
+![Query Trace](/aryn-platform/tutorials/intro_tutorial_images/QueryTrace.png)
+
+You can view the output of each step by clicking on the Docs count at the end of each step. Click on the "5 docs" link under the first LLM step to view the output of that step, and you'll see the extracted fields determining whether the incident was in the morning or afternoon:
+
+![Query Added Properties](/aryn-platform/tutorials/intro_tutorial_images/QueryAddedProperties.png)
+
+## Conclusion
+
+In this tutorial, you created a DocSet, added and parsed your documents, and used LLMs to extract Properties to prepare your DocSet for queries. You then ran a query, created a Bookmark from the output, and then queried that Bookmark with a multi-step query using some of Aryn's LLM-powered query operators. Finally, you inspected a query trace to dive deeper on how the system computed the answer to your query.
+
+These are some of the basic functions for loading data and running Deep Analytics on the Aryn Platform. Here are some next steps:
+
+* Explore the [Aryn SDK](https://docs.aryn.ai/sdk-reference/partition) for programmatic access 
+* Run other queries and use the ["Edit" option](https://docs.aryn.ai/aryn-platform/querying-data/deep-analytics/using_workspaces#editing-query-plans) to adjust your query plans
+* Use a [Sycamore document ETL job](https://docs.aryn.ai/aryn-platform/data-preparation/sycamore_document_etl) for additional data processing on your DocSet
