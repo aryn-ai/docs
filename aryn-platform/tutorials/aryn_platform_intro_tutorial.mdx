@@ -6,7 +6,7 @@ icon: 'person-walking'
 
 ## Introduction
 
-In this tutorial, you'll use the Aryn Platform UI to perform Deep Anlaytics on a set of complex PDFs. We define Deep Analytics as advanced queries on unstructured data, where you need a query plan with analytics and semantic operators to get the result. You will:
+In this tutorial, you'll use the Aryn Platform UI to perform Deep Analytics on a set of complex PDFs. We define Deep Analytics as advanced queries on unstructured data, where you need a query plan with analytics and semantic operators to get the result. You will:
 
 * Create a DocSet
 * Load and process a set of PDFs, including parsing and table extraction
@@ -39,13 +39,13 @@ Click "Create DocSet" to create it. Now, it's time to load our documents into ou
 
 ## Loading and parsing your documents
 
-Click on your new DocSet (NTSB-Demo) on the DocSets page to go to the DocSet explorer page. Next, click the "+" icon in the document list to open the Add Documents pop-up. Click on the pop-up to open the file sector, and select the NTSB reports that you downloaded. 
+Click on your new DocSet (NTSB-Demo) on the DocSets page to go to the DocSet explorer page. Next, click the "+" icon in the document list to open the Add Documents pop-up. Click on the pop-up to open the file selector, and select the NTSB reports that you downloaded. 
 
 When adding documents, Aryn will also process them so they can be properly queried. Under the hood, Aryn uses DocParse, a composite AI system for parsing, extracting, and chunking your documents before loading them into your DocSet. It uses a set of purpose-built AI models for document segmentation, optical character recognition (OCR), and extracting tables, images, metadata, and more. We will use the default parsing and chunking settings in this tutorial, but you can open the "Processing Options" drop-down to view the different options.
 
-Click "Upload" to add your documents. Aryn will create Tasks for each document (which you can view on the Tasks page from the left nav), and process and add your documents. This may take a few minutes.
+Click "Upload" to add your documents. Aryn will create a Task for each document (which you can view on the Tasks page from the left nav), and process and add your documents. This may take a few minutes.
 
-Your DocSet will show each new document as it as added. Click on one of the documents in the Document List, and it will appear in the center pane. Because we have not extracted any Properties yet, the Properties tab in the right nav will be empty. However, we can inspect the parsing of our document by clicking on the Elements tab in the right nav. You should see something like this:
+Your DocSet will show each new document as it gets added. Click on one of the documents in the Document List, and it will appear in the center pane. Because we have not extracted any Properties yet, the Properties tab in the right nav will be empty. However, we can inspect the parsing of our document by clicking on the Elements tab in the right nav. You should see something like this:
 
 ![View Elements](/aryn-platform/tutorials/intro_tutorial_images/DocumentViewer.png)
 
@@ -55,7 +55,7 @@ Aryn visualizes the labeled bounding boxes used in parsing your document. Each b
 
 To create query plans for Deep Analytics, Aryn's agentic query engine utilizes additional metadata from the documents in your DocSet. This metadata is called Properties, and you must extract this information from your documents, and Aryn makes this easy using its LLM-powered Extract Properties feature.
 
-<Note>You can use a [Sycamore document ETL](https://github.com/aryn-ai/sycamore) job to add Properties to your documents from an existing source, like a database. That's beyond this intro tutorial, though!</Note>
+<Note>You can use a [Sycamore document ETL](https://github.com/aryn-ai/sycamore) job to add Properties to your documents from an existing source, like a database. That's beyond the scope of this intro tutorial, though!</Note>
 
 Go to your DocSet page, and click the "Extract" button. You will extract three useful Properties from the documents in your DocSet: ```date_time```, ```incident_location```, and ```aircraft```
 
@@ -91,7 +91,7 @@ You should see all three of your Property Extraction configurations in the table
 
 ![View Tasks](/aryn-platform/tutorials/intro_tutorial_images/TasksPage.png) 
 
-When you add new documents to your DocSet, Aryn will automatically extract the Properties thave have been specified from it. Let's see it in action!
+When you add new documents to your DocSet, Aryn will automatically extract the Properties that have been specified from it. Let's see it in action!
 
 Download another [NTSB report here](https://aryn-public.s3.us-east-1.amazonaws.com/aryn-intro-tutorial/194547.pdf), and use the Add Docs feature you used above to add it. Once it's added, you can see the automatically extracted Properties in the right panel on the DocSet page.
 
@@ -115,7 +115,7 @@ The Workspace shows two results from our query. First, we get an AI overview, wh
 
 ![AI Summary](/aryn-platform/tutorials/intro_tutorial_images/AISummary.png)
 
-Under the summary is the Results Table, which includes list of documents for the incidents that happened in Texas. This section of the query output is the actual result from the query plan - in our query, there were 5 incidents that happened in Texas.
+Under the summary is the Results Table, which includes a list of documents for the incidents that happened in Texas. This section of the query output is the actual result from the query plan - in our query, there were 5 incidents that happened in Texas.
 
 ![Results Table](/aryn-platform/tutorials/intro_tutorial_images/ResultsTable.png)
 
