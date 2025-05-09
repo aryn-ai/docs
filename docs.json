@@ -11,8 +11,37 @@
   "favicon": "aryn_logo.png",
   "navigation": {
     "tabs": [
+       {
+        "tab": "DocParse",
+        "groups": [
+           {
+            "group": "DocParse",
+            "pages": [
+              "docparse/introduction",
+              "docparse/quickstart",
+              "docparse/aryn_sdk",
+              "docparse/output_structure",
+              "docparse/storage",
+              "docparse/chunking_strategies",
+              "docparse/processing_options",
+              "docparse/formats_supported",
+              "docparse/output_label_options_walkthrough",
+              {
+                "group": "Tutorials",
+                "pages": [
+                  "docparse/tutorials/tables",
+                  "docparse/tutorials/images",
+                  "docparse/tutorials/chunking_tutorial",
+                  "docparse/tutorials/async_requests_tutorial",
+                  "docparse/tutorials/output_walkthrough"
+                ]
+              }
+            ]
+          }
+        ]
+      },
       {
-        "tab": "Aryn Platform",
+        "tab": "Deep Analytics and Search",
         "groups": [
           {
             "group": "Get Started",
@@ -64,30 +93,14 @@
         ]
       },
       {
-        "tab": "DocParse",
+        "tab": "SDK Reference",
         "groups": [
-           {
-            "group": "DocParse",
+          {
+            "group": "Aryn SDK Reference",
             "pages": [
-              "docparse/introduction",
-              "docparse/quickstart",
-              "docparse/aryn_sdk",
-              "docparse/output_structure",
-              "docparse/storage",
-              "docparse/chunking_strategies",
-              "docparse/processing_options",
-              "docparse/formats_supported",
-              "docparse/output_label_options_walkthrough",
-              {
-                "group": "Tutorials",
-                "pages": [
-                  "docparse/tutorials/tables",
-                  "docparse/tutorials/images",
-                  "docparse/tutorials/chunking_tutorial",
-                  "docparse/tutorials/async_requests_tutorial",
-                  "docparse/tutorials/output_walkthrough"
-                ]
-              }
+              "sdk-reference/partition",
+              "sdk-reference/storage",
+              "sdk-reference/query"
             ]
           }
         ]
@@ -112,19 +125,6 @@
             "openapi": {
               "source": "api-reference/endpoint/platform/openapi.json"
             }
-          }
-        ]
-      },
-      {
-        "tab": "Python SDK Reference",
-        "groups": [
-          {
-            "group": "Aryn SDK Reference",
-            "pages": [
-              "sdk-reference/partition",
-              "sdk-reference/storage",
-              "sdk-reference/query"
-            ]
           }
         ]
       },
