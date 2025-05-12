@@ -20,10 +20,10 @@
               "docparse/introduction",
               "docparse/quickstart",
               "docparse/aryn_sdk",
-              "docparse/output_structure",
-              "docparse/storage",
-              "docparse/chunking_strategies",
               "docparse/processing_options",
+              "docparse/output_structure",
+              "docparse/chunking_strategies",
+              "docparse/storage",
               "docparse/formats_supported",
               "docparse/output_label_options_walkthrough",
               {
