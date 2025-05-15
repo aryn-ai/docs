@@ -40,7 +40,7 @@ with open("mydocument.pdf", "rb") as f:
 ``aryn_sdk`` provides some helper functions to make working with and visualizing the output of ``partition_file`` easier.
 
 ```python
-from aryn_sdk.partition import partition_file, table_elem_to_dataframe, draw_with_boxes
+from aryn_sdk.partition import partition_file, table_elem_to_dataframe, table_elem_to_html, draw_with_boxes
 with open("mydocument.pdf", "rb") as f:
    data = partition_file(f, extract_table_structure=True, text_mode="standard_ocr", extract_images=True, threshold=0.35)
 
