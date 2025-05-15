@@ -420,6 +420,43 @@ A Pandas DataFrame representing the tabular data inside the provided table eleme
 
 </AccordionGroup>
 
+### table_elem_to_html
+
+Convert the tabular data inside the provided table element into an HTML string. If the element is not of type `table` or doesn't contain any table data, return `None` instead.
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+- `elem`: Required. An element from the 'elements' field of a `partition_file` response.
+- `pretty`: A boolean indicating whether to pretty-print the returned HTML. Default is `False`. 
+
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, table_elem_to_html
+
+with open("partition-me.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        text_mode="standard_ocr",
+        extract_table_structure=True,
+        extract_images=True
+    )
+
+# Find the first table and convert it to a dataframe
+html_str = None
+for element in data['elements']:
+    if element['type'] == 'table':
+        html_str = table_elem_to_html(element)
+        break
+```
+</Accordion>
+
+<Accordion title="Return Value">
+An HTML string containing the contents of the table element or `None` if the provided element is not a table. The HTML string will contain just the table tag, starting with `<table>` and ending with `</table>`. 
+
+</Accordion>
+</AccordionGroup>
 
 ### tables_to_pandas
 
@@ -454,6 +491,42 @@ elts_and_dataframes = tables_to_pandas(data)
 <Accordion title="Return Value">
 
 A list of tuples, where each tuple contains an element from the 'elements' field of a `partition_file` response and a Pandas DataFrame representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, the DataFrame will be `None`.
+
+</Accordion>
+</AccordionGroup>
+
+### tables_to_html
+
+For every table element in the provided partitioning response, create an HTML string representing the tabular data. Return a list containing all the elements, with tables paired with their corresponding HTML.
+
+<AccordionGroup>
+
+<Accordion title="Parameters">
+
+- `data`: A response from `partition_file`
+
+</Accordion>
+
+
+<Accordion title="Example">
+```python
+from aryn_sdk.partition import partition_file, tables_to_html
+
+with open("my-favorite-pdf.pdf", "rb") as f:
+    data = partition_file(
+        f,
+        aryn_api_key="MY-ARYN-API-KEY",
+        text_mode="standard_ocr",
+        extract_table_structure=True,
+        extract_images=True
+    )
+elts_and_html = tables_to_html(data)
+```
+</Accordion>
+
+<Accordion title="Return Value">
+
+A list of tuples, where each tuple contains an element from the 'elements' field of a `partition_file` response and an HTML string representing the tabular data inside the provided table element. If the element is not of type 'table' or doesn't contain any table data, the HTML will be `None`.
 
 </Accordion>
 </AccordionGroup>
