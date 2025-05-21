@@ -1,6 +1,6 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "Aryn Documentation",
   "description": "Aryn is an agentic unstructured data warehouse that enables deep analyitcs and seach on documents at scale.",
   "colors": {
@@ -8,187 +8,14 @@
     "light": "#417586",
     "dark": "#417586"
   },
-  "favicon": "aryn_logo.png",
-  "navigation": {
-    "tabs": [
-       {
-        "tab": "DocParse",
-        "groups": [
-           {
-            "group": "DocParse",
-            "pages": [
-              "docparse/introduction",
-              "docparse/quickstart",
-              "docparse/aryn_sdk",
-              "docparse/processing_options",
-              "docparse/output_structure",
-              "docparse/chunking_strategies",
-              "docparse/storage",
-              "docparse/formats_supported",
-              "docparse/output_label_options_walkthrough",
-              {
-                "group": "Tutorials",
-                "pages": [
-                  "docparse/tutorials/tables",
-                  "docparse/tutorials/images",
-                  "docparse/tutorials/chunking_tutorial",
-                  "docparse/tutorials/async_requests_tutorial",
-                  "docparse/tutorials/output_walkthrough"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Deep Analytics and Search",
-        "groups": [
-          {
-            "group": "Get Started",
-            "pages": [
-              "introduction",
-              "quickstart",
-              "account_management"
-            ]
-          },
-          {
-            "group": "Aryn Platform",
-            "pages": [
-              "aryn-platform/core_concepts",
-              "aryn-platform/loading_data",
-              {
-                "group": "Data Preparation",
-                "pages": [
-                  "aryn-platform/data-preparation/document_properties",
-                  "aryn-platform/data-preparation/sycamore_document_etl"
-                ]
-              },
-                {
-                  "group": "Querying Data",
-                  "pages": [
-                  {
-                    "group": "Deep Analytics",
-                    "pages": [
-                      "aryn-platform/querying-data/deep-analytics/query_engine_overview",
-                      "aryn-platform/querying-data/deep-analytics/using_workspaces"
-                    ]
-                  },
-                  {
-                    "group": "Search",
-                    "pages": [
-                      "aryn-platform/querying-data/search/using_search_ui",
-                     "aryn-platform/querying-data/search/integrating_search_using_SDK"
-                    ]
-                  }
-                  ]
-                },  
-              {
-                "group": "Tutorials",
-                "pages": [
-                  "aryn-platform/tutorials/aryn_platform_intro_tutorial"
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "SDK Reference",
-        "groups": [
-          {
-            "group": "Aryn SDK Reference",
-            "pages": [
-              "sdk-reference/partition",
-              "sdk-reference/storage",
-              "sdk-reference/query"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "API Documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "DocParse",
-            "openapi": {
-              "source": "api-reference/endpoint/docparse/openapi.json"
-            }
-          },
-          {
-            "group": "Aryn Platform",
-            "openapi": {
-              "source": "api-reference/endpoint/platform/openapi.json"
-            }
-          }
-        ]
-      },
-      {
-        "tab": "Recipes",
-        "groups": [
-          {
-            "group": "Recipes",
-            "pages": [
-              "example-code/introduction"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Aryn Blog",
-          "href": "https://www.aryn.ai/blog",
-          "icon": "newspaper"
-        },
-        {
-          "anchor": "Slack Community",
-          "href": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Sycamore - Document ETL",
-          "href": "https://github.com/aryn-ai/sycamore",
-          "icon": "bars-staggered"
-        }
-      ]
-    }
-  },
   "logo": {
     "light": "/logo/aryn_logo_full.png",
     "dark": "/logo/aryn_logo_full.png"
   },
+  "favicon": "aryn_logo.png",
   "background": {
     "decoration": "windows"
   },
-  "redirects": [
-  {
-    "source": "/docparse/tables",
-    "destination": "/docparse/tutorials/tables"
-  },
-  {
-    "source": "/docparse/images",
-    "destination": "/docparse/tutorials/images"
-  },
-  {
-    "source": "/docparse/chunking_tutorial",
-    "destination": "/docparse/tutorials/chunking_tutorial"
-  },
-  {
-    "source": "/docparse/async_requests_tutorial",
-    "destination": "/docparse/tutorials/async_requests_tutorial"
-  },
-  {
-    "source": "/docparse/output_walkthrough",
-    "destination": "/docparse/tutorials/output_walkthrough"
-  }
-],
   "navbar": {
     "links": [
       {
@@ -206,8 +33,294 @@
       "href": "https://www.aryn.ai/"
     }
   },
-  "seo": {
-    "indexing": "all"
+  "navigation": {
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Aryn Blog",
+          "icon": "newspaper",
+          "href": "https://www.aryn.ai/blog"
+        },
+        {
+          "anchor": "Slack Community",
+          "icon": "slack",
+          "href": "https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg"
+        },
+        {
+          "anchor": "Sycamore - Document ETL",
+          "icon": "bars-staggered",
+          "href": "https://github.com/aryn-ai/sycamore"
+        }
+      ]
+    },
+    "languages": [
+      {
+        "language": "en",
+        "tabs": [
+          {
+            "tab": "DocParse",
+            "groups": [
+              {
+                "group": "DocParse",
+                "pages": [
+                  "docparse/introduction",
+                  "docparse/quickstart",
+                  "docparse/aryn_sdk",
+                  "docparse/processing_options",
+                  "docparse/output_structure",
+                  "docparse/chunking_strategies",
+                  "docparse/storage",
+                  "docparse/formats_supported",
+                  "docparse/output_label_options_walkthrough",
+                  {
+                    "group": "Tutorials",
+                    "pages": [
+                      "docparse/tutorials/tables",
+                      "docparse/tutorials/images",
+                      "docparse/tutorials/chunking_tutorial",
+                      "docparse/tutorials/async_requests_tutorial",
+                      "docparse/tutorials/output_walkthrough"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Deep Analytics and Search",
+            "groups": [
+              {
+                "group": "Get Started",
+                "pages": [
+                  "introduction",
+                  "quickstart",
+                  "account_management"
+                ]
+              },
+              {
+                "group": "Aryn Platform",
+                "pages": [
+                  "aryn-platform/core_concepts",
+                  "aryn-platform/loading_data",
+                  {
+                    "group": "Data Preparation",
+                    "pages": [
+                      "aryn-platform/data-preparation/document_properties",
+                      "aryn-platform/data-preparation/sycamore_document_etl"
+                    ]
+                  },
+                  {
+                    "group": "Querying Data",
+                    "pages": [
+                      {
+                        "group": "Deep Analytics",
+                        "pages": [
+                          "aryn-platform/querying-data/deep-analytics/query_engine_overview",
+                          "aryn-platform/querying-data/deep-analytics/using_workspaces"
+                        ]
+                      },
+                      {
+                        "group": "Search",
+                        "pages": [
+                          "aryn-platform/querying-data/search/using_search_ui",
+                          "aryn-platform/querying-data/search/integrating_search_using_SDK"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Tutorials",
+                    "pages": [
+                      "aryn-platform/tutorials/aryn_platform_intro_tutorial"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "SDK Reference",
+            "groups": [
+              {
+                "group": "Aryn SDK Reference",
+                "pages": [
+                  "sdk-reference/partition",
+                  "sdk-reference/storage",
+                  "sdk-reference/query"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "API Documentation",
+                "pages": [
+                  "api-reference/introduction"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "openapi": {
+                  "source": "api-reference/endpoint/docparse/openapi.json"
+                }
+              },
+              {
+                "group": "Aryn Platform",
+                "openapi": {
+                  "source": "api-reference/endpoint/platform/openapi.json"
+                }
+              }
+            ]
+          },
+          {
+            "tab": "Recipes",
+            "groups": [
+              {
+                "group": "Recipes",
+                "pages": [
+                  "example-code/introduction"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tabs": [
+          {
+            "tab": "DocParse",
+            "groups": [
+              {
+                "group": "DocParse",
+                "pages": [
+                  "es/docparse/introduction",
+                  "es/docparse/quickstart",
+                  "es/docparse/aryn_sdk",
+                  "es/docparse/processing_options",
+                  "es/docparse/output_structure",
+                  "es/docparse/chunking_strategies",
+                  "es/docparse/storage",
+                  "es/docparse/formats_supported",
+                  "es/docparse/output_label_options_walkthrough",
+                  {
+                    "group": "Tutoriales",
+                    "pages": [
+                      "es/docparse/tutorials/tables",
+                      "es/docparse/tutorials/images",
+                      "es/docparse/tutorials/chunking_tutorial",
+                      "es/docparse/tutorials/async_requests_tutorial",
+                      "es/docparse/tutorials/output_walkthrough"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Análisis Profundo y Búsqueda",
+            "groups": [
+              {
+                "group": "Comenzar",
+                "pages": [
+                  "es/introduction",
+                  "es/quickstart",
+                  "es/account_management"
+                ]
+              },
+              {
+                "group": "Aryn Platform",
+                "pages": [
+                  "es/aryn-platform/core_concepts",
+                  "es/aryn-platform/loading_data",
+                  {
+                    "group": "Preparación de Datos",
+                    "pages": [
+                      "es/aryn-platform/data-preparation/document_properties",
+                      "es/aryn-platform/data-preparation/sycamore_document_etl"
+                    ]
+                  },
+                  {
+                    "group": "Consulta de Datos",
+                    "pages": [
+                      {
+                        "group": "Análisis Profundo",
+                        "pages": [
+                          "es/aryn-platform/querying-data/deep-analytics/query_engine_overview",
+                          "es/aryn-platform/querying-data/deep-analytics/using_workspaces"
+                        ]
+                      },
+                      {
+                        "group": "Búsqueda",
+                        "pages": [
+                          "es/aryn-platform/querying-data/search/using_search_ui",
+                          "es/aryn-platform/querying-data/search/integrating_search_using_SDK"
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "group": "Tutoriales",
+                    "pages": [
+                      "es/aryn-platform/tutorials/aryn_platform_intro_tutorial"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Referencia del SDK",
+            "groups": [
+              {
+                "group": "Referencia del SDK de Aryn",
+                "pages": [
+                  "es/sdk-reference/partition",
+                  "es/sdk-reference/storage",
+                  "es/sdk-reference/query"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "Referencia de la API",
+            "groups": [
+              {
+                "group": "Documentación de la API",
+                "pages": [
+                  "es/api-reference/introduction"
+                ]
+              },
+              {
+                "group": "DocParse",
+                "openapi": {
+                  "source": "api-reference/endpoint/docparse/openapi.json"
+                }
+              },
+              {
+                "group": "Aryn Platform",
+                "openapi": {
+                  "source": "api-reference/endpoint/platform/openapi.json"
+                }
+              }
+            ]
+          },
+          {
+            "tab": "Recetas",
+            "groups": [
+              {
+                "group": "Recetas",
+                "pages": [
+                  "es/example-code/introduction"
+                ]
+              }
+            ]
+          }
+        ],
+        "language": "es"
+      }
+    ]
   },
   "footer": {
     "socials": {
@@ -215,5 +328,30 @@
       "github": "https://github.com/aryn-ai",
       "linkedin": "https://www.linkedin.com/company/aryn-ai"
     }
-  }
+  },
+  "seo": {
+    "indexing": "all"
+  },
+  "redirects": [
+    {
+      "source": "/docparse/tables",
+      "destination": "/docparse/tutorials/tables"
+    },
+    {
+      "source": "/docparse/images",
+      "destination": "/docparse/tutorials/images"
+    },
+    {
+      "source": "/docparse/chunking_tutorial",
+      "destination": "/docparse/tutorials/chunking_tutorial"
+    },
+    {
+      "source": "/docparse/async_requests_tutorial",
+      "destination": "/docparse/tutorials/async_requests_tutorial"
+    },
+    {
+      "source": "/docparse/output_walkthrough",
+      "destination": "/docparse/tutorials/output_walkthrough"
+    }
+  ]
 }

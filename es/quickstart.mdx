@@ -1,0 +1,44 @@
+---
+- title: Inicio Rápido
+- description: Empezando con Aryn
+---
+
+Puedes usar Aryn para ingerir, enriquecer, almacenar y consultar tus documentos complejos a escala usando Análisis Profundo y búsqueda. Aryn soporta más de 30 formatos de documentos, incluyendo PDF, Microsoft Word (.docx y .doc), Microsoft PowerPoint (.pptx y .ppt) y [más](docparse/formats_supported). Si solo quieres empezar con DocParse, visita el [Inicio Rápido de DocParse](docparse/quickstart).
+
+Te mostramos cómo empezar con Aryn a través de la interfaz de usuario de Aryn. Para más información sobre el uso del SDK de Python de Aryn, [haz clic aquí](aryn-platform/loading_data).
+
+Necesitarás una cuenta de Aryn, que puedes obtener gratis [aquí](https://console.aryn.ai/signup/). También puedes registrarte e iniciar sesión con tus credenciales de Google o GitHub.
+
+### Creando y cargando un DocSet
+
+Después de registrarte en Aryn, ve a la [Interfaz de Usuario de Aryn](http://app.aryn.ai/).
+
+Primero, crearás y cargarás tus documentos en un DocSet. Un DocSet es una colección de Documentos, incluyendo chunks (o elementos) y metadatos (o propiedades), y puede ser considerado de manera similar a una tabla en un almacén de datos, pero para documentos no estructurados. Cuando agregamos documentos a nuestro DocSet, Aryn utilizará un conjunto compuesto de modelos de IA para analizarlos, extraerlos y procesarlos (incluyendo OCR y más - utiliza [DocParse](https://www.aryn.ai/docparse) internamente).
+
+Haz clic en la página "DocSet" en la navegación izquierda, y luego en el botón "Nuevo DocSet" en la página de DocSets. En la ventana emergente, ingresa el Nombre de tu DocSet y una descripción opcional, y luego haz clic en "Crear DocSet".
+
+A continuación, haz clic en tu nuevo DocSet en la lista de DocSets para ir a la página del DocSet. Haz clic en el icono azul "+" en la parte inferior del panel de Documentos para agregar documentos a tu DocSet. En la ventana emergente, puedes arrastrar y soltar archivos o hacer clic en ella para abrir un explorador de archivos. Opcionalmente, puedes cambiar las Opciones de Procesamiento para incluir OCR y más. Haz clic en "Subir" para agregar y procesar tus documentos. Puedes ir a la página de Tareas en la navegación izquierda para ver el progreso de tus documentos.
+
+Una vez que tus documentos estén agregados, puedes verlos en el panel de Documentos en la página del DocSet. Puedes hacer clic en la pestaña "Elementos" en la navegación derecha para ver cómo Aryn analizó tu documento, y ver las propiedades extraídas (metadatos) en la pestaña "Propiedades". No especificamos ninguna propiedad para ser extraída... aún... así que esto debería estar vacío. El motor de consultas agéntico de Aryn utiliza estas propiedades al crear planes de consulta, por lo que será importante enriquecer tus documentos mientras preparas tu DocSet para cargas de trabajo de consultas complejas.
+
+### Consultando tu DocSet en un Espacio de Trabajo
+
+Ahora que has agregado documentos, vamos a consultarlos usando la interfaz de usuario de Espacios de Trabajo. Desde la página de Docsets, haz clic en el botón Abrir en Espacios de Trabajo. Esto te llevará a un nuevo Espacio de Trabajo configurado para consultar tu DocSet. Puedes renombrar este Espacio de Trabajo usando el botón "Renombrar".
+
+Puedes ingresar tu consulta en el Cuadro de Consulta usando lenguaje natural. Después de enviar tu consulta, Aryn generará y compartirá un plan de consulta mostrando los pasos que tomará para ejecutar tu consulta. Luego puedes elegir ejecutar la consulta, cancelar la consulta o editar la consulta usando instrucciones en lenguaje natural sobre qué cambiar.
+
+Después de comenzar a ejecutar la consulta, verás el estado de cada paso en el plan de consulta. Cada paso es un operador (Aryn tiene operadores tanto de estilo de base de datos como potenciados por LLM), y Aryn ejecutará el plan y devolverá un resultado. Puedes elegir Marcar el resultado usando el icono de Marcador en la parte superior de la celda de Consulta. Un Marcador es un conjunto de resultados guardado de una consulta que se puede usar con un Espacio de Trabajo, y puedes ejecutar Consultas subsiguientes en ese Marcador.
+
+¡Felicidades! Has creado un DocSet, agregado y procesado tus documentos, y ejecutado una consulta. Llamamos al proceso de navegar y consultar tus documentos Análisis Profundo.
+
+### Próximos pasos
+
+Entonces, ¿ahora qué? Aquí hay algunos próximos pasos para ir más allá de lo básico de Aryn y preparar tu DocSet para análisis más profundos:
+
+* Usa LLMs para [extraer propiedades de tus documentos](aryn-platform/data-preparation/document_properties) para ser utilizadas por el motor de consultas de Aryn.
+* Aprende sobre [diferentes opciones de análisis y chunking](docparse/processing_options) al agregar tus documentos a tu DocSet.
+* Aprende más sobre [el motor de consultas agéntico de Aryn](aryn-platform/querying-data/deep-analytics/query_engine_overview) y sus operadores.
+* Usa la biblioteca de código abierto [Sycamore para ETL de documentos](aryn-platform/data-preparation/sycamore_document_etl) para pasos personalizados de ETL, chunking y limpieza de datos para preparar tus datos.
+* [Aprovecha la búsqueda tradicional híbrida, vectorial, por palabras clave y léxica](aryn-platform/querying-data/search/using_search_ui) en tus documentos.
+
+Para preguntas adicionales sobre cómo empezar, por favor únete a nuestra comunidad de Slack [aquí](https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg) o [envíanos un correo electrónico](mailto:info@aryn.ai).

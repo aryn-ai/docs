@@ -1,0 +1,179 @@
+---
+- title: Estructura de Salida
+- description: El formato de salida de Aryn DocParse
+- icon: brackets-curly
+---
+
+## Formato General
+
+### Formato JSON
+
+El formato de salida predeterminado de Aryn DocParse es JSON.
+
+```text
+{ "status": in-progress updates,
+  "error": any errors encountered,
+  "elements": a list of elements }
+```
+
+### Formato Markdown
+
+Si la solicitud a Aryn DocParse tiene la opción`output_format` establecida en`markdown`, una respuesta exitosa se verá así:
+
+```text
+{ "status": ...,
+  "markdown": "# Title\ndolorem ipsum, quia dolor sit amet consectetur..." }
+```
+
+## Formato de Elemento
+
+### Estructura General
+
+A menudo es útil procesar diferentes partes de un documento por separado. Por ejemplo, es posible que desees procesar las tablas de manera diferente a los párrafos de texto, y típicamente pequeños fragmentos de texto se incrustan por separado para la búsqueda vectorial. En Aryn DocParse, estos fragmentos se llaman elementos. La Plataforma Aryn también utiliza el mismo formato para Documentos y Elementos.
+
+Los elementos siguen el siguiente formato:
+
+```text
+{"type": type of element (str),
+"bbox": Coordinates of bounding box around element (float),
+"properties": { "score": confidence score (float),
+                "page_number": page number element occurs on (int)},
+"text_representation: for elements with associated text (str),
+"binary_representation: for Image elements when extract_table_structure is enabled (bytes)}
+```
+
+Cada elemento siempre tiene un campo`type`,`bbox`,`properties`, y`text_representation`. El campo`type` indica el tipo del elemento (por ejemplo, texto, imagen, tabla, etc.), el campo`bbox` contiene las coordenadas del cuadro delimitador alrededor del elemento, el campo`properties`el campo contiene información adicional sobre el elemento (por ejemplo, puntuación de confianza, número de página, etc.), y el`text_representation`campo contiene el contenido de texto del elemento. El`score`tag representa la puntuación de confianza en la asignación de etiqueta (`Text`,`Image`,`Table`, etc.). El`page_number`es el número de página indexado en 1 donde aparece el elemento.
+
+A continuación se muestra un ejemplo de elemento:
+
+```json
+{
+    "type": "Text",
+    "bbox": [
+      0.10383546717026654,
+      0.31373721036044033,
+      0.8960905187270221,
+      0.39873851429332385
+    ],
+    "properties": {
+      "score": 0.9369918704032898,
+      "page_number": 1
+    },
+    "text_representation": "It is often useful to process different parts of a document separately. For example, you\nmight want to process tables differently than text paragraphs, and typically small chunks\nof text are embedded separately for vector search. In Aryn DocParse, these\nchunks are called elements.\n"
+}
+```
+
+#### Tipo de Elemento
+
+```text
+"type": one of the element types below
+```
+
+|                  Tipo | Descripción                                                                                                                                                                                                                                                                       |
+| --------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|                Título | Texto Grande                                                                                                                                                                                                                                                                      |
+|                 Texto | Texto Regular                                                                                                                                                                                                                                                                     |
+|               Leyenda | Descripción de una imagen o tabla                                                                                                                                                                                                                                                 |
+|           Nota al pie | Texto pequeño que se encuentra cerca de la parte inferior de la página                                                                                                                                                                                                            |
+|               Fórmula | Expresión matemática en LaTeX o similar                                                                                                                                                                                                                                           |
+|     Elemento de lista | Parte de una lista                                                                                                                                                                                                                                                                |
+|         Pie de página | Texto pequeño en la parte inferior de la página                                                                                                                                                                                                                                   |
+|  Encabezado de página | Texto pequeño en la parte superior de la página                                                                                                                                                                                                                                   |
+|                Imagen | Una imagen o diagrama. Cuando`extract_images`está configurado como`true`, este elemento incluye una etiqueta`binary_representation`que contiene un archivo de imagen ppm codificado en base64. Cuando`extract_images`es falso, aún se devuelve el cuadro delimitador de la Imagen |
+| Encabezado de sección | Texto de tamaño medio que marca una sección                                                                                                                                                                                                                                       |
+|                 tabla | Una cuadrícula de texto. Consulte la opción`extract_table_structure`para extraer información de la tabla en lugar de solo detectar su presencia                                                                                                                                   |
+
+#### Cuadro delimitador
+
+```text
+"bbox": coordinates of the bounding box around the element contents
+```
+
+Tiene el formato`[x1, y1, x2, y2]`donde cada coordenada se da como la proporción de qué tan abajo o a través de la pantalla está el elemento. Por ejemplo, un elemento que está a 100 píxeles del borde izquierdo de un documento de 400 píxeles de ancho tendría una coordenada x1 de 0.25.
+
+#### Propiedades
+
+```text
+"properties":
+    { "score": confidence between 0 and 1, with 1 being the most confident 
+                that this element type and bounding box coordinates are correct (float),
+      "page_number": 1-indexed page number the element occurs on (int) }
+```
+
+El`score`es la "confianza" del modelo en su predicción para ese cuadro delimitador en particular. Por defecto, seleccionamos automáticamente los cuadros delimitadores para lograr una buena cobertura con alta precisión de predicción, pero el usuario puede controlar esto usando el parámetro`threshold`(por defecto es "auto"). Si el usuario especifica un valor numérico entre 0 y 1, solo se mantendrán los Elementos con una puntuación de confianza superior al valor umbral especificado.
+
+#### Representación de Texto
+
+```text
+"text_representation": text associated with this element (str)
+```
+
+Los elementos de texto contienen`\n`cuando el texto incluye un retorno de línea.
+
+#### Representación Binaria
+
+Cuando`extract_images`se establece en True, las Imágenes incluyen una etiqueta`binary_representation`que contiene un`base64`codificado`ppm`archivo de imagen del pdf recortado a los límites de la imagen detectada. Cuando`extract_images`es falso, aún se devuelve el cuadro delimitador de la Imagen.
+
+```text
+"binary_representation": base64 encoded ppm image file of the pdf cropped to the image (bytes)
+```
+
+Para un tutorial sobre cómo usar la salida de Aryn DocParse, consulte la página[output walkthrough](./tutorials/output_walkthrough).
+
+### Estructura de Tabla
+
+Las tablas se representan como una lista de celdas, donde cada celda es un diccionario con los siguientes atributos:
+
+```json
+
+{
+  "type": "table",
+  "bbox": [int, int, int, int],
+  "properties": {
+    "score": float,
+    "title": str,
+    "columns": int,
+    "rows": int,
+    "page_number": int
+  },
+  "text_representation": str,
+  "table": {
+    "cells": [
+      {
+        "content": str,
+        "rows": list[int],
+        "cols": list[int],
+        "is_header": bool,
+        "bbox": [int, int, int, int],
+        "properties": dict
+      }
+    ]
+  }
+}
+```
+
+Una tabla también contiene una etiqueta`table`con individuales`cells`. Cada celda tiene 6 atributos:`content`,`rows`,`cols`,`is_header`,`bbox`, y`properties`. El atributo`content`contiene el contenido de texto de la celda, el atributo`rows`contiene el índice de fila de la celda, el atributo`cols`contiene el índice de columna de la celda, el atributo`is_header`indica si la celda es una celda de encabezado y es opcional, el atributo`bbox`contiene el cuadro delimitador de la celda, y el atributo`properties`contiene propiedades adicionales de la celda.
+
+La etiqueta`text_representation`contiene el contenido de texto de la tabla y no se especifica o es la representación CSV de la tabla. En el diccionario`properties`, la etiqueta`title`representa el título de la tabla en cadena si se especifica,`columns`es un entero que representa el número de columnas en la tabla, y`rows`es un entero que representa el número de filas. Todos pueden no estar especificados.
+
+### Estructura de Imagen
+
+```json
+{ 
+  {
+    "type": "Image",
+    "bbox": [int, int, int, int],
+    "properties": {
+      "score": float,
+      "image_size": [int, int],
+      "image_mode": str,
+      "page_number": int
+    },
+    "binary_representation": bytes
+  }
+}
+```
+
+Para una imagen, la etiqueta`binary_representation`contiene un`base64`codificado`ppm`archivo de imagen del pdf recortado a los límites de la imagen detectada. Las propiedades contienen atributos adicionales:`image_size`, que representa \[`width`,`height`] de la imagen, y`image_mode`, que representa el modo de color de la imagen.
+
+Para un tutorial sobre cómo usar la salida de Aryn DocParse, consulte la página[output walkthrough](./tutorials/output_walkthrough).

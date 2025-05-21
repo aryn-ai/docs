@@ -1,0 +1,90 @@
+---
+- title: Agregando y gestionando propiedades de Documentos
+- description: Extrayendo y actualizando Propiedades de Documentos
+- icon: list
+---
+
+El motor de consulta agéntico de Aryn utiliza metadatos adicionales de tus Documentos para crear planes de consulta precisos y como entrada para varios operadores de consulta (por ejemplo, filtro). Estos metadatos se llaman Propiedades, que son pares clave/valor incluidos en cada Documento en tu DocSet.
+
+Aryn almacena la lista de Propiedades para tu DocSet en un Esquema de Propiedades, que puedes establecer al crear tu DocSet. También puedes agregar y eliminar propiedades de este Esquema usando Extraer o Eliminar, respectivamente. Aryn extraerá automáticamente las Propiedades especificadas en el Esquema de los nuevos documentos agregados a tu DocSet.
+
+Puedes usar Extraer Propiedades para especificar y extraer nuevas propiedades de tu DocSet, y esto también agrega la Propiedad al Esquema. Aryn utiliza LLMs para extraer estos metadatos con alta calidad.
+
+## Agregando Esquema de Propiedades al crear un DocSet
+
+**Usando la Consola**
+
+Haz clic en el botón Nuevo DocSet en la página de lista de DocSet. En la ventana emergente, selecciona Esquema de Propiedades. Agrega las Propiedades y especifica la configuración para cada una:
+
+* `Name`: El nombre de la propiedad. Esta es la clave en el par clave:valor.
+* `Type`: El tipo de valor a extraer. Elige entre `String`, `Number`, o `Boolean`.
+* (opcional) `Description`: La descripción de la propiedad que se está extrayendo. El motor de consulta de Aryn utilizará esta descripción al crear planes de consulta.
+* (opcional) `Default Value`: Si el LLM no encuentra un valor para extraer, esto es lo que se colocará como el valor de la propiedad. `NULL` es el valor predeterminado.
+* (opcional)`Examples`: Estos son ejemplos de valores de propiedad separados por comas. El LLM utilizará estos como ejemplos de lo que podría ser un valor para una propiedad específica.
+
+Al agregar nuevos documentos a tu DocSet, Aryn extraerá automáticamente las Propiedades especificadas en tu Esquema de Propiedades.
+
+**Usando el SDK de Aryn**
+
+Al usar [create\_docset](https://docs.aryn.ai/sdk-reference/storage#create-docset), especifica un Esquema de Propiedades:
+
+```
+ ...
+  "properties_schema": {
+    "property_config": [
+      {
+        "name": "<string>",
+        "property_type": "<string>",
+        "default": "<any>",
+        "description": "<string>",
+        "examples": [
+          "<any>"
+        ]
+      }
+    ]
+  }
+...
+```
+
+## Visualizando el Esquema de Propiedades en un DocSet
+
+**Usando la Consola**
+
+Haz clic en el botón Administrar Propiedades en la página del DocSet. El Esquema de Propiedades estará en la ventana emergente, incluyendo la configuración para cada Propiedad.
+
+**Usando el SDK de Aryn**
+Usa la función [get\_docset](https://docs.aryn.ai/sdk-reference/storage#return-value). Se devuelve el Esquema de Propiedades.
+
+## Especificando y extrayendo Propiedades adicionales
+
+Si no especificaste un Esquema de Propiedades al crear tu DocSet o quieres agregar Propiedades adicionales a tus Documentos, puedes especificar y extraer Propiedades en cualquier momento.
+
+**Usando la Consola**
+
+En la página de tu DocSet, haz clic en el botón Extraer para ir a la página Extraer Propiedades. Agrega las Propiedades que quieres extraer usando las mismas opciones de configuración descritas anteriormente. Haz clic en Extraer, y Aryn agregará estas Propiedades a tu Esquema de Propiedades y las extraerá de los Documentos en tu DocSet. Puedes monitorear el progreso de esta Tarea en la página de Tareas.
+
+Una vez completado, puedes actualizar la página del DocSet y ver las propiedades en el panel del lado derecho.
+
+**Usando el SDK de Aryn**
+
+Usa la función [extract\_properties](https://docs.aryn.ai/sdk-reference/storage#extract-properties).
+
+## Actualizando valores de Propiedades en un Documento
+
+**Usando la Consola**
+
+Ve al Documento en la página del DocSet y selecciona el visor de Propiedades en el panel derecho. Pasa el cursor sobre la Propiedad que quieres editar y haz clic en el icono de lápiz a la derecha del valor. Cambia el valor y haz clic en Guardar para actualizarlo.
+
+**Usando el SDK de Aryn**
+
+Usa la función [update\_doc\_properties](https://docs.aryn.ai/sdk-reference/storage#update-document-properties).
+
+## Eliminando una Propiedad de tu DocSet
+
+**Usando la Consola**
+
+En la página de tu DocSet, haz clic en el botón Eliminar Propiedades en la parte superior derecha. En la ventana emergente, selecciona las Propiedades en el Esquema de Propiedades que te gustaría eliminar de los Documentos en tu DocSet. Luego, haz clic en el botón Eliminar para eliminar estas Propiedades. Debido a que estas Propiedades también se eliminan de tu Esquema de Propiedades, Aryn no las extraerá al agregar nuevos documentos a tu DocSet.
+
+**Usando el SDK de Aryn**
+
+Usa la función [delete\_properties](https://docs.aryn.ai/sdk-reference/storage#delete-properties).

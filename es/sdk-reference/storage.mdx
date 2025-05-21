@@ -1,0 +1,494 @@
+---
+- title: Almacenamiento
+- description: Documentación sobre cómo llamar a las APIs de Almacenamiento usando
+    el SDK de Aryn
+---
+
+import DocSetMetadata from '/snippets/docset_metadata.mdx';
+import DocumentMetadata from '/snippets/document_metadata.mdx';
+import Document from '/snippets/document.mdx';
+
+A continuación encontrará la documentación sobre cómo llamar a las APIs de Storage utilizando el SDK de Aryn. Todos los parámetros son opcionales a menos que se especifique lo contrario.
+
+## Funciones de DocSet
+
+Funciones para gestionar conjuntos de documentos (DocSets) que son colecciones de documentos.
+
+### Crear DocSet
+
+Crear un nuevo DocSet para almacenar documentos.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="name" type="string" required>
+      Nombre de cadena para el DocSet
+    </ParamField>
+
+    <ParamField path="properties" type="object">
+      Diccionario opcional de propiedades adicionales
+    </ParamField>
+
+    <ParamField path="schema" type="Schema">
+      Objeto Schema opcional que define las propiedades del documento
+    </ParamField>
+
+    <ParamField path="prompts" type="object">
+      Diccionario opcional de prompts para el DocSet
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.client.client import Client
+
+    docset = client.create_docset(name="My DocSet")
+    docset_id = docset.docset_id
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto DocSetMetadata que contiene:
+
+    <DocSetMetadata />
+  </Accordion>
+</AccordionGroup>
+
+### Obtener DocSet
+
+Recuperar metadatos de un DocSet.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet a recuperar
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    docset = client.get_docset(docset_id="your-docset-id")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto DocSetMetadata que contiene:
+
+    <DocSetMetadata />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Listar DocSets
+
+Listar todos los DocSets en la cuenta.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField query="page_size" type="integer" default="100">
+      Número de elementos por página
+    </ParamField>
+
+    <ParamField query="page_token" type="string">
+      Token para paginación
+    </ParamField>
+
+    <ParamField query="name_eq" type="string">
+      Filtrar DocSets por coincidencia exacta de nombre
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    docsets = client.list_docsets().get_all()
+    for docset in docsets:
+        print(f"DocSet: {docset.name}")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una lista paginada de objetos DocSetMetadata, cada uno conteniendo:
+
+    <DocSetMetadata />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Eliminar DocSet
+
+Eliminar un DocSet y todos sus documentos.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet a eliminar
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    client.delete_docset(docset_id="your-docset-id")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Los metadatos del DocSet eliminado
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+## Funciones de Documento
+
+Funciones para gestionar documentos individuales dentro de DocSets.
+
+### Añadir Documento
+
+Añadir un solo documento a la plataforma Aryn.
+
+Esta API llama a DocParse para particionar el documento y extrae automáticamente cualquier propiedad registrada como parte del esquema del DocSet.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField body="file" type="BinaryIO | str | PathLike" required>
+      Un `file` abierto en modo binario o una ruta especificada como `str` o `PathLike` instancia que indica el documento a añadir. La ruta puede ser una ruta local o una URL de Amazon S3 que comience con `s3://`. En este último caso, debe tener boto3 instalado y las credenciales de AWS configuradas en su entorno.
+    </ParamField>
+
+    <ParamField path="docset_id" type="str" required>
+      El id del DocSet al que añadir el documento.
+    </ParamField>
+
+    <ParamField body="options" type="str">
+      Opciones de DocParse a utilizar para particionar el documento especificado. Puede encontrar más información sobre opciones específicas [aquí](/es/sdk-reference/partition#parameters)
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    doc = client.add_doc(file="/path/to/myfile.pdf", docset_id="your-docset-id")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un `DocumentMetadata` objeto que contiene
+
+    <DocumentMetadata />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Listar Documentos
+
+Listar todos los documentos en un DocSet.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      ID del DocSet que contiene los documentos
+    </ParamField>
+
+    <ParamField query="page_size" type="integer" default="100">
+      Número de elementos por página
+    </ParamField>
+
+    <ParamField query="page_token" type="string">
+      Token para paginación
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    docs = client.list_docs(docset_id="your-docset-id")
+    for doc in docs:
+        print(f"Document: {doc.name}")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una lista paginada de objetos DocumentMetadata, cada uno conteniendo:
+
+    <DocumentMetadata />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 400`: "Parámetros de filtro inválidos"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Obtener Documento
+
+Obtener un documento por ID.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene el documento
+    </ParamField>
+
+    <ParamField path="doc_id" type="string" required>
+      El identificador único del documento a recuperar
+    </ParamField>
+
+    <ParamField query="include_elements" type="boolean" default="true">
+      Booleano para incluir elementos del documento
+    </ParamField>
+
+    <ParamField query="include_binary" type="boolean" default="false">
+      Booleano para incluir datos binarios
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    doc = client.get_doc(docset_id="your-docset-id", doc_id="your-doc-id")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto Document que contiene:
+
+    <Document />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "Documento no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Eliminar Documento
+
+Eliminar un documento por ID.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene el documento
+    </ParamField>
+
+    <ParamField path="doc_id" type="string" required>
+      El identificador único del documento a eliminar
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    client.delete_doc(docset_id="your-docset-id", doc_id="your-doc-id")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Los metadatos del documento eliminado
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "Documento no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Obtener Binario del Documento
+
+Obtener el contenido binario de un documento.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene el documento
+    </ParamField>
+
+    <ParamField path="doc_id" type="string" required>
+      El identificador único del documento a recuperar
+    </ParamField>
+
+    <ParamField path="file" type="string" required>
+      El objeto de archivo para escribir el contenido binario
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    output = "output.pdf"
+    client.get_doc_binary(docset_id="your-docset-id", doc_id="your-doc-id", file=output)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    El contenido binario del documento
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "Documento no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+## Funciones de Propiedades
+
+Funciones para gestionar propiedades de documentos.
+
+### Actualizar Propiedades del Documento
+
+Actualizar propiedades de un documento.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene el documento
+    </ParamField>
+
+    <ParamField path="doc_id" type="string" required>
+      El identificador único del documento a actualizar
+    </ParamField>
+
+    <ParamField body="updates" type="array" required>
+      Lista de objetos ReplaceOperation que definen actualizaciones de propiedades
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.types import ReplaceOperation
+
+    updates = [
+        ReplaceOperation(
+            path="/properties/status",
+            value="reviewed"
+        )
+    ]
+    client.update_doc_properties(
+        docset_id="your-docset-id",
+        doc_id="your-doc-id",
+        operations=updates
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    El objeto Document actualizado que contiene:
+
+    <Document />
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó la clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "Documento no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Extraer Propiedades
+
+Extraer propiedades de un documento.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene los documentos
+    </ParamField>
+
+    <ParamField body="schema" type="object" required>
+      Objeto Schema que define las propiedades a extraer
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.types.schema import Schema, SchemaField
+
+    schema = Schema(fields=[
+        SchemaField(name="category", field_type="string")
+    ])
+    client.extract_properties(docset_id="your-docset-id", schema=schema)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto de estado de trabajo que contiene:
+
+    * `exit_status`: El estado de salida del trabajo
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó la clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+### Eliminar Propiedades
+
+Eliminar propiedades de un documento.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="docset_id" type="string" required>
+      El identificador único del DocSet que contiene los documentos
+    </ParamField>
+
+    <ParamField body="schema" type="object" required>
+      Objeto Schema que define las propiedades a eliminar
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    client.delete_properties(docset_id="your-docset-id", schema=schema)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto de estado de trabajo
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó la clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 404`: "DocSet no encontrado"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>

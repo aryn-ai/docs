@@ -1,0 +1,90 @@
+---
+- title: Almacenamiento
+- description: Almacenamiento y búsqueda para sus documentos analizados.
+- icon: database
+---
+
+DocParse incluye almacenamiento, búsqueda y enriquecimiento de metadatos para sus documentos analizados utilizando DocSets en la Plataforma Aryn. DocParse enviará la salida analizada a un DocSet en la Plataforma Aryn, donde puede utilizar las características de la plataforma en estos datos.
+
+Puede ver los cuadros delimitadores (segmentación) y los elementos extraídos de sus documentos en la [Aryn Platform DocSets UI](https://app.aryn.ai/docsets). También puede usar GenAI para extraer metadatos de sus documentos, o descargar el documento analizado. También puede buscar sus documentos almacenados con búsqueda vectorial (semántica) o por palabras clave utilizando la interfaz de usuario o API de la Plataforma Aryn.
+
+Para obtener más información sobre los límites de almacenamiento de Aryn, visite la [Aryn pricing page](https://www.aryn.ai/pricing). Los clientes PAYG pueden optar por no almacenar la salida de DocParse en la Plataforma Aryn en la [Settings page](https://app.aryn.ai/settings).
+
+## Añadiendo documento al almacenamiento
+
+DocParse almacena los documentos analizados en DocSets en la Plataforma Aryn, y proporciona un DocSet predeterminado (llamado `docparse_storage`) para usar. Los documentos se añaden automáticamente a él para los clientes de Prueba Gratuita, a menos que cree y especifique un DocSet diferente. Piense en un DocSet como una carpeta para sus Docs procesados, y está optimizado para almacenar e indexar los elementos y metadatos de cada Doc.
+
+Por defecto, DocParse añadirá su Doc procesado al DocSet predeterminado llamado `docparse_storage`. Puede crear un nuevo DocSet usando la interfaz de usuario de Aryn o `create-docset` API, y especificarlo usando el `add_to_docset_id` al particionar un documento:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, add_to_docset_id:[your-docset-ID])
+```
+
+Puede encontrar su ID de DocSet en la página de DocSets en la interfaz de usuario de Aryn o usando la `list-docsets` API.
+
+Para los clientes de Pago Por Uso (PAYG), puede optar por no almacenar sus documentos de dos maneras:
+
+1. Especifique una cadena vacía para el parámetro `add_to_docset_id` en la `Partition` API.
+2. Opte por no almacenar datos en la página de Configuración en la interfaz de usuario de Aryn. Esto deshabilitará el almacenamiento para todas las llamadas a la API `Partition`.
+
+## Visualización de documentos almacenados
+
+Puede ver los documentos analizados en su DocSet en la página de DocSet en la interfaz de usuario de Aryn. Seleccione su DocSet, y luego seleccione un Doc. En la interfaz de usuario, verá los cuadros delimitadores etiquetados para cada elemento en su documento, y el contenido de cada elemento. También puede ver los metadatos (llamados `properties`) extraídos de su documento.
+
+También puede usar la API `get-doc` para recuperar el Doc analizado, o `get-doc-binary` para obtener el documento original.
+
+## Extracción de metadatos de sus documentos
+
+Puede extraer fácilmente metadatos (llamados `properties`) de sus documentos usando GenAI para documentos en Aryn DocSets. Las propiedades se almacenan como parte de su documento en pares clave:valor (nombre\_propiedad:valor\_propiedad), y se extraen usando un LLM de todos los documentos en su DocSet. Puede usar la función Extraer Propiedades en la página de DocSet o usando la API `extract-properties`.
+
+Desde la pestaña DocSets en la navegación izquierda, haga clic en su DocSet para abrirlo. Luego, haga clic en el botón Extraer, y luego seleccione Añadir Propiedad. Puede añadir hasta 15 propiedades en la interfaz de usuario, y cientos cuando usa la API directamente. A continuación, añada la información para guiar al modelo GenAI para extraer correctamente su propiedad:
+
+`Name`: El nombre de la propiedad. Esta es la clave en el par clave:valor.
+
+`Type`: El tipo de valor a extraer. Elija entre `String`, `Number`, o `Boolean`.
+
+`Description`: La descripción de la propiedad que se está extrayendo.
+
+`Default Value`: Si el LLM no encuentra un valor para extraer, esto es lo que se colocará como el valor de la propiedad.
+
+`Examples`: Estos son ejemplos de valores de propiedad separados por comas. El LLM usará estos como ejemplos de lo que podría ser un valor para una propiedad específica.
+
+Después de proporcionar esta información, haga clic en Añadir Propiedad. Luego, haga clic en Extraer. Aryn ejecutará un trabajo para extraer las propiedades especificadas, y compartirá un ID de Tarea para que pueda monitorear el progreso de la tarea. Las Tareas completadas desaparecerán de la página de Tareas cuando se completen.
+
+Puede ver sus propiedades recién extraídas al ver un documento en el DocSet seleccionando la pestaña Propiedades en el visor de Documentos.
+
+## Consulta y búsqueda de documentos almacenados
+
+Ahora que sus documentos están almacenados en un DocSet de Aryn, puede aprovechar las características de Análisis Profundo y búsqueda de la Plataforma Aryn en estos datos.
+
+### Ejecutando Análisis Profundo
+
+Puede consultar sus documentos analizados usando el motor de consultas de Análisis Profundo de Aryn. Para obtener más información sobre cómo usar un Espacio de Trabajo para consultar sus datos, visite la [Workspaces documentation](aryn-platform/querying-data/deep-analytics/using_workspaces).
+
+### Usando búsqueda vectorial y por palabras clave
+
+Puede buscar fácilmente en sus documentos y los metadatos asociados utilizando la API de búsqueda de Aryn. Una vez que haya añadido documentos a un docset y extraído propiedades, puede simplemente usar la [Search UI](aryn-platform/querying-data/search/using_search_ui).
+
+O, puede usar la API de búsqueda de la siguiente manera:
+
+```python
+
+from aryn_sdk.client.client import Client, SearchRequest
+
+myClient = Client()
+results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+```
+
+esto devolverá un objeto SearchResponse de la siguiente manera:
+
+```
+SearchResponse(results=[], query_embedding=[your-query-embedded], next_page_token=None)
+```
+
+el parámetro results será una lista de elementos o documentos que coinciden con la consulta de búsqueda. Para obtener más información sobre la API de búsqueda, consulte la documentación del sdk [here](../sdk-reference/query.mdx).
+
+### Filtrando documentos en la página de DocSet
+
+También puede filtrar sus documentos en la página de DocSet. Desde la pestaña Almacenamiento, haga clic en ver para abrir su DocSet. Luego, haga clic en "Filtrar" y complete el formulario con sus criterios de búsqueda. Puede especificar propiedades específicas en las que le gustaría buscar haciendo clic en el botón "+Añadir propiedad" y luego eligiendo la propiedad sobre la que le gustaría filtrar.

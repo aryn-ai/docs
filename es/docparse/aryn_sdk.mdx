@@ -1,0 +1,111 @@
+---
+- title: Usando el SDK de Aryn
+- description: Usando DocParse con el SDK de Aryn
+- icon: terminal
+---
+
+## Instalación
+
+Recomendamos instalar la biblioteca SDK de Aryn usando `pip`:
+
+```python
+pip install aryn-sdk
+```
+
+## Particionando un Documento
+
+Particiona un documento así:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f)
+```
+
+`partition_file` toma las mismas opciones que curl, excepto como argumentos de palabras clave. Puedes encontrar una lista de opciones [aquí](./processing_options).
+
+## Gestión de claves
+
+Por defecto, `aryn-sdk` busca las claves API de Aryn primero en la variable de entorno `ARYN_API_KEY`, y luego en `~/.aryn/config.yaml`. Puedes anular este comportamiento especificando una clave directamente o una ruta diferente al archivo de configuración de Aryn:
+
+```python
+from aryn_sdk.partition import partition_file
+from aryn_sdk.config import ArynConfig
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, aryn_api_key="YOUR-API-KEY")
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, aryn_config=ArynConfig(aryn_config_path="~/dotfiles/.aryn/config.yaml"))
+```
+
+## Funciones Auxiliares
+
+`aryn_sdk` proporciona algunas funciones auxiliares para facilitar el trabajo y la visualización de la salida de `partition_file`.
+
+```python
+from aryn_sdk.partition import partition_file, table_elem_to_dataframe, table_elem_to_html, draw_with_boxes
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, extract_table_structure=True, text_mode="standard_ocr", extract_images=True, threshold=0.35)
+
+# Produce a pandas DataFrame representing one of the extracted tables
+table_elements = [elt for elt in data['elements'] if elt['type'] == 'table']
+dataframe = table_elem_to_dataframe(table_elements[0])
+
+# Convert the first table into HTML.
+html = table_elem_to_html(table_elements[0])
+
+# Draw the detected bounding boxes on the pages. requires poppler
+images = draw_with_boxes("mydocument.pdf", data)
+```
+
+## Diferentes Formatos de Archivo
+
+Es fácil procesar archivos con diferentes formatos usando el aryn-sdk:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f)
+with open("mydocument.docx", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.doc", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.pptx", "rb") as f:
+   data = partition_file(f)
+with open("mypresentation.ppt", "rb") as f:
+   data = partition_file(f)
+```
+
+## Fragmentando un documento
+
+Se ha añadido soporte para fragmentación en la v0.1.9. Puedes habilitar las opciones de fragmentación por defecto especificando un diccionario vacío:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, chunking_options={})
+```
+
+Aquí hay un ejemplo especificando ciertas opciones de fragmentación:
+
+```python
+from aryn_sdk.partition import partition_file
+with open("mydocument.pdf", "rb") as f:
+   data = partition_file(f, 
+      chunking_options={
+         "strategy": "context_rich",
+         "tokenizer": "openai_tokenizer",
+         "tokenizer_options": {
+            "model_name": "text-embedding-3-small"
+         },
+         "merge_across_pages": True,
+         "max_tokens": 512,
+      }
+   )
+```
+
+Las opciones completas de fragmentación están documentadas [aquí](/es/docparse/chunking_strategies).
+
+## Solicitudes asíncronas
+
+Si necesitas enviar un gran número de solicitudes de particionamiento a la vez, recomendamos usar la versión asíncrona de la API: `partition_file_async_submit`. La API asíncrona envía una tarea de particionamiento de archivo a Aryn y devuelve su `task_id`.
+Puedes usar el `task_id` devuelto para hacer un seguimiento de tu solicitud para particionar el archivo usando el `partition_file_async_result`. Para aprender más, consulta la [documentación](/es/sdk-reference/partition#partition-file-async-submit) y el [tutorial](/es/docparse/tutorials/async_requests_tutorial).

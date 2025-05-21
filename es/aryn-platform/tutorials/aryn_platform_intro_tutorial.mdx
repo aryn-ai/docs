@@ -1,0 +1,162 @@
+---
+- title: "Tutorial: Introducción a la Plataforma Aryn"
+- description: Uso de la interfaz de usuario de Aryn para Análisis Profundo
+- icon: person-walking
+---
+
+## Introducción
+
+En este tutorial, utilizarás la interfaz de usuario de la Plataforma Aryn para realizar Análisis Profundo en un conjunto de PDFs complejos. Definimos Análisis Profundo como consultas avanzadas en datos no estructurados, donde necesitas un plan de consulta con operadores analíticos y semánticos para obtener el resultado. Tú:
+
+* Crearás un DocSet
+* Cargarás y procesarás un conjunto de PDFs, incluyendo análisis y extracción de tablas
+* Crearás un Espacio de Trabajo y ejecutarás una consulta
+* Usarás un Marcador para crear una vista
+* Escribirás una consulta de seguimiento en el DocSet marcado
+* Utilizarás operadores de consulta basados en LLM
+
+## Conjunto de documentos de muestra
+
+Para nuestros documentos, utilizaremos una selección de [informes de incidentes de aviación](https://www.ntsb.gov/Pages/AviationQueryv2.aspx) de la [Junta Nacional de Seguridad del Transporte (NTSB)](https://www.ntsb.gov/Pages/home.aspx) que describen diferentes incidentes de aviación. La NTSB es una agencia investigadora del gobierno de EE. UU. para investigaciones de incidentes de transporte civil. Cada incidente de aviación se reporta en un PDF que contiene una mezcla de campos requeridos específicos y análisis de texto libre del incidente. Se puede encontrar un informe de ejemplo [aquí](https://data.ntsb.gov/carol-repgen/api/Aviation/ReportMain/GenerateNewestReport/103753/pdf), y un extracto está a continuación:
+
+![Sample Doc](/aryn-platform/tutorials/intro_tutorial_images/SampleNTSBDoc.png)
+
+Estos documentos son complejos y contienen varias tablas, secciones, imágenes y encabezados/pies de página, y texto. También hay similitudes entre los documentos, porque todos son informes de incidentes, como el lugar donde ocurrió, el tipo de aeronave, el día y la hora, y más. Estas propiedades en toda la colección de documentos serán importantes cuando enriquezcamos cada documento con metadatos para usar con el motor de consultas de Aryn.
+
+Descarga la colección de 10 informes de la NTSB [aquí](https://aryn-public.s3.us-east-1.amazonaws.com/aryn-intro-tutorial/Aryn_Intro_Tutorial_Dataset.zip) en un archivo zip, para que puedas cargarlos en un DocSet de Aryn en la siguiente sección.
+
+## Creando un DocSet
+
+Para ejecutar consultas en nuestra colección de documentos, primero necesitamos cargarlos en Aryn y prepararlos. Aryn almacena e indexa colecciones de documentos en DocSets, que pueden considerarse similares a cómo almacenas datos en tablas en un almacén de datos. Los DocSets también incluyen datos y metadatos relacionados con cada documento de manera jerárquica - esto será importante a medida que analicemos y enriquezcamos cada documento.
+
+¡Vamos a crear nuestro DocSet! Inicia sesión en la [interfaz de usuario de Aryn](https://app.aryn.ai/), y llegarás a la página de DocSets. Haz clic en el botón "Nuevo" para obtener la ventana emergente de Crear DocSet:
+
+![Create DocSet](/aryn-platform/tutorials/intro_tutorial_images/CreateDocSet.png)
+
+Ingresa NTSB-Demo como nombre, y puedes proporcionar una descripción opcional. Omitiremos la sección "Propiedades" en la ventana emergente - las Propiedades son metadatos almacenados en pares clave/valor que Aryn extrae para enriquecer tus documentos usando LLMs. En su lugar, extraeremos propiedades después de haber cargado nuestros documentos en una sección posterior.
+
+Haz clic en "Crear DocSet" para crearlo. Ahora, es hora de cargar nuestros documentos en nuestro DocSet.
+
+## Cargando y analizando tus documentos
+
+Haz clic en tu nuevo DocSet (NTSB-Demo) en la página de DocSets para ir a la página del explorador de DocSet. Luego, haz clic en el icono "+" en la lista de documentos para abrir la ventana emergente Agregar Documentos. Haz clic en la ventana emergente para abrir el selector de archivos y selecciona los informes de la NTSB que descargaste.
+
+Al agregar documentos, Aryn también los procesará para que puedan ser consultados adecuadamente. Internamente, Aryn utiliza DocParse, un sistema de IA compuesto para analizar, extraer y dividir tus documentos antes de cargarlos en tu DocSet. Utiliza un conjunto de modelos de IA diseñados específicamente para la segmentación de documentos, reconocimiento óptico de caracteres (OCR) y extracción de tablas, imágenes, metadatos y más. Usaremos la configuración predeterminada de análisis y división en este tutorial, pero puedes abrir el menú desplegable "Opciones de Procesamiento" para ver las diferentes opciones.
+
+Haz clic en "Subir" para agregar tus documentos. Aryn creará una Tarea para cada documento (que puedes ver en la página de Tareas desde la navegación izquierda), y procesará y agregará tus documentos. Esto puede tomar unos minutos.
+
+Tu DocSet mostrará cada nuevo documento a medida que se agregue. Haz clic en uno de los documentos en la Lista de Documentos, y aparecerá en el panel central. Debido a que aún no hemos extraído ninguna Propiedad, la pestaña Propiedades en la navegación derecha estará vacía. Sin embargo, podemos inspeccionar el análisis de nuestro documento haciendo clic en la pestaña Elementos en la navegación derecha. Deberías ver algo como esto:
+
+![View Elements](/aryn-platform/tutorials/intro_tutorial_images/DocumentViewer.png)
+
+Aryn visualiza los cuadros delimitadores etiquetados utilizados en el análisis de tu documento. Cada cuadro delimitador contiene un Elemento, que es la segmentación más granular de tu documento en partes más pequeñas. Si seleccionaste una estrategia de división, Aryn combinará los Elementos en fragmentos más grandes según la estrategia. Puedes ver el contenido real (texto, tabla, etc.) extraído en cada elemento en la navegación derecha.
+
+## Enriqueciendo tus documentos con Propiedades
+
+Para crear planes de consulta para Análisis Profundo, el motor de consultas agéntico de Aryn utiliza metadatos adicionales de los documentos en tu DocSet. Estos metadatos se llaman Propiedades, y debes extraer esta información de tus documentos, y Aryn facilita esto usando su función de Extracción de Propiedades impulsada por LLM.
+
+<Note>Puedes usar un [trabajo ETL de documento Sycamore](https://github.com/aryn-ai/sycamore) para agregar Propiedades a tus documentos desde una fuente existente, como una base de datos. ¡Eso está fuera del alcance de este tutorial introductorio, sin embargo!</Note>
+
+Ve a la página de tu DocSet y haz clic en el botón "Extraer". Extraerás tres Propiedades útiles de los documentos en tu DocSet: `date_time`, `incident_location`, y `aircraft`
+
+Para la primera Propiedad, haga clic en el botón "Add Property". Complete esta información:
+
+![Extract Property](/aryn-platform/tutorials/intro_tutorial_images/ExtractProperty.png)
+
+* **Name:**&#x64;ate\_time
+* **Type:**&#x53;tring
+* **Description:**&#x4C;a fecha y hora del incidente. Formatee esto en formato DateTime.
+* **Valor predeterminado:**\[dejar en blanco]
+* **Examples:**&#x32;024-08-14T11:30:00, 2024-07-10T08:30:00
+
+Luego, haga clic en "Add Property". Debería ver esta Propiedad agregada a la lista. A continuación, agreguemos las otras dos Propiedades a nuestra lista antes de ejecutar un trabajo de Extracción.
+
+Para`incident_location`:
+
+* **Name:**&#x69;ncident\_location\_state
+* **Type:**&#x53;tring
+* **Description:**&#x45;l estado en los EE. UU. donde ocurrió el incidente.
+* **Valor predeterminado:**\[dejar en blanco]
+* **Examples:**&#x4F;hio, Florida
+
+Y para`aircraft`:
+
+* **Name:**&#x61;ircraft
+* **Type:**&#x53;tring
+* **Description:**&#x45;l tipo de aeronave en el incidente.
+* **Valor predeterminado:**\[dejar en blanco]
+* **Examples:**&#x43;essna, Gulfstream
+
+Debería ver las tres configuraciones de Extracción de Propiedades en la tabla. Ahora, haga clic en "Extract". Aryn ejecutará un trabajo utilizando un LLM para extraer esta información de cada documento en su DocSet y almacenará los valores como Propiedades. Puede ver el progreso de esto en la página de Tareas, a la que puede navegar desde la navegación izquierda.
+
+![View Tasks](/aryn-platform/tutorials/intro_tutorial_images/TasksPage.png)
+
+Cuando agregue nuevos documentos a su DocSet, Aryn extraerá automáticamente las Propiedades que se han especificado. ¡Veámoslo en acción!
+
+Descargue otro[informe NTSB aquí](https://aryn-public.s3.us-east-1.amazonaws.com/aryn-intro-tutorial/194547.pdf), y use la función Add Docs que utilizó anteriormente para agregarlo. Una vez agregado, puede ver las Propiedades extraídas automáticamente en el panel derecho de la página DocSet.
+
+![Extracted Properties](/aryn-platform/tutorials/intro_tutorial_images/NewProperties.png)
+
+## Consulte sus documentos usando Workspaces
+
+La interfaz de usuario de Workspaces de Aryn está diseñada específicamente para el Análisis Profundo iterativo de documentos, y veremos un ejemplo de cómo usarla.
+
+Cree un Workspace desde la página de su DocSet haciendo clic en el botón "Workspace". Una vez que se cargue su Workspace, haga clic en el botón "Rename" y renómbrelo a "NTSB-Demo" o algo que sea fácil de recordar.
+
+Puede ver en la parte superior que el DocSet al que está adjunto este workspace es "NTSB-Demo" - así que estará consultando los documentos en ese DocSet (o Bookmarks de ese DocSet... espere y verá).
+
+Escribamos nuestra primera consulta en el cuadro de consulta del Workspace: "¿Qué incidentes ocurrieron en Texas?" y presione Enter o el botón de reproducción/enviar. El motor de consulta agéntico de Aryn devolverá un plan de consulta y se lo mostrará antes de ejecutarlo.
+
+![Generated Query Plan](/aryn-platform/tutorials/intro_tutorial_images/GeneratePlan.png)
+
+En este ejemplo, el plan muestra un solo paso que ejecuta un filtro en la`location`Propiedad buscando valores que incluyan`Texas`. Este plan tiene sentido, ¡así que haga clic en "Run plan" para ejecutarlo!
+
+El Workspace muestra dos resultados de nuestra consulta. Primero, obtenemos una descripción general de IA, que es un resumen generado por LLM de los resultados de la consulta y citas:
+
+![AI Summary](/aryn-platform/tutorials/intro_tutorial_images/AISummary.png)
+
+Debajo del resumen está la Tabla de Resultados, que incluye una lista de documentos para los incidentes que ocurrieron en Texas. Esta sección de la salida de la consulta es el resultado real del plan de consulta - en nuestra consulta, hubo 5 incidentes que ocurrieron en Texas.
+
+![Results Table](/aryn-platform/tutorials/intro_tutorial_images/ResultsTable.png)
+
+## Uso de bookmarks
+
+Si queremos hacer una pregunta de seguimiento sobre el resultado de una consulta anterior, podemos usar la función de Bookmark de Aryn. Un Bookmark es la salida guardada de una consulta, que puede referenciar como entrada para otra consulta. Es similar en concepto a una vista materializada en un almacén de datos.
+
+![Bookmark](/aryn-platform/tutorials/intro_tutorial_images/Bookmark.png)
+
+Para crear un Bookmark, pase el cursor sobre la parte superior de su celda de consulta y haga clic en el icono de Bookmark. Nombre su Bookmark y presione enter. Debería ver el nombre de su Bookmark aparecer en la sección de Bookmarks en la navegación superior derecha.
+
+## Consultas de múltiples pasos con operadores LLM
+
+Para la siguiente consulta, usaremos el Bookmark en lugar del conjunto de datos completo. Seleccione el Bookmark en la esquina inferior izquierda del cuadro de entrada de consulta.
+
+![Select Bookmark](/aryn-platform/tutorials/intro_tutorial_images/SelectBookmark.png)
+
+Consulte los incidentes de Texas con la pregunta "¿Qué incidentes ocurrieron en la mañana versus la tarde?". Debería generar este plan de consulta de múltiples pasos:
+
+![Multi-Step Query Plan](/aryn-platform/tutorials/intro_tutorial_images/MultiStepPlan.png)
+
+Aunque extrajimos DateTime como una Propiedad en el paso de extracción, no clasificamos ese tiempo como "mañana" o "tarde". El motor de consulta agéntico de Aryn reconoce esto e incluyó un paso de extracción en el plan para crear una nueva Propiedad llamada`incident_time_of_day`para clasificar el informe como ocurrido en la mañana o en la tarde. Luego, el plan usará esa Propiedad en una operación de agrupación para contar los incidentes para cada valor.
+
+Este plan se ve bien, ¡así que vamos a ejecutarlo! Obtendremos tanto la Descripción general de IA como el resultado real en la tabla de Resultados:
+
+![Query Answer](/aryn-platform/tutorials/intro_tutorial_images/MultiStepAnswer.png)
+
+Para validar cómo Aryn calculó esta respuesta, puede explorar el rastro de la consulta bajo el menú desplegable "Steps". Haga clic en él para expandir el Plan de Consulta:
+
+![Query Trace](/aryn-platform/tutorials/intro_tutorial_images/QueryTrace.png)
+
+Puede ver la salida de cada paso haciendo clic en el recuento de Docs al final de cada paso. Haga clic en el enlace "5 docs" bajo el primer paso LLM para ver la salida de ese paso, y verá los campos extraídos que determinan si el incidente fue en la mañana o en la tarde:
+
+![Query Added Properties](/aryn-platform/tutorials/intro_tutorial_images/QueryAddedProperties.png)
+
+## Conclusión
+
+En este tutorial, creó un DocSet, agregó y analizó sus documentos, y utilizó LLMs para extraer Propiedades para preparar su DocSet para consultas. Luego ejecutó una consulta, creó un Bookmark a partir de la salida, y luego consultó ese Bookmark con una consulta de múltiples pasos utilizando algunos de los operadores de consulta potenciados por LLM de Aryn. Finalmente, inspeccionó un rastro de consulta para profundizar en cómo el sistema calculó la respuesta a su consulta.
+
+Estas son algunas de las funciones básicas para cargar datos y ejecutar Análisis Profundo en la Plataforma Aryn. Aquí hay algunos pasos siguientes:
+
+* Explore el[Aryn SDK](https://docs.aryn.ai/sdk-reference/partition)para acceso programático
+* Ejecute otras consultas y use la[opción "Edit"](https://docs.aryn.ai/aryn-platform/querying-data/deep-analytics/using_workspaces#editing-query-plans)para ajustar sus planes de consulta
+* Use un[trabajo de ETL de documento Sycamore](https://docs.aryn.ai/aryn-platform/data-preparation/sycamore_document_etl)para procesamiento adicional de datos en su DocSet

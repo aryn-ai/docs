@@ -1,0 +1,28 @@
+---
+- title: Uso de la interfaz de usuario de Búsqueda
+- description: Ejecutando consultas de búsqueda usando la interfaz de usuario de Búsqueda
+- icon: magnifying-glass
+---
+
+Además de usar el motor de consultas agéntico de Aryn, puede ejecutar consultas de búsqueda directas en su DocSet. Aryn está construido sobre OpenSearch y aprovecha su indexación de palabras clave y vectores para este conjunto de características.
+
+Puede consultar su DocSet usando la interfaz de usuario de Búsqueda en la Consola de Aryn. Para obtener más información sobre cómo construir una aplicación de búsqueda con el SDK de Aryn,[haga clic aquí](aryn-platform/querying-data/search/integrating_search_using_SDK).
+
+### Ejecutando una consulta de búsqueda
+
+Navegue a la interfaz de usuario de Búsqueda usando la navegación izquierda y seleccione su DocSet para buscar usando el menú desplegable a la izquierda de la barra de búsqueda. A continuación, seleccione su Tipo de Búsqueda, que incluye:
+
+* Hybrid: Combines keyword and vector search.
+* Vector (Semántico): Encuentra elementos similares en un conjunto de datos comparando sus representaciones numéricas (incrustaciones vectoriales) usando un algoritmo k-NN.
+* Lexical: Uses the BM25 algorithm, a ranking function used by search engines to estimate the relevance of documents to a given search query. The search call will perform an exact string match and return results where the query string shows up as a standalone word.
+* Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
+
+La búsqueda de Aryn devolverá los fragmentos de Documento más relevantes en su DocSet. Si hace clic en un fragmento, verá el documento completo y otros fragmentos relevantes en ese documento en el Visor de Documentos.
+
+### Uso de filtros para búsqueda detallada
+
+Puede especificar uno o más filtros en las Propiedades de su DocSet en sus consultas de búsqueda. Para agregar un filtro, haga clic en el botón Filtro debajo del cuadro de texto de consulta de búsqueda. Seleccione su Propiedad, Operador y Valor. Los filtros usan una coincidencia exacta, si se usa el operador`equals`.
+
+Haga clic en Agregar Filtro, y verá el filtro agregado debajo del cuadro de texto de consulta de búsqueda. Puede eliminarlo haciendo clic en la "x" en el filtro. También puede agregar filtros adicionales.
+
+Cuando haya terminado de agregar filtros, puede ejecutar su consulta de búsqueda. Puede agregar Propiedades adicionales para usar con filtros a través de Extraer Propiedades o usando ETL de documentos de Sycamore.
