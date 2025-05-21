@@ -1,0 +1,57 @@
+---
+- title: Cargando Datos
+- description: Creando DocSets y agregando documentos a Aryn
+- icon: upload
+---
+
+Aryn almacena documentos en DocSets, que pueden escalar a millones de documentos. Al agregar un documento a Aryn, automáticamente lo analiza y lo divide en Elementos etiquetados (por ejemplo, Encabezado de sección, Tabla, Imagen, Texto y más), y almacena esta representación JSON como un Documento junto con el documento original. Utiliza la tecnología DocParse de Aryn[DocParse](https://www.aryn.ai/docparse) bajo el capó para hacer esto, y hay una variedad de opciones como OCR, Resumen de Imágenes y más que puedes elegir habilitar.
+
+Aryn indexa los Documentos en tus DocSets en índices vectoriales y de palabras clave escalables.
+
+## Creando un DocSet
+
+**Usando la Consola**
+
+Para crear un DocSet, haz clic en la pestaña DocSets en la navegación izquierda. Luego, haz clic en el botón Nuevo DocSet en la parte superior derecha.
+
+Ingresa el Nombre y la Descripción opcional de tu DocSet. También puedes opcionalmente elegir especificar las propiedades/metadatos que te gustaría extraer de cada documento agregado a tu DocSet. Sin embargo, siempre puedes configurar esto en cualquier momento usando la función Extraer Propiedades.
+
+Haz clic en Crear DocSet para crear tu DocSet.
+
+**Usando el SDK de Aryn**
+
+Usa la función[create\_docset](https://docs.aryn.ai/sdk-reference/storage#example).
+
+## Agregando documentos a tu DocSet
+
+**Usando la Consola**
+
+Al agregar documentos a tu DocSet, Aryn automáticamente los analiza y procesa utilizando su modelo de IA compuesto[DocParse](https://www.aryn.ai/docparse). Esto incluye segmentación, OCR, extracción de tablas, resumen de imágenes, división en fragmentos, incrustación de vectores y más.
+
+Una vez que se agrega un documento a un DocSet de Aryn, Aryn lo almacenará utilizando una representación estructurada interna llamada[Document](docparse/output_structure#json-format). Este es el mismo formato de salida de DocParse y cómo se almacenan los documentos en[Sycamore DocSets](https://sycamore.readthedocs.io/en/stable/sycamore/APIs/document.html). Esta representación estructurada contiene una lista de Elementos (imágenes, tablas, texto, etc.) encontrados dentro del documento, así como un mapa de Propiedades del documento.
+
+Los documentos procesados se estructuran en el formato Document y se agregan a tu DocSet.
+
+Puedes agregar documentos a tu DocSet en la página del Explorador de DocSet en la interfaz de usuario de Aryn. Selecciona tu DocSet y luego haz clic en el icono azul "+" en la parte inferior de la lista de Documentos.
+
+Selecciona o arrastra y suelta tus archivos en la ventana emergente. Puedes ajustar la configuración de ingesta predeterminada y hacer clic en Cargar.
+
+Aryn creará una Tarea asíncrona para cargar cada documento, y puedes verlas en la página de Tareas.
+
+Si tienes propiedades/metadatos especificados para tu DocSet, se extraerán y agregarán a tu Documento cuando lo agregues a tu DocSet.
+
+¿Buscas un conector específico para cargar datos desde un sistema de almacenamiento a Aryn? Envíanos una solicitud:[info@aryn.ai](mailto:info@aryn.ai)
+
+**Usando el SDK de Aryn**
+
+Puedes usar la función[Add Document](https://docs.aryn.ai/sdk-reference/storage#add-document) para agregar un documento a tu DocSet usando el SDK de Aryn. Esta es una función asíncrona.
+
+**Usando ETL de documentos de Sycamore**
+
+Puedes escribir en un DocSet de Aryn usando[Sycamore](https://github.com/aryn-ai/sycamore), un marco de trabajo de ETL de documentos de código abierto. Esto es útil si requieres procesamiento personalizado, enriquecimiento o división en fragmentos para tus documentos. Para obtener más información sobre cómo usar Aryn como destino para un pipeline de Sycamore,[haz clic aquí](aryn-platform/data-preparation/sycamore_document_etl).
+
+**Usando DocParse**
+
+Cuando agregas documentos a Aryn, está utilizando la tecnología DocParse bajo el capó para el análisis y procesamiento. Sin embargo, los documentos analizados directamente con DocParse usando la interfaz de usuario o API de DocParse también se envían a un DocSet en Aryn. Esto se conocía como "almacenamiento DocParse" antes del lanzamiento de Aryn.
+
+Por defecto, los Documentos analizados se almacenan en un DocSet llamado "docparse\_storage". Sin embargo, puedes especificar un DocSet diferente para usar al analizar tu documento. Visita la documentación de[DocParse storage](https://docs.aryn.ai/docparse/storage) para obtener más información.

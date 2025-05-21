@@ -1,0 +1,74 @@
+---
+- title: Usando Sycamore para ETL de documentos
+- description: Preparando datos usando las canalizaciones ETL de documentos de Sycamore
+- icon: timeline
+---
+
+Puede utilizar la biblioteca de ETL de documentos de código abierto Sycamore para la transformación avanzada de datos, limpieza de datos, fragmentación personalizada y más, y cargar el resultado como un nuevo DocSet en Aryn. Puede escribir canalizaciones de datos altamente personalizables en Python, e iterar rápidamente en sus canalizaciones utilizando un cuaderno Jupyter. Sycamore también es eficaz para extraer y transformar las Propiedades extraídas de los Documentos en su DocSet.
+
+Sycamore trabaja mano a mano con Aryn, ya que ambos están construidos alrededor de las abstracciones de DocSet y Document. Sycamore puede analizar documentos, extraer tablas, realizar OCR y más utilizando el [DocParse service](https://www.aryn.ai/docparse) de Aryn, y puede escalar para procesar eficientemente miles de documentos utilizando un backend de [Ray](https://github.com/ray-project/ray).
+
+Visite la [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/index.html) para aprender más, o consulte ejemplos de cuadernos Jupyter con canalizaciones ETL [here](https://github.com/aryn-ai/sycamore/tree/main/notebooks).
+
+## Escribiendo en Aryn
+
+Puede utilizar el conector de Aryn para escribir su DocSet en Aryn. Puede especificar un ID de DocSet para escribir en un DocSet específico, o proporcionar un nombre de DocSet para crear un nuevo DocSet con ese nombre.
+
+**Configuración de incrustación de vectores**
+
+El DocSet que escriba debe utilizar incrustaciones de vectores creadas con el modelo OpenAI Text Embedding 3. Si el DocSet de origen para su trabajo de Sycamore es de Aryn, sus Documentos ya tendrán las incrustaciones configuradas correctamente. Si está leyendo y procesando documentos de otro lugar, necesitará incluir este paso de incrustación en su canalización:
+
+```
+...
+docset.embed(OpenAIEmbedder(model_name="text-embedding-3-small"))
+...
+```
+
+**Añadiendo Propiedades extraídas en la canalización al Esquema de Propiedades del DocSet de Aryn**\*
+
+Su canalización ETL de Sycamore puede extraer Propiedades utilizando transformaciones impulsadas por LLM o enriquecer sus Documentos con metadatos de otras fuentes de datos. Para que Aryn utilice estas Propiedades con su motor de consultas, su trabajo de Sycamore también necesitará actualizar el Esquema de Propiedades del DocSet de Aryn, lo que hace con el parámetro `update_properties_schema`. Por defecto, esto está configurado en `True`.
+
+Sycamore solo añade los campos `name` y `value` al Esquema de Propiedades de Aryn, por lo que necesitará actualizar otros campos como `description` directamente en el Esquema de Propiedades. Puede hacerlo con la API [`update_docset`](https://docs.aryn.ai/api-reference/docset/update-docset), obtener el Esquema de Propiedades actual (usando [`get_docset`](https://docs.aryn.ai/api-reference/docset/get-docset)), añadir los parámetros adicionales (como \`\`\`description), y luego pasar un nuevo Esquema de Propiedades con los valores añadidos.
+
+**Escribiendo en un DocSet existente de Aryn**
+
+Si escribe en un DocSet existente en Aryn, el trabajo de Sycamore actualizará ese DocSet:
+
+* Se añadirán nuevas Propiedades
+* Las Propiedades existentes se actualizarán
+* Las Propiedades eliminadas en su trabajo no se eliminarán en Aryn
+* El contenido de los Elementos con el mismo Element\_ID se actualizará
+* Se añadirán nuevos Elementos (nuevos Element\_IDs)
+* Los Elementos eliminados en su trabajo no se eliminarán en Aryn
+
+También puede escribir en un nuevo DocSet si desea que el resultado de su trabajo de Sycamore propague correctamente las eliminaciones en su trabajo.
+
+```
+...
+docset.write.aryn(
+	docset_id="<YOUR-DOCSET-ID>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+	)
+```
+
+**Escribiendo en un nuevo DocSet de Aryn**
+
+Para crear un nuevo DocSet de Aryn y escribir en él:
+
+```
+...
+docset.write.aryn(
+	name="<NEW-DOCSET-NAME>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+```
+
+## Leyendo desde Aryn
+
+Para leer un DocSet desde Aryn, también utilizará el conector de Aryn:
+
+```
+...
+docset.read.aryn(
+	docset_id="<YOUR-DOCSET-ID>"
+	aryn_api_key="<YOUR-ARYN-KEY>"
+```

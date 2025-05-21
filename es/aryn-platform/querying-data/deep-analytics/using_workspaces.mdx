@@ -1,0 +1,53 @@
+---
+- title: Uso de Espacios de Trabajo
+- description: Use la interfaz de usuario de Espacios de Trabajo para Análisis Profundo
+- icon: atom
+---
+
+La forma más fácil de comenzar con Deep Analytics es usando la[Interfaz de Usuario de Workspaces](https://app.aryn.ai/workspaces) de Aryn. Deep Analytics es la capacidad de ejecutar consultas analíticas complejas y de múltiples operaciones en tus datos no estructurados a escala, y está habilitada por el motor de consultas agéntico de Aryn.
+
+Un Workspace permite varias interacciones:
+
+* Ejecutar consultas iterativas en lenguaje natural en un DocSet
+* Recuperar los resultados de una consulta, que pueden incluir texto, tablas y listas de documentos relevantes
+* Guardar los resultados de una consulta como un Marcador y consultar el Marcador
+* Ajustar el plan de consulta en lenguaje natural antes de ejecutarlo
+* Ver la entrada y salida de cada paso de la consulta (para fines de depuración)
+
+## Ejecutando una consulta
+
+Ve a la[Interfaz de Usuario de Workspaces](https://app.aryn.ai/workspaces) haciendo clic en ella en la navegación izquierda, y luego selecciona el DocSet que deseas consultar. O ve a tu DocSet en la página de lista de DocSet y haz clic en el botón Abrir Workspace.
+
+Una vez que hayas seleccionado tu DocSet en la interfaz de usuario de Workspace, escribe una consulta en lenguaje natural en el cuadro de consulta. La parte inferior del cuadro tiene el selector de Dataset, que por defecto es el DocSet que seleccionaste para tu Workspace. Si creas un Marcador en tu Workspace (ver más abajo), puedes seleccionarlo aquí para consultarlo.
+
+Después de enviar tu consulta, Aryn generará y te mostrará el plan de consulta, o los pasos que tomará para ejecutar tu consulta. Puedes elegir ejecutar el plan haciendo clic en el botón Ejecutar plan, o cancelar la consulta haciendo clic en el botón Cancelar consulta. Esto te permitirá enviar una nueva consulta.
+
+### Editando planes de consulta
+
+Si necesitas ajustar el plan de consulta, selecciona el botón Editar plan. Puedes instruir a Aryn para que cambie el plan en lenguaje natural usando el cuadro de consulta. Envía tus instrucciones y deberías ver el cambio en el plan de consulta. Una vez que estés satisfecho con el plan, haz clic en el botón Ejecutar plan.
+
+## Resultados de la consulta
+
+Aryn devuelve un resultado y un rastro de tu consulta.
+
+### Resultado de la consulta
+
+Dependiendo de la consulta, Aryn devolverá resultados en diferentes formatos:
+
+* Lista de documentos: El resultado de una consulta puede ser un nuevo DocSet. Por ejemplo, una consulta podría filtrar un DocSet y devolver el conjunto filtrado.
+* Table: The output of a query can be a table with derived values, like counts.
+* String: The output of a query can be a natural lanauge answer, like a summary or question-answering text.
+
+También puedes obtener un resumen de tus resultados como una visión general, si es relevante.
+
+### Rastro de la consulta
+
+Aryn incluye un rastro de consulta con los resultados de la consulta, que es una lista de Documentos en el DocSet que fueron procesados en cada etapa/nodo del plan de consulta. Puedes ver esto en la sección Pasos de esa consulta, y verás el número de Documentos procesados en cada etapa. Puedes hacer clic en ese enlace y abrir una lista de esos documentos para inspeccionarlos.
+
+## Usando Marcadores
+
+Puedes usar Marcadores para guardar el resultado de una consulta como un DocSet de trabajo y consultarlo. Por ejemplo, podrías haber filtrado tu DocSet inicial en un conjunto de datos de trabajo más pequeño, y sería más eficiente usarlo en tus consultas subsiguientes. Los Marcadores solo son accesibles dentro del Workspace en el que fueron creados.
+
+Para hacer esto, haga clic en el icono de Marcador en la parte superior de la celda con la salida de consulta que desea guardar. Luego, ingrese el nombre de su Marcador en el campo de texto a la derecha del icono y presione enter. Verá su Marcador aparecer en la sección de Marcadores en la navegación derecha, y también podrá seleccionarlo en el Selector de Conjunto de Datos en la parte inferior derecha del cuadro de consulta.
+
+Si desea eliminar su Marcador, puede quitarlo de la navegación derecha haciendo clic en el icono de Marcador con una "x" al pasar el cursor sobre él. O, vaya a la celda donde creó el Marcador y haga clic en el mismo icono al pasar el cursor sobre el nombre del Marcador.

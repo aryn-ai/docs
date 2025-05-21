@@ -1,0 +1,43 @@
+---
+- title: Conceptos Fundamentales
+- description: Visión general de la Plataforma Aryn
+- icon: lightbulb
+---
+
+Aryn es un almacén de datos no estructurados agéntico que permite cargas de trabajo de Análisis Profundo y búsqueda en documentos y datos no estructurados a escala.[Análisis Profundo](aryn-platform/core_concepts#deep-analytics)va más allá de la búsqueda y la Investigación Profunda - es el proceso de ejecutar análisis computacional utilizando una mezcla de operadores de almacén de datos y semánticos en sus colecciones de documentos.
+
+Esta visión general proporciona una arquitectura de alto nivel de la Plataforma Aryn.
+
+Aunque puede simplemente cargar sus documentos y comenzar con las consultas, Aryn funciona mejor cuando su motor de consulta agéntico puede utilizar metadatos extraídos y datos correctamente segmentados. Discutiremos estos componentes a continuación, y también puede[leer nuestro artículo en la Conferencia sobre Sistemas de Datos Innovadores (CIDR)](https://arxiv.org/abs/2409.00847)que inspiró su arquitectura.
+
+![Aryn Platform Diagram](/aryn_platform_diagram.png)
+
+## Carga y enriquecimiento de documentos
+
+Aryn almacena colecciones de documentos en un DocSet, abreviatura de "Conjunto de Documentos". Piense en ello como una tabla en un almacén de datos, donde puede almacenar un conjunto de información que puede consultar. Al agregar un nuevo documento a un DocSet, Aryn lo procesará y lo agregará a índices vectoriales y de palabras clave internos en un backend de OpenSearch. Puede especificar propiedades (metadatos) para extraer y almacenar de los documentos en un DocSet, que son pares clave/valor que proporcionan información adicional para que el motor de consulta de Aryn la utilice.
+
+Como nota al margen - somos grandes fanáticos de OpenSearch y[ayudamos a llevarlo a la Fundación Linux](https://www.aryn.ai/post/aryn-is-a-founding-member-of-the-new-opensearch-software-foundation)!
+
+Cuando Aryn procesa un documento, utiliza[DocParse](https://www.aryn.ai/docparse)para segmentación,[OCR, extracción de tablas, resumen de imágenes](https://docs.aryn.ai/docparse/processing_options),[fragmentación](https://docs.aryn.ai/docparse/chunking_strategies), y más. Si ha especificado propiedades (metadatos) para extraer de sus documentos, Aryn utilizará un LLM de su elección para hacerlo. Aryn puede ingerir[más de 30 formatos de documentos](https://docs.aryn.ai/docparse/formats_supported), incluyendo PDF, Microsoft Office, y más.
+
+Si su carga de trabajo requiere ETL de documentos personalizado, como extracción de metadatos más avanzada, transformaciones de datos, limpieza de datos o una estrategia de fragmentación personalizada, puede utilizar la biblioteca de código abierto [Sycamore document ETL library](https://github.com/aryn-ai/sycamore). Le permite escribir pipelines de ETL personalizados en Python, configurar el servicio LLM para usar en la extracción de metadatos, utiliza la misma [DocSet abstraction](https://sycamore.readthedocs.io/en/stable/sycamore/APIs/docset.html) que Aryn (¡sorpresa!), y se ejecuta en [Ray](https://github.com/ray-project/ray) por lo que puede escalar a miles de documentos. Sycamore puede cargar un DocSet de Aryn como paso final.
+
+Una vez que sus documentos están procesados y cargados en un DocSet, ¡es hora de consultarlos!
+
+## Deep Analytics
+
+Aryn tiene un motor de consultas agéntico que combina el razonamiento de GenAI con operadores de consulta basados en bases de datos y LLM para ejecutar análisis y consultas complejas en sus DocSets. Llamamos a esto Deep Analytics, porque puede consultar y navegar iterativamente a través de sus datos no estructurados con preguntas analíticas. Aryn proporciona una interfaz de usuario de Workspaces diseñada específicamente para Deep Analytics, y puede crear aplicaciones con nuestras APIs utilizando el SDK de Aryn.
+
+La plataforma tiene tres operaciones principales para ejecutar Deep Analytics:
+
+* **Creación de planes de consulta:** Aryn toma una pregunta o comando en lenguaje natural y crea un plan de consulta utilizando su planificador de consultas agéntico. El planificador utiliza su comprensión de los operadores disponibles, propiedades/metadatos de documentos y otro contexto para generar un plan de alta calidad. Aryn tiene una mezcla de operadores de estilo de base de datos, como filtro, agregación y búsqueda, junto con operadores basados en LLM como LLM-Extract y LLM-Filter. Los operadores basados en LLM utilizan IA para razonar sobre los datos en tiempo real durante una consulta, lo que amplía la capacidad de Aryn para comprender mejor semánticamente los documentos.
+
+* **Edición de planes de consulta:** Aryn separa la generación y ejecución de planes de consulta, por lo que puede inspeccionar el plan y editarlo si es necesario. Las posibles razones para editar un plan incluyen ajustar los metadatos utilizados en una operación de filtro, elegir ejecutar una consulta diferente porque un operador basado en LLM procesaría demasiados datos (latencia y costo), o corregir un operador incorrecto, o hacer otros ajustes menores. Puede editar estos planes manualmente o usar la interfaz de usuario de Aryn Workspace para cambiarlos con comandos en lenguaje natural.
+
+* **Ejecución de planes de consulta**: Una vez que tiene el plan deseado, ¡es hora de ejecutar su consulta! Aryn ejecuta consultas en un backend escalable para un buen rendimiento. La salida de su consulta también es un DocSet, que puede incluir una lista de documentos, propiedades/metadatos adicionales extraídos, resúmenes en lenguaje natural y, obviamente, el resultado. Si desea ejecutar una consulta subsiguiente en esta salida, puede guardar la salida como un marcador (disponible en la interfaz de usuario de Workspace). Esto guardará la salida durante la duración de su sesión de Workspace, y puede especificar un DocSet marcado en sus consultas.
+
+Aryn fue diseñado para la transparencia, permitiéndole validar cómo se derivaron los resultados de una consulta. Puede inspeccionar los planes de consulta y los operadores para validar cómo Aryn traduce su solicitud en lenguaje natural a una consulta ejecutable. Al ejecutar una consulta, también puede ver los conjuntos de datos de entrada y salida para cada operador en el plan de consulta, lo que facilita ver qué se procesó (y por qué).
+
+## Búsqueda
+
+Aryn también puede ejecutar consultas de búsqueda, incluyendo búsqueda híbrida, vectorial, por palabras clave y subcadenas. Utiliza OpenSearch internamente, y esta funcionalidad puede ser útil para aplicaciones que requieren una API de búsqueda más tradicional.

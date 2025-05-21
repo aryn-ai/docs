@@ -1,0 +1,488 @@
+---
+- title: Partition
+- description: Documentación para Aryn SDK Partition
+---
+
+import PartitionOptions from '/snippets/partition_options.mdx';
+
+A continuación encontrará la documentación del módulo Partition del SDK de Aryn. Todos los parámetros son opcionales a menos que se especifique lo contrario.
+
+## Funciones de Partición Sincrónica
+
+### partition\_file
+
+Envía un archivo a Aryn DocParse y devuelve un diccionario de Python con elementos que contienen su estructura de documento y texto.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <PartitionOptions />
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            aryn_api_key="MY-ARYN-API-KEY",
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+    elements = data['elements']
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un diccionario que contiene las claves`status`y`elements`. Si output\_format es`markdown`, devuelve un diccionario de`status`y`markdown`.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"This async action requires you to upgrade your account plan"`
+      * Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón:`Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+## Funciones de Partición Asincrónica
+
+### partition\_file\_async\_submit
+
+Envía un documento para partición asincrónica y obtiene su`task_id`. Los resultados de la tarea permanecerán disponibles en el sistema durante 48 horas. Destinado a ser utilizado con`partition_file_async_result`.
+Nota: enviar múltiples tareas de partición asincrónica al mismo tiempo no garantiza que se ejecuten simultáneamente.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <PartitionOptions />
+
+    * `webhook_url`: una URL de cadena para que Aryn visite cuando la tarea asincrónica se haya detenido. POST un cuerpo como este:`{"done": [{"task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"}]}`
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file_async_submit
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        response = partition_file_async_submit(
+            f,
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+        )
+
+    # get task id
+    task_id = response["task_id"]
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un diccionario que contiene el`task_id`de la solicitud enviada.
+
+    ```json
+    {
+      "task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"This async action requires you to upgrade your account plan"`
+      * Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+    * `HTTPError: Error:status_code 429`. Razón:`"Too many requests"`
+      * Fix: Please try again after some time. Each account is allowed 1000 tasks to run at a time.
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón:`Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+### partition\_file\_async\_result
+
+Obtiene los resultados de una tarea de partición asincrónica por`task_id`. Destinado a ser utilizado con`partition_file_async_submit`.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `task_id`: Requerido. Una cadena del id de tarea para sondear e intentar obtener el resultado.
+    * `aryn_api_key`: Una clave API de Aryn, proporcionada como una cadena. Puedes obtener una gratis en[aryn.ai/get-started](https://www.aryn.ai/get-started). El valor predeterminado es`None`(Si no se proporciona, el sdk lo buscará en la variable de entorno`ARYN_API_KEY`o buscará en aryn\_config como se especificó anteriormente).
+    * `aryn_config`: Un objeto ArynConfig (definido en[aryn\_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), utilizado para encontrar una clave api. Si`aryn_api_key`está configurado, anulará esto. El ArynConfig predeterminado busca en la variable de entorno`ARYN_API_KEY`y luego en el archivo`~/.aryn/config.yaml`. El valor predeterminado es None (aryn-sdk buscará en el parámetro aryn\_api\_key, en tus variables de entorno y luego en`~/.aryn/config.yaml`).
+    * `ssl_verify`: Un`bool`que controla si el cliente verifica el certificado SSL del servidor DocParse elegido. ssl\_verify es`True`por defecto, aplicando la verificación SSL.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    import time
+    from aryn_sdk.partition import partition_file_async_result
+
+    # Poll for the results
+    while True:
+        result = partition_file_async_result(task_id)
+        if result["task_status"] != "pending":
+            break
+        time.sleep(1)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un diccionario como el del ejemplo a continuación que contiene "task\_status". Cuando "task\_status" es "done", el diccionario devuelto también contiene "result" que contiene lo que se habría devuelto si`partition_file`se hubiera llamado directamente. Si hay un error al particionar el archivo en sí, entonces "task\_status" seguirá siendo "done" pero el "result" contendrá un campo "error" indicando qué salió mal.
+
+    "task\_status" puede ser "done" o "pending".<br />
+
+    ```json
+    {
+      "task_status":"done",
+      "result": ...
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"This async action requires you to upgrade your account plan"`
+      * Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+    * `aryn_sdk.partition.partition.PartitionTaskNotFoundError`. Razón:`"No such task"`
+      * Fix: Check to make sure the task\_id specified is correct.
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón:`Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+### partition\_file\_async\_cancel
+
+Cancela la tarea asociada con el task\_id especificado.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `task_id`: Requerido. Una cadena del id de tarea a cancelar.
+    * `aryn_api_key`: Una clave API de Aryn, proporcionada como una cadena. Puedes obtener una gratis en[aryn.ai/get-started](https://www.aryn.ai/get-started). El valor predeterminado es`None`(Si no se proporciona, el sdk lo buscará en la variable de entorno`ARYN_API_KEY`o buscará en aryn\_config como se especificó anteriormente).
+    * `aryn_config`: Un objeto ArynConfig (definido en[aryn\_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), utilizado para encontrar una clave api. Si`aryn_api_key`está configurado, anulará esto. El ArynConfig predeterminado busca en la variable de entorno`ARYN_API_KEY`y luego en el archivo`~/.aryn/config.yaml`. El valor predeterminado es None (aryn-sdk buscará en el parámetro aryn\_api\_key, en tus variables de entorno y luego en`~/.aryn/config.yaml`).
+    * `ssl_verify`: Un`bool`que controla si el cliente verifica el certificado SSL del servidor DocParse elegido. ssl\_verify es`True`por defecto, aplicando la verificación SSL.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file_async_submit, partition_file_async_cancel
+    task_id = partition_file_async_submit(
+                "path/to/file.pdf",
+                text_mode="standard_ocr",
+                extract_table_structure=True,
+                extract_images=True,
+            )["task_id"]
+
+    partition_file_async_cancel(task_id)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Sin valor de retorno. Las tareas asincrónicas solo pueden cancelarse con éxito una vez. Una vez que una tarea ha sido cancelada, cualquier llamada`partition_file_async_result`utilizando el id de esa tarea lanzará una excepción.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"This async action requires you to upgrade your account plan"`
+      * Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+    * `aryn_sdk.partition.partition.PartitionTaskNotFoundError`. Razón:`"No such task"`
+      * Fix: Check to make sure the task\_id specified is correct.
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón:`Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+### partition\_file\_async\_list
+
+Lista todas las tareas de partition\_file que aún se están ejecutando en tu cuenta.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `aryn_api_key`: Una clave API de Aryn, proporcionada como una cadena. Puedes obtener una gratis en[aryn.ai/get-started](https://www.aryn.ai/get-started). El valor predeterminado es`None`(Si no se proporciona, el sdk lo buscará en la variable de entorno`ARYN_API_KEY`o buscará en aryn\_config como se especificó anteriormente).
+    * `aryn_config`: Un objeto ArynConfig (definido en[aryn\_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), utilizado para encontrar una clave api. Si`aryn_api_key`está configurado, anulará esto. El ArynConfig predeterminado busca en la variable de entorno`ARYN_API_KEY`
+      y luego en el archivo `~/.aryn/config.yaml`. El valor predeterminado es None (aryn-sdk buscará en el parámetro aryn\_api\_key, en sus
+      variables de entorno y luego en `~/.aryn/config.yaml`).
+    * `ssl_verify`: Un `bool` que controla si el cliente verifica el certificado SSL del servidor DocParse elegido.
+      ssl\_verify es `True` por defecto, aplicando la verificación SSL.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file_async_list
+
+    l = partition_file_async_list()
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un diccionario como el que se muestra a continuación que mapea task\_ids a un diccionario que contiene detalles de la tarea respectiva.
+
+    ```json
+    {
+        "aryn:t-sc0v0lglkauo774pioflp4l": {
+            "task_status": "pending"
+        },
+        "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
+            "task_status": "pending"
+        }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón: `"This async action requires you to upgrade your account plan"`
+      * Fix: Please upgrade your account [aquí](https://console.aryn.ai/billing)
+    * `HTTPError: Error:status_code 403`. Razón: `"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón: `"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón: `"Expired Aryn API key"`
+      * Fix: Please get a new API key [aquí](https://console.aryn.ai/api-keys).
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón: `Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+## Funciones Auxiliares
+
+### convert\_image\_element
+
+Convierte un elemento de imagen a un formato más utilizable. Si no se especifica un formato, crea un objeto de imagen PIL. Si se especifica un formato, devuelve los bytes de la imagen en ese formato. Si `b64encode` se establece en `True`, codifica los bytes en base64 y los devuelve como una `string`.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `elem`: Requerido. Un elemento de imagen del campo `elements` de una respuesta `partition_file`.
+    * `format`: Una `string` que especifica el formato de salida de los bytes. El valor predeterminado es `PIL`.
+    * `b64encode`: Un `boolean` que cuando se establece en True habilita la codificación base64 de los bytes de salida de esta función. El formato no puede ser `PIL` cuando esta opción es `True`. El valor predeterminado es `False`.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, convert_image_element
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            extract_images=True
+        )
+    image_elts = [e for e in data['elements'] if e['type'] == 'Image']
+
+    pil_img = convert_image_element(image_elts[0])
+    jpg_bytes = convert_image_element(image_elts[1], format='JPEG')
+    png_str = convert_image_element(image_elts[2], format="PNG", b64encode=True)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Ya sea un objeto PIL `Image`, bytes de una imagen, o una imagen codificada en base64 como una `str`.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `ValueError` - "b64encode era True pero el formato era PIL. No se puede codificar en base64 una imagen PIL".
+      * Fix: If you're calling the function with a PIL image, please set b64encode to False.
+  </Accordion>
+</AccordionGroup>
+
+### draw\_with\_boxes
+
+Crea una lista de imágenes del PDF proporcionado, una para cada página, con los cuadros delimitadores detectados por el particionador dibujados en ellas.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `pdf_file`: Requerido. Un archivo PDF abierto en modo binario o una ruta a un archivo PDF expresada como una `string` o un objeto `PathLike` sobre el cual dibujar.
+      -`partitioning_data`: Requerido. La salida de `partition_file`.
+    * `draw_table_cells`: Un booleano que cuando es `True`, hace que la función dibuje celdas de tablas detectadas individualmente. Cuando es `False`, los cuadros delimitadores de las celdas de la tabla no se dibujan, pero los cuadros delimitadores externos de las tablas y los cuadros delimitadores de todos los demás elementos aún se dibujan. El valor predeterminado es False.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, draw_with_boxes
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            aryn_api_key="MY-ARYN-API-KEY",
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+    pages = draw_with_boxes("my-favorite-pdf.pdf", data, draw_table_cells=True)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una lista de imágenes de páginas del PDF, cada una con cuadros delimitadores dibujados.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * Lanzará una excepción si la función no se llama con un archivo PDF.
+  </Accordion>
+</AccordionGroup>
+
+### table\_elem\_to\_dataframe
+
+Crea un DataFrame de `pandas` que representa los datos tabulares dentro del elemento de tabla proporcionado. Si el elemento no es de tipo `table` o no contiene datos de tabla, devuelve `None` en su lugar.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `elem`: Requerido. Un elemento del campo 'elements' de una respuesta `partition_file`.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, table_elem_to_dataframe
+
+    with open("partition-me.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+
+    # Find the first table and convert it to a dataframe
+    df = None
+    for element in data['elements']:
+        if element['type'] == 'table':
+            df = table_elem_to_dataframe(element)
+            break
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un DataFrame de Pandas que representa los datos tabulares dentro del elemento de tabla proporcionado. Si el elemento no es de tipo 'table' o no contiene datos de tabla, devuelve None en su lugar.
+  </Accordion>
+</AccordionGroup>
+
+### table\_elem\_to\_html
+
+Convierte los datos tabulares dentro del elemento de tabla proporcionado en una cadena HTML. Si el elemento no es de tipo `table` o no contiene datos de tabla, devuelve `None` en su lugar.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `elem`: Requerido. Un elemento del campo 'elements' de una respuesta `partition_file`.
+    * `pretty`: Un booleano que indica si se debe formatear el HTML devuelto. El valor predeterminado es `False`.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, table_elem_to_html
+
+    with open("partition-me.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+
+    # Find the first table and convert it to a dataframe
+    html_str = None
+    for element in data['elements']:
+        if element['type'] == 'table':
+            html_str = table_elem_to_html(element)
+            break
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una cadena HTML que contiene el contenido del elemento de tabla o `None` si el elemento proporcionado no es una tabla. La cadena HTML contendrá solo la etiqueta de tabla, comenzando con `<table>` y terminando con `</table>`.
+  </Accordion>
+</AccordionGroup>
+
+### tables\_to\_pandas
+
+Para cada elemento de tabla en la respuesta de particionamiento proporcionada, crea un DataFrame de pandas que representa los datos tabulares. Devuelve una lista que contiene todos los elementos, con las tablas emparejadas con sus DataFrames correspondientes.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `data`: Una respuesta de `partition_file`
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, tables_to_pandas
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            aryn_api_key="MY-ARYN-API-KEY",
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+    elts_and_dataframes = tables_to_pandas(data)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una lista de tuplas, donde cada tupla contiene un elemento del campo 'elements' de una respuesta `partition_file` y un DataFrame de Pandas que representa los datos tabulares dentro del elemento de tabla proporcionado. Si el elemento no es de tipo 'table' o no contiene datos de tabla, el DataFrame será `None`.
+  </Accordion>
+</AccordionGroup>
+
+### tables\_to\_html
+
+Para cada elemento de tabla en la respuesta de particionamiento proporcionada, crea una cadena HTML que representa los datos tabulares. Devuelve una lista que contiene todos los elementos, con las tablas emparejadas con su HTML correspondiente.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `data`: Una respuesta de `partition_file`
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.partition import partition_file, tables_to_html
+
+    with open("my-favorite-pdf.pdf", "rb") as f:
+        data = partition_file(
+            f,
+            aryn_api_key="MY-ARYN-API-KEY",
+            text_mode="standard_ocr",
+            extract_table_structure=True,
+            extract_images=True
+        )
+    elts_and_html = tables_to_html(data)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Una lista de tuplas, donde cada tupla contiene un elemento del campo 'elements' de una respuesta `partition_file` y una cadena HTML que representa los datos tabulares dentro del elemento de tabla proporcionado. Si el elemento no es de tipo 'table' o no contiene datos de tabla, el HTML será `None`.
+  </Accordion>
+</AccordionGroup>

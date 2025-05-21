@@ -1,0 +1,111 @@
+---
+- title: "Tutorial: Extracción de Tablas"
+- description: Extraer datos estructurados de tablas de PDFs usando Aryn DocParse
+- icon: table
+---
+
+En[this example](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing), usaremos DocParse para extraer una tabla de flujo de efectivo (mostrada a continuación) del documento financiero 10-K de 3M, y convertirla en un dataframe de pandas.
+
+<Frame>
+  <img src="../../images/3m_10k_extract.png" />
+</Frame>
+
+## Extrayendo Celda de Tabla de DocParse
+
+```python table_demo.py
+import aryn_sdk
+from aryn_sdk.partition import partition_file, tables_to_pandas
+import pandas as pd
+from io import BytesIO
+
+file = open('my-document.pdf', 'rb')
+aryn_api_key = 'YOUR-KEY-HERE'
+
+## Make a call to Aryn DocParse
+## param extract_table_structure (boolean): extract tables and their structural content. default: False
+## returns: JSON object with elements representing information inside the PDF
+partitioned_file = partition_file(file, aryn_api_key, extract_table_structure=True)
+```
+
+Si inspeccionas la variable partitioned\_file, notarás que es un objeto JSON grande con detalles sobre todos los componentes en el PDF (consulta[this page](../output_structure)para entender el esquema del objeto JSON devuelto en detalle). A continuación, destacamos el elemento`table`que contiene la información sobre la tabla en la página.
+
+```json output.json
+{'type': 'table',
+   'bbox': [0.09049919577205882,
+    0.35081939697265624,
+    0.8906761259191176,
+    0.5200832852450284],
+   'properties': {'score': 0.9009878635406494,
+    'title': None,
+    'columns': None,
+    'rows': None,
+    '_element_index': 7,
+    'page_number': 1},
+   'text_representation': None,
+   'table': {'cells': [{'content': 'Years ended December 31 (Millions)',
+      'rows': [0],
+      'cols': [0],
+      'is_header': True,
+      'bbox': {'x1': 0.09167566636029412,
+       'y1': 0.3512739424272017,
+       'x2': 0.355205078125,
+       'y2': 0.37081939697265626},
+      'properties': {}},
+     {'content': '2018',
+      'rows': [0],
+      'cols': [1],
+      'is_header': True,
+      'bbox': {'x1': 0.5346168428308824,
+       'y1': 0.3512739424272017,
+       'x2': 0.6546168428308824,
+       'y2': 0.37081939697265626},
+      'properties': {}},
+    ... ]}}
+```
+
+En particular, veamos el campo`cells`que es un array de objetos de celda que representan cada una de las celdas en la tabla. Centrémonos en el primer elemento de esa lista.
+
+```json cells.json
+{'cells': [{'content': 'Years ended December 31 (Millions)',
+      'rows': [0],
+      'cols': [0],
+      'is_header': True,
+      'bbox': {'x1': 0.09167566636029412,
+       'y1': 0.3512739424272017,
+       'x2': 0.355205078125,
+       'y2': 0.37081939697265626},
+      'properties': {}}, ... }
+
+```
+
+## Mostrando la Tabla
+
+Aquí hemos detectado la primera celda, su cuadro delimitador (que indica las coordenadas de la celda en el PDF), si es una celda de encabezado y su contenido. Luego puedes procesar este JSON como desees para un análisis adicional. En[the notebook](https://colab.research.google.com/drive/1Qpd-llPC-EPzuTwLfnguMnrQk0eclyqJ?usp=sharing)usamos la función`tables_to_pandas`para convertir el JSON en un dataframe de pandas y luego realizar algunos análisis sobre él:
+
+```python display_table.py
+pandas = tables_to_pandas(partitioned_file)
+
+tables = []
+#pull out the tables from the list of elements
+for elt, dataframe in pandas:
+    if elt['type'] == 'table':
+        tables.append(dataframe)
+        
+supplemental_income = tables[0]
+display(supplemental_income)
+```
+
+La salida se muestra a continuación:
+
+|    | Años terminados el 31 de diciembre (Millones)                           | 2018     | 2017     | 2016     |
+| -: | :---------------------------------------------------------------------- | :------- | :------- | :------- |
+|  0 | Principales Categorías de Flujo de Efectivo GAAP                        |          |          |          |
+|  1 | Efectivo neto proporcionado por actividades operativas                  | \$ 6,439 | 6,240    | \$ 6,662 |
+|  2 | Efectivo neto proporcionado por (utilizado en) actividades de inversión | 222      | (3,086)  | (1,403)  |
+|  3 | Efectivo neto utilizado en actividades de financiamiento.               | (6,701)  | (2,655)  | (4,626)  |
+|  4 | Flujo de Efectivo Libre (medida no GAAP)                                |          |          |          |
+|  5 | Efectivo neto proporcionado por actividades operativas                  | \$ 6,439 | \$ 6,240 | 6,662    |
+|  6 | Compras de propiedad, planta y equipo (PP\&E                            | (1,577)  | (1,373)  | (1,420)  |
+|  7 | Flujo de efectivo libre                                                 | \$ 4,862 | \$ 4,867 | \$ 5,242 |
+|  8 | Ingreso neto atribuible a 3M                                            | \$ 5,349 | \$ 4,858 | \$ 5,050 |
+|  9 | Conversión de flujo de efectivo libre                                   | 91 %     | 100 %    | 104 %    |

@@ -1,0 +1,157 @@
+---
+- title: Consulta
+- description: Documentación sobre cómo llamar a las API de Consulta utilizando el
+    SDK de Aryn
+---
+
+A continuación encontrará la documentación de las funciones que llaman a las API de Consulta utilizando el SDK. Todos los parámetros son opcionales a menos que se especifique lo contrario.
+
+## Búsqueda
+
+Busca en un conjunto de documentos y obtiene documentos o elementos que coinciden con sus criterios de búsqueda.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    * `docset_id`: Una cadena que especifica el id del conjunto de documentos sobre el que está buscando.
+    * `query`: Una cadena que especifica qué término está buscando dentro del contenido de sus documentos. El parámetro query\_type especificado a continuación controlará exactamente cómo se utiliza este parámetro de consulta para buscar en sus documentos.
+    * `query_type`: Una enumeración que puede ser`keyword`,`vector`, o`lexical`:
+      * Cuando se especifica`keyword`, la llamada de búsqueda realizará una coincidencia de subcadena y devolverá resultados que contienen cadenas que contienen el término de consulta especificado.
+      * Cuando se especifica`vector`, la llamada de búsqueda incrustará internamente la consulta con la función de incrustación asociada al conjunto de documentos sobre el que está consultando y realizará una búsqueda de k vecinos más cercanos para recuperar los resultados.
+      * Cuando se especifica`lexical`, la llamada de búsqueda realizará una coincidencia exacta de cadena y devolverá resultados donde la cadena de consulta aparece como una palabra independiente.
+    * `properties_filter`: Una cadena que especifica una expresión booleana. Esta expresión especifica la condición a utilizar al extraer documentos o elementos del conjunto de documentos. La expresión booleana es una cadena que consiste en condiciones separadas por las palabras clave AND/OR. Los siguientes son algunos ejemplos:
+      * "(company\_name='Microsoft' AND year='2024')"
+      * "(company\_ticker='AMZN' AND year='2023') AND (quarter='Q2' or quarter='Q4')"
+    * `k`: El número de registros a devolver.
+    * `return_type`: Una enumeración que puede ser`doc`o`element`. Cuando se especifica`doc`, se devuelven los documentos que coinciden con los criterios de búsqueda. Cuando se especifica`element`, se devuelven secciones específicas del documento (es decir, elementos).
+    * `page_token`: Una cadena utilizada para fines de paginación. Si se proporciona, esto indicará al servidor dónde comenzar el siguiente conjunto de registros a devolver. Válido por 24 horas.
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.client.client import Client, SearchRequest
+
+    results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter=[your-filter-string], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto SearchResponse que contiene los siguientes atributos:
+
+    * `results`: Una lista que contiene los documentos o elementos que coincidieron con los criterios de búsqueda.
+    * `query_embedding`: Si el query\_type seleccionado es 'vector', este campo indica el vector de incrustación que se utilizó para realizar la búsqueda.
+    * `next_page_token`: El token de paginación. Si es None, no hay más resultados de búsqueda para recuperar. Si no es None, el llamador puede usar esto para recuperar más resultados para la consulta de búsqueda particular.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    Errores de usuario:
+
+    * `HTTPError: Error:status_code 403`. Razón:`"No Aryn API Key provided"`
+      * Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Invalid Aryn API key"`
+      * Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+    * `HTTPError: Error:status_code 403`. Razón:`"Expired Aryn API key"`
+      * Fix: Please get a new API key [aquí](https://console.aryn.ai/api-keys).
+    * `HTTPError: Error:status_code 404`. Razón:`"Docset not found error"`
+      * Fix: Please try again with a valid docset id.
+    * `HTTPError: Error:status_code 400`. Razón:`"Incorrect input"`
+      * Fix: Please try again with correct input.
+
+    Otros errores:
+
+    * `HTTPError: Error:status_code 5xx`. Razón:`Internal Server Error`
+  </Accordion>
+</AccordionGroup>
+
+## Generar Plan
+
+Genera un plan de consulta para la consulta dada, pero no lo ejecuta.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="query" type="Query" required>
+      Un objeto`Query`que describe la consulta para construir y devolver un`LogicalPlan`para.
+    </ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.client.client import Client, generate_plan, Query
+    c = Client()
+    c.generate_plan(query=Query(
+        docset_id="aryn:ds-u3915kxzdi8fosmv542ynv4",
+        query="What was the breakdown of aircraft types for incidents with substantial damage?"
+    ))
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto`LogicalPlan`.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+## Editar Plan
+
+Edita un plan.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="query" type="Query" required>La consulta a editar.</ParamField>
+    <ParamField path="feedback" type="string" required>Los cambios al plan que desea.</ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.client.client import Client, edit_plan
+    c = Client()
+    c.edit_plan(query=myQuery, feedback="Add a filter to select just documents that mention inflation.")
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Un objeto`LogicalPlan`.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>
+
+## Consulta
+
+Ejecuta una consulta ya sea desde un`Query`basado en una cadena o un`Query`basado en un plan.
+
+<AccordionGroup>
+  <Accordion title="Parámetros">
+    <ParamField path="query" type="Query" required>La consulta a ejecutar.</ParamField>
+  </Accordion>
+
+  <Accordion title="Ejemplo">
+    ```python
+    from aryn_sdk.client.client import Client, query
+    c = Client()
+    c.query(query=myQuery)
+    ```
+  </Accordion>
+
+  <Accordion title="Valor de Retorno">
+    Ya sea un`QueryResult`o un`Iterator[QueryEvent]`.
+  </Accordion>
+
+  <Accordion title="Excepciones">
+    * `HTTPError 403`: "No se proporcionó clave API de Aryn"
+    * `HTTPError 403`: "Clave API de Aryn inválida"
+    * `HTTPError 403`: "Clave API de Aryn expirada"
+    * `HTTPError 5xx`: Error Interno del Servidor
+  </Accordion>
+</AccordionGroup>

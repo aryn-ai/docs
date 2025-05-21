@@ -1,0 +1,121 @@
+---
+- title: "Tutorial: Extracción de Imágenes"
+- description: Usa Aryn DocParse para extraer una imagen de un manual de batería
+- icon: image
+---
+
+## Introducción
+
+En [este ejemplo](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing), usaremos DocParse para extraer una imagen de un manual de batería. Revisaremos los fragmentos de código importantes a continuación para ver qué está sucediendo.
+
+Centrémonos en el siguiente código que hace una llamada a la API de Aryn DocParse para extraer la imagen del PDF:
+
+```python add_document.py
+import aryn_sdk
+from aryn_sdk.partition import partition_file, tables_to_pandas
+import pandas as pd
+from io import BytesIO
+
+file = open('my-document.pdf', 'rb')
+aryn_api_key = 'YOUR-KEY-HERE'
+
+## Make a call to Aryn DocParse 
+## param extract_images (boolean):  extract image contents. default: False
+## returns: JSON object with elements representing information inside the PDF
+partitioned_file = partition_file(file, aryn_api_key, extract_images=True)
+```
+
+Si inspeccionas la variable partitioned\_file, notarás que es un objeto JSON grande con detalles sobre todos los componentes en el PDF (consulta [this page](../output_structure) para entender el esquema del objeto JSON devuelto en detalle). A continuación, destacamos el `Image` elemento que contiene la información sobre algunas de las imágenes en la página:
+
+```json docparse_output.json
+[
+  {
+    "type": "Section-header",
+    "bbox": [
+      0.06470742618336398,
+      0.08396875554865056,
+      0.3483343505859375,
+      0.1039327656139027
+    ],
+    "properties": {
+      "score": 0.7253036499023438,
+      "page_number": 1
+    },
+    "text_representation": "Make AC Power Connections\n"
+  },
+  {
+    "type": "Image",
+    "bbox": [
+      0.3593270694508272,
+      0.10833765896883878,
+      0.6269251924402574,
+      0.42288088711825284
+    ],
+    "properties": {
+      "score": 0.7996300458908081,
+      "image_size": [
+        475,
+        712
+      ],
+      "image_mode": "RGB",
+      "image_format": null,
+      "page_number": 1
+    },
+    "text_representation": "",
+    "binary_representation": "AAAAAA.."
+    },
+]
+```
+
+En particular, veamos el elemento que destaca la Imagen que ha sido detectada.
+
+```json image_output.json
+{
+    "type": "Image",
+    "bbox": [
+      0.3593270694508272,
+      0.10833765896883878,
+      0.6269251924402574,
+      0.42288088711825284
+    ],
+    "properties": {
+      "score": 0.7996300458908081,
+      "image_size": [
+        475,
+        712
+      ],
+      "image_mode": "RGB",
+      "image_format": null,
+      "page_number": 1
+    },
+    "text_representation": "",
+    "binary_representation": "AAAAAA.."
+    }
+```
+
+## Extrayendo la Imagen
+
+Este objeto JSON representa una de las imágenes en el PDF. Notarás que se devuelve la representación binaria de la imagen, su cuadro delimitador (que indica las coordenadas de la imagen en el PDF) y ciertas otras propiedades (image\_mode, image\_size, etc.). Luego puedes procesar este JSON como desees para un análisis adicional. En el notebook, usamos el módulo Pillow Image de Python para mostrar la imagen extraída por sí sola.
+
+```python image_output.py
+## extract all the images from the JSON and print out the JSON representation of the first image
+images = [e for e in partitioned_file['elements'] if e['type'] == 'Image']
+first_image = images[0]
+
+## read in the image and display it
+image_width = first_image['properties']['image_size'][0]
+image_height = first_image['properties']['image_size'][1]
+image_mode = first_image['properties']['image_mode']
+image = Image.frombytes(image_mode,  (image_width, image_height), base64.b64decode(first_image['binary_representation']))
+
+#display the image
+image 
+```
+
+## Imagen de Salida
+
+Aquí está la imagen de salida después de la extracción. Como puedes ver, la imagen ha sido extraída exitosamente del PDF con claridad.
+
+<Frame>
+  <img src="/images/board.png" />
+</Frame>

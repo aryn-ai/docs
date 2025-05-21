@@ -1,0 +1,66 @@
+---
+- title: Visión general del motor de consultas
+- description: Visión general de cómo el motor de consultas genera planes y los ejecuta
+- icon: bolt
+---
+
+El motor de consultas de Aryn consiste en una serie de piezas que trabajan juntas para proporcionar un sistema de procesamiento de consultas en lenguaje natural de extremo a extremo sobre datos complejos y no estructurados. La arquitectura de este sistema también se describe en nuestro artículo de la Conferencia para Sistemas de Datos Innovadores (CIDR) titulado [The Design of an LLM-powered Unstructured Analytics System](https://arxiv.org/abs/2409.00847).
+
+Si solo quieres empezar a consultar tus datos, no necesitas conocer todos estos detalles específicos - simplemente [usa la interfaz de usuario de Workspaces](aryn-platform/querying-data/deep-analytics/using_workspaces).
+
+## Planificación de consultas
+
+El planificador de consultas agéntico en el motor de Aryn ejecuta consultas contra DocSets. Durante la planificación de consultas, Aryn proporciona al planificador el Esquema de Propiedades del DocSet, que consiste en las propiedades contenidas en los documentos, junto con sus descripciones, tipos de datos y valores de muestra, junto con un campo de "representación de texto" que representa todo el contenido de cada Documento. El planificador de consultas agéntico creará entonces un plan optimizado, que es un grafo acíclico dirigido (DAG) de los operadores de consulta de Aryn.
+
+Las interfaces de usuario como Workspaces de Aryn te permiten modificar fácilmente los planes de consulta usando lenguaje natural, si se necesita una edición.
+
+### Operadores de consulta
+
+Aryn proporciona un conjunto de operadores lógicos de alto nivel para propósitos de planificación de consultas, y reescribe el plan lógico resultante en operadores físicos de bajo nivel antes de la ejecución. Esto lo hace más robusto para ejecutar, y más fácil para que entiendas el plan y depures la ejecución, si es necesario.
+
+Muchos operadores lógicos simples se mapean uno a uno con operadores físicos, incluyendo operaciones de un solo paso por documento como mapeo, filtro y extracción-llm, pero para operaciones que abarcan múltiples documentos, hemos encontrado que a menudo funciona mejor tener operadores más específicos en lugar de primitivas de bajo nivel.
+
+#### Operadores de base de datos
+
+Estos operadores de consulta utilizan la funcionalidad de indexación y base de datos subyacente de Aryn, haciéndolos rápidos y eficientes para recorrer y procesar datos.
+
+| Operador                          | Descripción                                                                                                                                                             |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Filtro                            | Filtra registros basados en un filtro de rango o coincidencia. Puede combinarse con el operador de Consulta de Base de Datos.                                           |
+| Contar                            | Devuelve un recuento del número de registros proporcionados en la entrada. Opcionalmente puede contar los registros distintos.                                          |
+| Límite                            | Limita el número de registros devueltos.                                                                                                                                |
+| Matemáticas                       | Realiza operaciones aritméticas en dos números de entrada. Devuelve un número.                                                                                          |
+| Consultar Base de Datos           | Recupera datos del índice de palabras clave de Aryn utilizando consultas de texto completo, a nivel de término y otros tipos de consulta. Utiliza OpenSearch Query DSL. |
+| Consultar Base de Datos Vectorial | Recupera datos del índice vectorial de Aryn utilizando búsqueda vectorial, y devuelve los k mejores registros. Utiliza OpenSearch Query DSL.                            |
+| Ordenar                           | Ordena los registros basándose en el valor de una Propiedad.                                                                                                            |
+| Agrupar Por                       | Devuelve el recuento de valores únicos para una clave de Propiedad única dada                                                                                           |
+
+#### Operadores semánticos
+
+Estos operadores de consulta utilizan Modelos de Lenguaje Grande (LLMs) para permitir un procesamiento flexible que requiere la comprensión de detalles semánticos o la generación de nuevo texto. Estas operaciones incurren en latencia adicional debido a las llamadas al LLM, y se recomienda filtrar los registros en un plan de consulta antes de usar un operador semántico.
+
+| Operador            | Descripción                                                                                                       |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| LLM Extraer Entidad | Añade una nueva Propiedad extrayendo información de una representación de texto o Propiedad existente.            |
+| Filtro LLM          | Filtra registros basados en el valor de un campo. Se usa cuando se necesita la comprensión semántica de un campo. |
+| Resumir Datos       | Esta operación genera una respuesta en inglés a una solicitud basada en los datos de entrada proporcionados.      |
+
+## Ejecutando planes de consulta
+
+Después de la reescritura y optimización del plan, el plan de consulta lógico se compila en el plan físico para su ejecución. La ejecución en grandes conjuntos de datos se beneficia del procesamiento distribuido, permitiendo a Aryn escalar las cargas de trabajo con una sobrecarga mínima.
+
+### Salida
+
+Aryn devolverá un [resultado](aryn-platform/querying-data/deep-analytics/query_engine_overview#query-result) y [traza](aryn-platform/querying-data/deep-analytics/query_engine_overview#query-trace) de una ejecución de consulta. También puedes elegir transmitir la traza de la consulta durante la ejecución.
+
+#### Resultado de la consulta
+
+Dependiendo de la consulta, Aryn devolverá resultados en diferentes formatos:
+
+* Lista de documentos: La salida de una consulta puede ser un nuevo DocSet. Por ejemplo, una consulta podría filtrar un DocSet y devolver el conjunto filtrado.
+* Table: The output of a query can be a table with derived values, like counts.
+* String: The output of a query can be a natural lanauge answer, like a summary or question-answering text.
+
+#### Traza de la consulta
+
+Aryn incluye una traza de consulta con los resultados de la consulta, que es una lista de Documentos en el DocSet que fueron procesados en cada etapa/nodo del plan de consulta. Esto es útil cuando se depura la consulta, o se quiere validar qué documentos fueron incluidos. Si estás transmitiendo resultados, obtendrás una Traza de Documento en tiempo real a medida que los Documentos se procesan durante la ejecución de la consulta.

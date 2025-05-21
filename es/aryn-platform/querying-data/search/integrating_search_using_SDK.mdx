@@ -1,0 +1,42 @@
+---
+- title: Integrando su aplicación usando el SDK de Aryn
+- description: Usando el SDK de Aryn para buscar en DocSets
+- icon: magnifying-glass-arrow-right
+---
+
+Además de usar el motor de consulta agéntico de Aryn, puede ejecutar consultas de búsqueda directa en su DocSet. Aryn está construido sobre OpenSearch y aprovecha su indexación de palabras clave y vectores para este conjunto de características.
+
+Puede agregar fácilmente capacidades de búsqueda a su aplicación usando el SDK de Aryn. Para obtener más información sobre el uso de la interfaz de usuario de Aryn para búsquedas ad hoc,[haga clic aquí](aryn-platform/querying-data/search/using_search_ui).
+
+### Ejecutando una consulta de búsqueda
+
+Puede usar la función[search](https://docs.aryn.ai/sdk-reference/query#example)en el SDK de Aryn para ejecutar una consulta de búsqueda en su DocSet:
+
+```
+from aryn_sdk.client.client import Client, SearchRequest
+
+myClient = Client()
+results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[query-type], return_type=[DOC|ELEMENT], k=[num-results-to-return]))
+```
+
+**Tipo de Consulta**
+
+Puede elegir diferentes formas de buscar en su DocSet:
+
+* Hybrid: Combines keyword and vector search.
+* Vector (Semántico): Encuentra elementos similares en un conjunto de datos comparando sus representaciones numéricas (incrustaciones vectoriales) usando un algoritmo k-NN.
+* Lexical: Uses the BM25 algorithm, a ranking function used by search engines to estimate the relevance of documents to a given search query. The search call will perform an exact string match and return results where the query string shows up as a standalone word.
+* Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
+
+**Filtro de Propiedades**
+
+Puede filtrar sus resultados de búsqueda usando las Propiedades de su DocSet. El filtro es una expresión booleana que especifica la condición a usar. Es una cadena que consiste en condiciones separadas por las palabras clave AND/OR. Los siguientes son algunos ejemplos:
+
+```
+“(company_name=‘Microsoft’ AND year=‘2024’)”
+“(company_ticker=‘AMZN’ AND year=‘2023’) AND (quarter=‘Q2’ OR quarter=‘Q4’)”
+```
+
+**Tipo de Retorno**
+
+Puede devolver fragmentos de Documento (elementos) con`element`o documentos completos con `doc`.

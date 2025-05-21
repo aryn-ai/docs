@@ -1,0 +1,76 @@
+---
+- title: Inicio rápido
+- description: Comenzando con Aryn DocParse
+---
+
+Puede usar Aryn DocParse para dividir y extraer fácilmente datos de documentos complejos, y devolver una salida estructurada en JSON o Markdown. DocParse puede procesar más de 30 formatos de documentos, incluyendo PDF, Microsoft Word (.docx y .doc), Microsoft PowerPoint (.pptx y .ppt) y [más](docparse/formats_supported).
+
+Le mostramos cómo comenzar con DocParse a través de la interfaz de usuario de DocParse, el cliente Python `aryn-sdk`, o `curl`. Para construir pipelines de ETL de documentos de múltiples etapas que usan DocParse para el análisis, visite la [documentación de Sycamore](https://sycamore.readthedocs.io/en/stable/).
+
+Para este inicio rápido, necesitará una cuenta de Aryn. Puede obtener una y usarla gratis [aquí](https://console.aryn.ai/signup/).
+
+## Usando la interfaz de usuario de DocParse
+
+Después de registrarse, vaya a la [interfaz de usuario de Aryn](http://app.aryn.ai/)y haga clic en la pestaña DocParse en la navegación izquierda para ir a la interfaz de usuario de DocParse.
+
+A continuación, seleccione un documento para analizar y elija las opciones para DocParse (por ejemplo, OCR). Haga clic en "Chunk document", y DocParse procesará las primeras 25 páginas de su PDF. Si tiene un documento más grande, use el`aryn-sdk`(la interfaz de usuario está limitada a 25 páginas por documento).
+
+Una vez que el documento esté procesado, verá una segmentación del documento visualizada con cuadros delimitadores etiquetados. Puede elegir descargar y revisar la salida JSON estructurada, que es la salida de DocParse. Además, puede descargar la visualización del PDF segmentado. Si prefiere la salida en markdown, por favor use el`aryn-sdk`.
+
+Ahora que ha visto cómo DocParse puede segmentar documentos complejos, extraer tablas y más, puede usar el`aryn-sdk`para aprovechar DocParse en su aplicación o la[Sycamore document ETL library](https://github.com/aryn-ai/sycamore)para cargar la salida en bases de datos vectoriales.
+
+Para preguntas adicionales sobre cómo empezar, por favor únase a la comunidad de Slack[aquí](https://join.slack.com/t/sycamore-ulj8912/shared_invite/zt-23sv0yhgy-MywV5dkVQ~F98Aoejo48Jg)o[envíenos un correo electrónico](mailto:info@aryn.ai).
+
+## Usando el DocParse`aryn-sdk`
+
+El DocParse`aryn-sdk`client es una biblioteca de Python ligera que llama a Aryn DocParse y proporciona algunos métodos de utilidad alrededor de él. Es la forma más fácil de añadir Aryn DocParse a sus aplicaciones o pipelines de procesamiento de datos personalizados. Puede ver un ejemplo en[este notebook](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerPython.ipynb).
+
+Necesitará usar la clave API de su cuenta con el SDK de Aryn. Para recuperarla, haga clic en la pestaña de clave API en la navegación izquierda en la interfaz de usuario de Aryn.
+
+Para más información, consulte la[documentación del SDK de Aryn](/es/docparse/aryn_sdk)o[referencia de la API](/api-reference/endpoint/docparse).
+
+## Usando`curl`
+
+Recomendamos usar el`aryn-sdk`, pero también puede usar`curl`para acceder a Aryn DocParse directamente.
+
+`curl`un documento de ejemplo para usar con DocParse, si aún no tiene uno.
+
+```bash
+curl http://arxiv.org/pdf/1706.03762 -o document.pdf
+```
+
+Cambie`PUT API KEY HERE`a continuación por su clave API de Aryn. Si tiene un documento diferente, cambie`@document.pdf`a`@/path/to/your/document.pdf`a continuación.
+
+```bash
+export ARYN_API_KEY="PUT API KEY HERE"
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
+```
+
+Sus resultados han sido guardados en`document.json`.
+
+```bash
+cat document.json
+```
+
+### Diferentes Formatos de Archivo
+
+```bash
+export ARYN_API_KEY="PUT API KEY HERE"
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.docx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.doc" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pptx" | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.ppt" | tee document.json
+```
+
+## Próximos pasos
+
+* Para cargar sus documentos analizados en una base de datos vectorial, use[Sycamore](https://github.com/aryn-ai/sycamore)para crear un pipeline de ETL de documentos en Python para procesamiento y carga adicionales. Sycamore es una biblioteca de ETL de documentos escalable y de código abierto que se integra con DocParse. Puede ver un ejemplo de notebook[aquí](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb).
+
+* Para usar DocParse con Langchain, puede consultar[este ejemplo de notebook aquí](https://github.com/aryn-ai/sycamore/blob/main/notebooks/ArynPartitionerWithLangchain.ipynb).
+
+* Para extraer tablas de sus documentos y ejecutar análisis sobre ellas, visite[aquí](docparse/tutorials/tables).
+
+* Para extraer imágenes de sus documentos y procesarlas directamente, visite[aquí](docparse/tutorials/images).
+
+* Si está interesado en construir un sistema de extremo a extremo para consultar y buscar en sus documentos,[aprenda más sobre la Plataforma Aryn](aryn-platform/core_concepts). Utiliza DocParse internamente para analizar y procesar sus documentos al ingerirlos.
