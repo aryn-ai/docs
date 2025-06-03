@@ -11,8 +11,7 @@ Default is `False`.
 - `text_mode`: A string that specifies the mode to use for text extraction. The default is `inline_fallback_to_ocr`,
 which tries to extract the embedded text elementwise and falls back to performing OCR otherwise. The other options are
 `inline`, which extracts embedded text; `ocr_standard`, which uses the classical OCR pipeline; and `ocr_vision`, which
-uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users only. These text_modes have been
-deprecated: `standard`, `fine_grained`, `standard_ocr`, and `vision_ocr`.
+uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users only.
 - `text_extraction_options`: A map with string keys specifying options for text extraction.
     - `ocr_text_mode` (deprecated): A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
     - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `False`.
