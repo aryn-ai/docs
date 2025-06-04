@@ -119,11 +119,11 @@ supported languages can be found [here](./formats_supported).
 ### text_extraction_options
 A map with string keys specifying options for text extraction.
 
-#### text_extraction_options.ocr_text_mode (Deprecated)
-Use `text_mode` instead.<br />A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
-
 #### text_extraction_options.remove_line_breaks
 A boolean that specifies whether to remove line breaks from the text. Default is `False`.
+
+#### text_extraction_options.ocr_text_mode (Deprecated)
+Use `text_mode` instead.<br />A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
 
 
 ## Chunking
