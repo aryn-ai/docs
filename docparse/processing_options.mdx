@@ -11,7 +11,7 @@ our document with the following curl command.
 export ARYN_API_KEY="PUT API KEY HERE"
 curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" \
     -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" \
-    -F 'options={"extract_table_structure": true}' | tee document.json
+    -F 'options={"table_mode": "standard"}' | tee document.json
 ```
 
 All of the available options are listed below, and are optional unless specified otherwise.
@@ -199,7 +199,7 @@ Here are examples of how you can use multiple of these options in a curl command
 
 ```bash curl
 export ARYN_API_KEY="PUT API KEY HERE"
-curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"text_mode": "standard_ocr", "extract_table_structure": true, "threshold": 0.2}' | tee document.json
+curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" -F 'options={"text_mode": "standard_ocr", "table_mode": "standard", "threshold": 0.2}' | tee document.json
 ```
 
 ```python aryn_sdk.py
@@ -211,7 +211,7 @@ with open("document.pdf", "rb") as f:
     ans = partition_file(
         file=f,
         text_mode="standard_ocr",
-        extract_table_structure=True,
+        table_mode="standard",
         threshold=0.2
     )
 with open("document.json", "w") as f:
