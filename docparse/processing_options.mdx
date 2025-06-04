@@ -84,11 +84,11 @@ for their structure; as a result, table cells and their bounding boxes are not i
 A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`.
 Default is empty (`{}`)
 
-### table_extraction_options.include_additional_text
+#### table_extraction_options.include_additional_text
 Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction.
 This can be useful for working with tables that have missing or misaligned text. Default is `False`
 
-### table_extraction_options.model_selection
+#### table_extraction_options.model_selection
 String. An expression to instruct DocParse how to select the table model to use for extraction.
 
   Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table
