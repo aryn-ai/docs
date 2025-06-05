@@ -18,11 +18,6 @@ All of the available options are listed below, and are optional unless specified
 
 ## General
 
-### summarize_images
-A boolean that, when `True`, generates a summary of the images in the document and returns it as the
-`text_representation`. When `False`, images are not summarized. `Default: False`. `summarize_images` is only
-available for Pay-As-You-Go (PAYG) users.
-
 ### text_mode
 A string that specifies the mode to use for text extraction. `Default: "inline_fallback_to_ocr"`. Valid options are
 `inline`, `inline_fallback_to_ocr`, `ocr_standard`, and `ocr_vision`.
@@ -64,6 +59,11 @@ and `maximize_within_limit`. The default and recommended chunker is `context_ric
 A string controlling the output representation. `Default: "json"`, which yields an array called `elements` which
 contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include
 a field called `markdown` that contains a string representing the entire document in Markdown format.
+
+### summarize_images (PAYG Only)
+A boolean that, when `True`, generates a summary of the images in the document and returns it as the
+`text_representation`. When `False`, images are not summarized. `Default: False`. `summarize_images` is only
+available for Pay-As-You-Go (PAYG) users.
 
 ### use_ocr (Deprecated)
 Use `text_mode` instead.<br />A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model.
