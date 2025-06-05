@@ -19,9 +19,14 @@ In [this example](https://colab.research.google.com/drive/120STOQ5wGIpFUbgS7Gcld
 ```python text_demo.py
 with open(file_name, 'rb') as file:
   ## Make a call to the partitioning service and set extract_images to true.
-  partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, text_mode="standard_ocr", selected_pages=[2])
+  partitioned_file = partition_file(file, aryn_api_key, extract_images=True, extract_table_structure=True, text_mode="inline_fallback_to_ocr", selected_pages=[2])
 ```
-We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The `aryn_api_key` is your API key from Aryn. In this example, we set `text_mode` to `standard` to avoid OCR and use embedded text, and set `extract_images` and `extract_table_structure` to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2. This document is also be added to [your storage](http://app.aryn.ai/storage/), where you can visualize the labeled bounding boxes and extracted elements.
+We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The
+`aryn_api_key` is your API key from Aryn. In this example, we set `text_mode` to `inline_fallback_to_ocr` to use
+inline, embedded text when available and to use OCR otherwise, and set `extract_images` and `extract_table_structure`
+to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2. This document is also be added
+to [your storage](http://app.aryn.ai/storage/), where you can visualize the labeled bounding boxes and extracted
+elements.
 
 ### Viewing the JSON Output
 
