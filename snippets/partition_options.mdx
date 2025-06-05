@@ -4,14 +4,16 @@ specifying where the file to parse is.
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do
 set the threshold manually, we recommend starting with a value of `0.32`.
-- `extract_table_structure`: A boolean that, when `True`, enables DocParse to extract tables and their structural
-content using a purpose built table extraction model. If set to `False`, tables are still identified but
-not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
-Default is `False`.
-- `text_mode`: A string that specifies the mode to use for text extraction. The default is `inline_fallback_to_ocr`,
-which tries to extract the embedded text elementwise and falls back to performing OCR otherwise. The other options are
-`inline`, which extracts embedded text; `ocr_standard`, which uses the classical OCR pipeline; and `ocr_vision`, which
-uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users only.
+- `text_mode`: A string that specifies the mode to use for text extraction. The default is `inline_fallback_to_ocr`.
+    - `inline_fallback_to_ocr` tries to extract the embedded text elementwise and falls back to performing OCR otherwise.
+    - `inline` extracts embedded text
+    - `ocr_standard` uses the classical OCR pipeline
+    - `ocr_vision` uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users only.
+- `table_mode`: A string that specifies the mode to use for table structure extraction. The default is `none`.
+    - `none` will not extract table structure (equivalent to `extract_table_structure = False`)
+    - `standard` will use the standard hybrid table structure extraction pipeline
+    - `vision` will use a vision model to extract table structure
+    - `custom` will use the custom expression described by the model_selection parameter in the table_extraction_options
 - `text_extraction_options`: A map with string keys specifying options for text extraction.
     - `ocr_text_mode` (deprecated): A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
     - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `False`.
@@ -90,6 +92,10 @@ an api key. If aryn_api_key is set it will override this. The default ArynConfig
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
-- `use_ocr` (deprecated): A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
+- `use_ocr` (deprecated): Use `text_mode` instead. A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
 useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
 text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.
+- `extract_table_structure` (deprecated): Use `table_mode` instead. A boolean that, when `True`, enables DocParse to extract tables and their structural
+content using a purpose built table extraction model. If set to `False`, tables are still identified but
+not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
+Default is `False`.
