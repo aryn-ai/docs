@@ -653,7 +653,8 @@
                 "type": "boolean",
                 "title": "Extract Table Structure",
                 "default": false,
-                "description": "A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n"
+                "description": "Use `table_mode` instead. A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n",
+                "deprecated": true
               },
               "table_extraction_options": {
                 "type": "object",
@@ -707,11 +708,24 @@
                 "title": "Text Mode",
                 "description": "The mode to use for text extraction. Defaults to `inline_fallback_to_ocr`, which tries to use embedded text before falling back to standard_ocr. Note that the `vision_ocr` mode is only available for PAYG users.\n"
               },
+              "table_mode": {
+                    "type": "string",
+                    "enum": [
+                      "none",
+                      "standard",
+                      "vision",
+                      "custom"
+                    ],
+                    "default": "none"
+                  },
+                "title": "Table Mode",
+                "description": "The mode to use for table structure extraction. Defaults to `none`, which will not extract table structure. Note that the `vision` mode is only available for PAYG users.\n"
+              },
               "use_ocr": {
                 "type": "boolean",
                 "title": "Use OCR",
                 "deprecated": true,
-                "description": "A boolean value indicating whether to use OCR or not on the document.\n"
+                "description": "Use `text_mode` instead. A boolean value indicating whether to use OCR or not on the document.\n"
               },
               "text_extraction_options": {
                 "type": "object",
