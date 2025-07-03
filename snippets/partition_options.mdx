@@ -16,9 +16,9 @@ set the threshold manually, we recommend starting with a value of `0.32`.
     - `custom` will use the custom expression described by the model_selection parameter in the table_extraction_options
 - `text_extraction_options`: A map with string keys specifying options for text extraction.
     - `ocr_text_mode` (deprecated): A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
-    - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `False`.
+    - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `True`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
-  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `False`
+  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `True`.
   - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
       ```
       metric cmp threshold -> model; metric cmp threshold -> model; model
