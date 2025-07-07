@@ -32,7 +32,6 @@
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -384,7 +383,7 @@
           "Document"
         ],
         "summary": "Get Doc Binary",
-        "description": "Get binary original source file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
+        "description": "Get binary original source file with range request support.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
         "operationId": "get_doc_binary_v1_storage_docsets__docset_id__docs__doc_id__binary_get",
         "security": [
           {
@@ -756,6 +755,65 @@
             "description": "The unique identifier of the DocSet."
           }
         ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/storage/docsets/{docset_id}/copy": {
+      "post": {
+        "tags": [
+          "DocSet"
+        ],
+        "summary": "Copy Docset",
+        "operationId": "copy_docset_v1_storage_docsets__docset_id__copy_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the DocSet.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the DocSet."
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_copy_docset_v1_storage_docsets__docset_id__copy_post"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -1205,6 +1263,178 @@
           }
         }
       }
+    },
+    "/v1/login": {
+      "get": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Saml Login",
+        "operationId": "saml_login_v1_login_get",
+        "parameters": [
+          {
+            "name": "redirect_url",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Redirect Url"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/login/callback": {
+      "post": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Saml Callback",
+        "operationId": "saml_callback_v1_login_callback_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/v1/logout": {
+      "get": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Logout User",
+        "operationId": "logout_user_v1_logout_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/v1/token/validate": {
+      "post": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Validate Token",
+        "operationId": "validate_token_v1_token_validate_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/login/user-info": {
+      "get": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Check User",
+        "description": "Kept for local testing.",
+        "operationId": "check_user_v1_login_user_info_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/v1/protected-resource": {
+      "get": {
+        "tags": [
+          "sso"
+        ],
+        "summary": "Protected Resource",
+        "description": "Sample endpoint to demonstrate access to a protected resource using the session token\nmanaged by SessionMiddleware.\n\nKept for local testing.",
+        "operationId": "protected_resource_v1_protected_resource_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          }
+        },
+        "security": [
+          {
+            "SessionChecker": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -1212,10 +1442,28 @@
       "Body_add_doc_v1_storage_docsets__docset_id__docs_post": {
         "properties": {
           "file": {
-            "type": "string",
-            "format": "binary",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "File",
             "description": "The file to add to the Aryn platform."
+          },
+          "file_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Url"
           },
           "options": {
             "anyOf": [
@@ -1232,10 +1480,25 @@
           }
         },
         "type": "object",
-        "required": [
-          "file"
-        ],
         "title": "Body_add_doc_v1_storage_docsets__docset_id__docs_post"
+      },
+      "Body_copy_docset_v1_storage_docsets__docset_id__copy_post": {
+        "properties": {
+          "new_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "New Name",
+            "description": "Name to give the new DocSet"
+          }
+        },
+        "type": "object",
+        "title": "Body_copy_docset_v1_storage_docsets__docset_id__copy_post"
       },
       "Body_create_docset_v1_storage_docsets_post": {
         "properties": {
@@ -1378,7 +1641,7 @@
               }
             ],
             "title": "Size",
-            "description": "The size of the DocSet in bytes."
+            "description": "The number of documents in the DocSet."
           },
           "schema": {
             "anyOf": [
@@ -1845,6 +2108,12 @@
             "title": "Summarize Result",
             "description": "If true, an english summary of the result in context of the original query will be returned.\nApplies only when calling the query API and only available when `stream=True`",
             "default": false
+          },
+          "rag_mode": {
+            "type": "boolean",
+            "title": "Rag Mode",
+            "description": "If true, the query will only run a RAG query plan.",
+            "default": false
           }
         },
         "type": "object",
@@ -2216,6 +2485,11 @@
       "HTTPBearer": {
         "type": "http",
         "scheme": "bearer"
+      },
+      "SessionChecker": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "session"
       }
     }
   }
