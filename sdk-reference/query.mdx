@@ -136,9 +136,15 @@ Run a query either from a `Query` based on a string or a `Query` based on a plan
 
 <Accordion title="Example">
 ```python
-from aryn_sdk.client.client import Client, query
+from aryn_sdk.client.client import Client, Query
 c = Client()
-c.query(query=myQuery)
+docset_id = None # my docset id
+
+# Do RAG on the documents
+results = c.query(query=Query(docset_id=docset_id, query="test_query", stream=True, rag_mode=True))
+
+# Do Deep Analytics which involves generating a logical plan and running it on the documents
+results = c.query(query=Query(docset_id=docset_id, query="test_query", stream=True))
 ```
 </Accordion>
 

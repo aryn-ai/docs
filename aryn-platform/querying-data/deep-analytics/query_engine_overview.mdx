@@ -6,8 +6,9 @@ icon: 'bolt'
 
 Aryn's query engine consists of a number of pieces that work together to provide an end-to-end natural-language query processing system over complex, unstructured data. The architecture of this system is also described in our Conference for Innovative Data Systems (CIDR) paper titled [The Design of an LLM-powered Unstructured Analytics System](https://arxiv.org/abs/2409.00847).
 
-If you want to just get started querying your data, you don't need to know all of these specifics - just [use the Workspaces UI](aryn-platform/querying-data/deep-analytics/using_workspaces). 
+A query can be executed in two modes: `Deep Analytics` and `RAG`. `Deep Analytics` mode will generate a query plan for your query, which you can then run or edit before executing — this is ideal for complex queries that require multiple steps and operations on the data. `RAG` mode will retrieve relevant documents and generate a natural language response based on those documents — this is ideal for simpler queries that do not require complex query plans and this could also be useful for querying a small set of documents. In the Workspaces UI, you can toggle between these two modes using the `Deep Analytics` toggle in the query box. In the Aryn SDK, you can specify the mode using the `rag_mode` parameter in the `query` method of the `Client` class.
 
+If you want to just get started querying your data, you don't need to know all of these specifics - just [use the Workspaces UI](aryn-platform/querying-data/deep-analytics/using_workspaces). 
 
 ## Query planning
 

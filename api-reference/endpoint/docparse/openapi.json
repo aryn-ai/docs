@@ -743,6 +743,7 @@
                   },
                   "remove_line_breaks": {
                     "type": "boolean",
+                    "default": true,
                     "title": "Remove Line Breaks",
                     "default": true,
                     "description": "A boolean value indicating whether to remove line breaks from the extracted text.\n"

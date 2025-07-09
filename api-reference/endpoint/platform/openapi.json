@@ -32,7 +32,6 @@
           }
         ],
         "requestBody": {
-          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -384,7 +383,7 @@
           "Document"
         ],
         "summary": "Get Doc Binary",
-        "description": "Get binary original source file.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
+        "description": "Get binary original source file with range request support.\n\nArgs:\n    docset_id: The ID of the DocSet\n    doc_id: The ID of the document\n\nReturns:\n    the content",
         "operationId": "get_doc_binary_v1_storage_docsets__docset_id__docs__doc_id__binary_get",
         "security": [
           {
@@ -1212,10 +1211,28 @@
       "Body_add_doc_v1_storage_docsets__docset_id__docs_post": {
         "properties": {
           "file": {
-            "type": "string",
-            "format": "binary",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "binary"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "File",
             "description": "The file to add to the Aryn platform."
+          },
+          "file_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Url"
           },
           "options": {
             "anyOf": [
@@ -1232,9 +1249,6 @@
           }
         },
         "type": "object",
-        "required": [
-          "file"
-        ],
         "title": "Body_add_doc_v1_storage_docsets__docset_id__docs_post"
       },
       "Body_create_docset_v1_storage_docsets_post": {
@@ -1378,7 +1392,7 @@
               }
             ],
             "title": "Size",
-            "description": "The size of the DocSet in bytes."
+            "description": "The number of documents in the DocSet."
           },
           "schema": {
             "anyOf": [
@@ -1844,6 +1858,12 @@
             "type": "boolean",
             "title": "Summarize Result",
             "description": "If true, an english summary of the result in context of the original query will be returned.\nApplies only when calling the query API and only available when `stream=True`",
+            "default": false
+          },
+          "rag_mode": {
+            "type": "boolean",
+            "title": "Rag Mode",
+            "description": "If true, the query will only run a RAG query plan.",
             "default": false
           }
         },
