@@ -27,7 +27,7 @@ A string that specifies the mode to use for text extraction. `Default: "inline_f
 - `ocr_vision` uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users.
 
 ### table_mode
-A string specifying table structure extraction mode. `Default: "none"'. Valid options are
+A string specifying table structure extraction mode. `Default: "standard"`. Valid options are
 'standard', 'vision', 'none', and 'custom'.
 - `none` will not extract table structure (equivalent to `extract_table_structure = False`)
 - `standard` will use the standard hybrid table structure extraction pipeline
@@ -73,7 +73,7 @@ when the text is rotated. When set to `False`, DocParse extracts embedded text f
 ### extract_table_structure (Deprecated)
 Use `table_mode` instead.<br />A boolean that, when `True`, enables DocParse to extract tables and their structural
 content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed
-for their structure; as a result, table cells and their bounding boxes are not included in the response. `Default: False`.
+for their structure; as a result, table cells and their bounding boxes are not included in the response. `Default: True`.
 
 
 ## Tables
@@ -84,7 +84,7 @@ A map with string keys specifying options for table extraction. Only applied whe
 
 #### table_extraction_options.include_additional_text
 Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction.
-This can be useful for working with tables that have missing or misaligned text. `Default: False`.
+This can be useful for working with tables that have missing or misaligned text. `Default: True`.
 
 #### table_extraction_options.model_selection
 String. An expression to instruct DocParse how to select the table model to use for extraction.
@@ -118,7 +118,7 @@ supported languages can be found [here](./formats_supported).
 A map with string keys specifying options for text extraction.
 
 #### text_extraction_options.remove_line_breaks
-A boolean that specifies whether to remove line breaks from the text. `Default: False`.
+A boolean that specifies whether to remove line breaks from the text. `Default: True`.
 
 #### text_extraction_options.ocr_text_mode (Deprecated)
 Use `text_mode` instead.<br />A string that specifies the mode to use for OCR text extraction. `Default: "standard"`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
