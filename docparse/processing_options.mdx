@@ -27,7 +27,7 @@ A string that specifies the mode to use for text extraction. `Default: "inline_f
 - `ocr_vision` uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users.
 
 ### table_mode
-A string specifying table structure extraction mode. `Default: "none"'. Valid options are
+A string specifying table structure extraction mode. `Default: "standard"`. Valid options are
 'standard', 'vision', 'none', and 'custom'.
 - `none` will not extract table structure (equivalent to `extract_table_structure = False`)
 - `standard` will use the standard hybrid table structure extraction pipeline
@@ -73,7 +73,7 @@ when the text is rotated. When set to `False`, DocParse extracts embedded text f
 ### extract_table_structure (Deprecated)
 Use `table_mode` instead.<br />A boolean that, when `True`, enables DocParse to extract tables and their structural
 content using a purpose built table extraction model. If set to `False`, tables are still identified but not analyzed
-for their structure; as a result, table cells and their bounding boxes are not included in the response. `Default: False`.
+for their structure; as a result, table cells and their bounding boxes are not included in the response. `Default: True`.
 
 
 ## Tables

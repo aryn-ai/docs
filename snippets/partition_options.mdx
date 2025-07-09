@@ -9,7 +9,7 @@ set the threshold manually, we recommend starting with a value of `0.32`.
     - `inline` extracts embedded text
     - `ocr_standard` uses the classical OCR pipeline
     - `ocr_vision` uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users only.
-- `table_mode`: A string that specifies the mode to use for table structure extraction. The default is `none`.
+- `table_mode`: A string that specifies the mode to use for table structure extraction. Default: `standard`.
     - `none` will not extract table structure (equivalent to `extract_table_structure = False`)
     - `standard` will use the standard hybrid table structure extraction pipeline
     - `vision` will use a vision model to extract table structure
@@ -17,8 +17,9 @@ set the threshold manually, we recommend starting with a value of `0.32`.
 - `text_extraction_options`: A map with string keys specifying options for text extraction.
     - `ocr_text_mode` (deprecated): A string that specifies the mode to use for OCR text extraction. The default is `standard`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
     - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `True`.
+    - `remove_line_breaks`: A boolean that specifies whether to remove line breaks from the text. Default is `True`.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
-  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `True`.
+  - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `True`
   - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
       ```
       metric cmp threshold -> model; metric cmp threshold -> model; model
@@ -98,4 +99,4 @@ text is rotated. When set to `False`, DocParse extracts embedded text from the i
 - `extract_table_structure` (deprecated): Use `table_mode` instead. A boolean that, when `True`, enables DocParse to extract tables and their structural
 content using a purpose built table extraction model. If set to `False`, tables are still identified but
 not analyzed for their structure; as a result, table cells and their bounding boxes are not included in the response.
-Default is `False`.
+Default is `True`.

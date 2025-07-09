@@ -652,7 +652,7 @@
               "extract_table_structure": {
                 "type": "boolean",
                 "title": "Extract Table Structure",
-                "default": false,
+                "default": true,
                 "description": "Use `table_mode` instead. A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n",
                 "deprecated": true
               },
@@ -664,7 +664,7 @@
                   "include_additional_text": {
                     "type": "boolean",
                     "title": "Include Additional Text",
-                    "default": true,
+                    "default": "true",
                     "description": "Attempts to merge text within the table bounding box but missed by the table due to misalignment issues.\n"
                   },
                   "model_selection": {
@@ -716,7 +716,7 @@
                     "vision",
                     "custom"
                   ],
-                "default": "none",
+                "default": "standard",
                 "title": "Table Mode",
                 "description": "The mode to use for table structure extraction. Defaults to `none`, which will not extract table structure. Note that the `vision` mode is only available for PAYG users.\n"
               },
@@ -745,6 +745,7 @@
                     "type": "boolean",
                     "default": true,
                     "title": "Remove Line Breaks",
+                    "default": true,
                     "description": "A boolean value indicating whether to remove line breaks from the extracted text.\n"
                   }
                 }
