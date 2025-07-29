@@ -138,7 +138,17 @@
             ]
           }
         ]
-      }
+      },
+      {
+        "tab": "Release Notes",
+        "groups": [
+          {
+            "group": "Release Notes",
+            "pages": [
+              "release_notes"
+            ]
+      }]
+    }
     ],
     "global": {
       "anchors": [
