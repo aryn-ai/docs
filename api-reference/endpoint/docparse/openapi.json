@@ -638,23 +638,27 @@
                 "default": false,
                 "description": "A boolean value indicating whether to crop images detected in the document and return them in the specified format converted to base64 within the binary_representation of returned image elements.\n"
               },
-              "extract_image_format": {
-                "type": "string",
-                "enum": [
-                  "ppm",
-                  "png",
-                  "jpeg"
-                ],
-                "title": "Extract Image Format",
-                "default": "ppm",
-                "description": "The format to use for extracted images. Defaults to ppm.\n"
-              },
-              "extract_table_structure": {
-                "type": "boolean",
-                "title": "Extract Table Structure",
-                "default": true,
-                "description": "Use `table_mode` instead. A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n",
-                "deprecated": true
+              "image_extraction_options": {
+                "type": "object",
+                "properties": {
+                  "associate_captions": {
+                    "type": "boolean",
+                    "title": "Associate Captions",
+                    "default": false,
+                    "description": "A boolean value indicating whether to associate captions with the images.\n"
+                  },
+                  "extract_image_format": {
+                    "type": "string",
+                    "enum": [
+                      "ppm",
+                      "png",
+                      "jpeg"
+                    ],
+                    "title": "Extract Image Format",
+                    "default": "ppm",
+                    "description": "The format to use for extracted images. Defaults to ppm.\n"
+                  }
+                }
               },
               "table_extraction_options": {
                 "type": "object",
@@ -719,12 +723,6 @@
                 "default": "standard",
                 "title": "Table Mode",
                 "description": "The mode to use for table structure extraction. Defaults to `none`, which will not extract table structure. Note that the `vision` mode is only available for PAYG users.\n"
-              },
-              "use_ocr": {
-                "type": "boolean",
-                "title": "Use OCR",
-                "deprecated": true,
-                "description": "Use `text_mode` instead. A boolean value indicating whether to use OCR or not on the document.\n"
               },
               "text_extraction_options": {
                 "type": "object",
@@ -960,6 +958,32 @@
                 },
                 "title": "Markdown Options",
                 "description": "A dictionary of options to specify what to include in the markdown output.\n"
+              },
+
+              "extract_table_structure": {
+                "type": "boolean",
+                "title": "Extract Table Structure",
+                "default": true,
+                "description": "Use `table_mode` instead. A boolean value indicating whether to extract table structure from the document. This means detecting cells of a table broken into rows and columns.\n",
+                "deprecated": true
+              },
+              "use_ocr": {
+                "type": "boolean",
+                "title": "Use OCR",
+                "deprecated": true,
+                "description": "Use `text_mode` instead. A boolean value indicating whether to use OCR or not on the document.\n"
+              },
+              "extract_image_format": {
+                    "deprecated": true,
+                    "type": "string",
+                    "enum": [
+                      "ppm",
+                      "png",
+                      "jpeg"
+                    ],
+                    "title": "Extract Image Format",
+                    "default": "ppm",
+                    "description": "The format to use for extracted images. Defaults to ppm.\n"
               }
             }
           }
