@@ -112,6 +112,7 @@ image = Image.frombytes(image_mode,  (image_width, image_height), base64.b64deco
 #display the image
 image 
 ```
+
 ## Output Image
 
 Here's the output image after extraction. As you can see, the image has been successfully extracted from the PDF with clarity.
@@ -119,3 +120,48 @@ Here's the output image after extraction. As you can see, the image has been suc
 <Frame>
   <img src="/images/board.png" />
 </Frame>
+
+
+## Captions
+
+If you want to associate captions with the images, you can set the `associate_captions` parameter to `True`.
+
+```python
+partitioned_file = partition_file(file, aryn_api_key, extract_images=True, image_extraction_options={'associate_captions': True})
+```
+
+Here's the output of the image with the caption separated.
+
+<Frame>
+  <img src="/images/caption_output.png" />
+</Frame>
+
+After enabling the `associate_captions` parameter, you'll notice that the image is now associated with a caption, as seen below.
+
+<Frame>
+  <img src="/images/image_with_caption.png" />
+</Frame>
+
+The caption is also returned in the `caption` field of the image or table element.
+
+```json image_output.json
+{'type': 'Image',
+   'bbox': [0.5138835951861214,
+    0.09537044178355823,
+    0.8832426183363971,
+    0.2254865195534446],
+   'properties': {'score': 0.8971611857414246,
+    'image_size': None,
+    'image_mode': None,
+    'image_format': None,
+    'caption': {'type': 'Caption',
+     'bbox': [0.5880948414522059,
+      0.21432253750887784,
+      0.8085399672564338,
+      0.2254865195534446],
+     'properties': {'score': 0.9146057963371277,
+      '_element_index': 10,
+      'font_size': 9.251028571428524},
+     'text_representation': 'Figure 1: Example of an RL system.'},
+    'page_number': 2}}
+```
