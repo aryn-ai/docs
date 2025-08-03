@@ -609,6 +609,11 @@
             "format": "binary",
             "title": "file"
           },
+          "file_url": {
+            "type": "string",
+            "format": "url",
+            "title": "file_url"
+          },
           "options": {
             "type": "object",
             "properties": {
@@ -989,9 +994,6 @@
           }
         },
         "type": "object",
-        "required": [
-          "file"
-        ],
         "title": "Body__partition_document_sync_v1"
       },
       "Element": {
