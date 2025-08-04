@@ -73,6 +73,17 @@ with open("mypresentation.ppt", "rb") as f:
    data = partition_file(f)
 ```
 
+## URLs as input
+
+The Aryn SDK also supports document input via a file path or URL to a document hosted on a remote server:
+
+```python
+from aryn_sdk.partition import partition_file
+data = partition_file("/home/jdoe/Documents/Memo.pdf")
+data = partition_file("file:///home/jdoe/Documents/Memo.pdf")
+data = partition_file("https://www.example.com/assets/proposal.pdf")
+```
+
 ## Chunking a document
 
 Chunking support has been added in v0.1.9. You can enable the default chunking options by specifying an empty dict:
