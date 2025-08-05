@@ -6,7 +6,9 @@ icon: 'image'
 
 ## Introduction
 
-In this example, we'll use DocParse to extract images from a [battery manual](https://drive.google.com/file/d/1eyBIc_oiAn0LvoP2uHBluJJp1N3onxRz/view?usp=sharing). 
+In this [example](https://drive.google.com/file/d/1eyBIc_oiAn0LvoP2uHBluJJp1N3onxRz/view?usp=sharing), 
+we'll use DocParse to extract images from a 
+[battery manual](https://aryn-public.s3.amazonaws.com/partitioner-blog-data/powerwall_parts_boards.pdf). 
 We'll go through the important code snippets below to see what's going on.
 
 Let's focus on the following code that calls the DocParse `partition` API
@@ -26,7 +28,7 @@ file_name = 'powerwall_parts_boards.pdf'
 
 # Parse the file extracting images, inline text embedded in the PDF,
 # and tables using Aryn's default table extraction model.
-# 
+
 # returns a JSON object with parsed elements of the PDF
 with open(file_name, 'rb') as file:
   partitioned_file = partition_file(file, aryn_api_key=aryn_api_key,
@@ -37,7 +39,7 @@ with open(file_name, 'rb') as file:
 ```
 
 
-If you inspect thereturned `partitioned_file`, you'll notice that it's a large JSON object with 
+If you inspect the returned `partitioned_file`, you'll notice that it's a large JSON object with 
 details about all the parsed elements in the PDF (checkout [this page](../output_structure) to understand 
 the schema of the returned JSON object in detail). Below, we show the first few elements of 
 `partitioned_file`: 
@@ -90,19 +92,30 @@ schematic image in the file. You see key properties of the image, including its 
 a base64 encoded binary representation of the image.
 
 ```json image_output.json
-{'type': 'Image',
- 'bbox': [0.07296839545754825,
-  0.11070712002840909,
-  0.3344818833295037,
-  0.44303000710227275],
- 'properties': {'score': 0.8690586090087891,
-  'image_size': [465, 751],
-  'image_mode': 'RGB',
-  'image_format': None,
-  'page_number': 1},
- 'binary_representation': ...
+{
+   "type":"Image",
+   "bbox":[
+      0.07296839545754825,
+      0.11070712002840909,
+      0.3344818833295037,
+      0.44303000710227275
+   ],
+   "properties":{
+      "score":0.8690586090087891,
+      "image_size":[
+         465,
+         751
+      ],
+      "image_mode":"RGB",
+      "image_format":"None",
+      "page_number":1
+   },
+   "binary_representation": ...
 }
 ```
+
+## Output Image
+
 
 You can then process this JSON however you'd like for further analysis. For example, let's use the 
 Pillow Image module from python to display the extracted image on its own.
@@ -122,18 +135,15 @@ image = Image.frombytes(image_mode,  (image_width, image_height), base64.b64deco
 image 
 ```
 
-## Output Image
-
-Here's the output image after extraction. As you can see, the image has been successfully extracted from the PDF with clarity.
-
 <Frame>
   <img src="/images/board.png" />
 </Frame>
 
+As you can see, the image has been successfully extracted from the PDF with clarity.
 
 ## Captions
 
-If you want to associate captions with the images, you can set the `associate_captions` parameter to `True`.
+If you want to associate captions with the images, you can reprocess the file with the `associate_captions` parameter within `image_extraction_options` set to `True`.
 
 ```python
 with open(file_name, 'rb') as file:
@@ -150,7 +160,7 @@ After enabling the `associate_captions` parameter, you'll notice that the image 
   <img src="/images/image_with_caption.png" />
 </Frame>
 
-The caption is also returned in the `caption` field of the image or table element.
+The caption is also returned in the `caption` field of the element.
 
 ```json image_output.json
 {
