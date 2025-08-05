@@ -11,10 +11,10 @@ we'll use DocParse to extract images from a
 [battery manual](https://aryn-public.s3.amazonaws.com/partitioner-blog-data/powerwall_parts_boards.pdf). 
 We'll go through the important code snippets below to see what's going on.
 
-Let's focus on the following code that calls the DocParse `partition` API
+Let's focus on the following code that calls the DocParse [partition](../../api-reference/introduction) API
 to parse the manual, extracting its embedded images, inline text, and tables:
   
-```python extract_image.py
+```python
 from PIL import Image
 from io import BytesIO
 import pdf2image
@@ -44,7 +44,7 @@ details about all the parsed elements in the PDF (checkout [this page](../output
 the schema of the returned JSON object in detail). Below, we show the first few elements of 
 `partitioned_file`: 
 
-```json docparse_output.json
+```json
 [
    {
       "type":"Image",
@@ -91,7 +91,7 @@ schematic image in the file. You see key properties of the image, including its 
 (which indicates the coordinates of the image in the page) and 
 a base64 encoded binary representation of the image.
 
-```json image_output.json
+```json
 {
    "type":"Image",
    "bbox":[
@@ -120,7 +120,7 @@ a base64 encoded binary representation of the image.
 You can then process this JSON however you'd like for further analysis. For example, let's use the 
 Pillow Image module from python to display the extracted image on its own.
 
-```python image_output.py
+```python
 ## extract all the images from the JSON and print out the JSON representation of the first image
 images = [e for e in partitioned_file['elements'] if e['type'] == 'Image']
 first_image = images[1]
@@ -162,7 +162,7 @@ After enabling the `associate_captions` parameter, you'll notice that the image 
 
 The caption is also returned in the `caption` field of the element.
 
-```json image_output.json
+```json
 {
    "type":"Image",
    "bbox":[
