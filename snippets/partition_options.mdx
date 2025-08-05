@@ -38,7 +38,7 @@ set the threshold manually, we recommend starting with a value of `0.32`.
 - `extract_images`: A boolean that determines whether to extract images from the document. The format is determined by the value of `extract_image_format`. Default: `False`.
 - `image_extraction_options`: A map with string keys specifying options for image extraction.
     - `associate_captions`: A boolean that specifies whether to associate captions with the images. Default is `False`.
-    - `extract_image_format`: A string indicating what in what format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
+    - `extract_image_format`: A string indicating in which format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
 - `summarize_images`: (PAYG Only) A boolean that, when `True`, generates a summary of the images in the document and returns it as the `text_representation`. When `False`, images are not summarized. Default is `False`.
 - `selected_pages`: A list specifying individual pages (1-indexed) and page ranges from the document to partition.
 Single pages are specified as integers and ranges are specified as lists with two integer entries in ascending order. A
@@ -94,7 +94,7 @@ an api key. If aryn_api_key is set it will override this. The default ArynConfig
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
-- `extract_image_format` (deprecated out of `image_extraction_options`): A string indicating what in what format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
+- `extract_image_format` (deprecated out of `image_extraction_options`): A string indicating in which format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
 - `use_ocr` (deprecated): Use `text_mode` instead. A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
 useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
 text is rotated. When set to `False`, DocParse extracts embedded text from the input document. Default is `False`.

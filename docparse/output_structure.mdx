@@ -171,6 +171,23 @@ The `text_representation` tag contains the text content of the table and is eith
 }
 ```
 
+If `image_extraction_options: {'associate_captions': True}` is passed in the request, the output will also include a `caption` element in the `properties` dictionary.
+
+```text
+"caption": {
+  "type": "Caption",
+  "bbox": [int, int, int, int],
+  "properties": {
+    "score": float,
+    "_element_index": int,
+    "font_size": float
+  },
+  "text_representation": str,
+  "binary_representation": bytes
+  }
+}
+```
+
 For an image, the `binary_representation` tag contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes: `image_size`, which represents [`width`, `height`] of the image, and `image_mode`, which represents the color mode of the image.
 
 For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./tutorials/output_walkthrough) page.

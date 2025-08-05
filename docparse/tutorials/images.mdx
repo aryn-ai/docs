@@ -6,102 +6,124 @@ icon: 'image'
 
 ## Introduction
 
-In [this example](https://colab.research.google.com/drive/1n5zRm5hfHhxs7dA0FncC44VjlpiPJLWq?usp=sharing), we'll use DocParse to extract an image from a battery manual. We'll go through the important code snippets below to see what's going on.
+In this [example](https://drive.google.com/file/d/1eyBIc_oiAn0LvoP2uHBluJJp1N3onxRz/view?usp=sharing), 
+we'll use DocParse to extract images from a 
+[battery manual](https://aryn-public.s3.amazonaws.com/partitioner-blog-data/powerwall_parts_boards.pdf). 
+We'll go through the important code snippets below to see what's going on.
 
-Let's focus on the following code that makes a call to Aryn DocParse API to extract the image from the PDF:
+Let's focus on the following code that calls the DocParse `partition` API
+to parse the manual, extracting its embedded images, inline text, and tables:
   
-```python add_document.py
-import aryn_sdk
-from aryn_sdk.partition import partition_file, tables_to_pandas
-import pandas as pd
+```python extract_image.py
+from PIL import Image
 from io import BytesIO
+import pdf2image
+import base64
 
-file = open('my-document.pdf', 'rb')
+import aryn_sdk
+from aryn_sdk.partition import  partition_file, draw_with_boxes, convert_image_element
+
 aryn_api_key = 'YOUR-KEY-HERE'
+file_name = 'powerwall_parts_boards.pdf'
 
-## Make a call to Aryn DocParse 
-## param extract_images (boolean):  extract image contents. default: False
-## returns: JSON object with elements representing information inside the PDF
-partitioned_file = partition_file(file, aryn_api_key, extract_images=True)
+# Parse the file extracting images, inline text embedded in the PDF,
+# and tables using Aryn's default table extraction model.
+
+# returns a JSON object with parsed elements of the PDF
+with open(file_name, 'rb') as file:
+  partitioned_file = partition_file(file, aryn_api_key=aryn_api_key,
+                                    extract_images=True,
+                                    table_mode="standard",
+                                    text_mode="inline")
+
 ```
 
 
-If you inspect the partitioned_file variable, you'll notice that it's a large JSON object with details about all the components in the PDF (checkout [this page](../output_structure) to understand the schema of the returned JSON object in detail). Below, we highlight the `Image` element that contains the information about some of the images in the page: 
+If you inspect the returned `partitioned_file`, you'll notice that it's a large JSON object with 
+details about all the parsed elements in the PDF (checkout [this page](../output_structure) to understand 
+the schema of the returned JSON object in detail). Below, we show the first few elements of 
+`partitioned_file`: 
 
 ```json docparse_output.json
 [
-  {
-    "type": "Section-header",
-    "bbox": [
-      0.06470742618336398,
-      0.08396875554865056,
-      0.3483343505859375,
-      0.1039327656139027
-    ],
-    "properties": {
-      "score": 0.7253036499023438,
-      "page_number": 1
-    },
-    "text_representation": "Make AC Power Connections\n"
-  },
-  {
-    "type": "Image",
-    "bbox": [
-      0.3593270694508272,
-      0.10833765896883878,
-      0.6269251924402574,
-      0.42288088711825284
-    ],
-    "properties": {
-      "score": 0.7996300458908081,
-      "image_size": [
-        475,
-        712
+   {
+      "type":"Image",
+      "bbox":[
+         0.9439504825367647,
+         0.005599567673423073,
+         0.9984484145220588,
+         0.058024385625665836
       ],
-      "image_mode": "RGB",
-      "image_format": null,
-      "page_number": 1
-    },
-    "text_representation": "",
-    "binary_representation": "AAAAAA.."
-    },
+      "properties":{
+         "score":0.6607702374458313,
+         "image_size":[
+            112,
+            136
+         ],
+         "image_mode":"RGB",
+         "image_format":"None",
+         "page_number":1
+      },
+      "binary_representation": ...
+   },
+   {
+      "type":"Section-header",
+      "bbox":[
+         0.06352920981014476,
+         0.08379009593616832,
+         0.34880245433134194,
+         0.10395796342329545
+      ],
+      "properties":{
+         "score":0.8269602656364441,
+         "page_number":1
+      },
+      "text_representation":"Make AC Power Connections"
+   },
+   ...
 ]
-```
-
-In particular let's look at the element which highlights the Image that has been detected. 
-
-```json image_output.json
-{
-    "type": "Image",
-    "bbox": [
-      0.3593270694508272,
-      0.10833765896883878,
-      0.6269251924402574,
-      0.42288088711825284
-    ],
-    "properties": {
-      "score": 0.7996300458908081,
-      "image_size": [
-        475,
-        712
-      ],
-      "image_mode": "RGB",
-      "image_format": null,
-      "page_number": 1
-    },
-    "text_representation": "",
-    "binary_representation": "AAAAAA.."
-    }
 ```
 
 ## Extracting the Image
 
-This JSON object represents one of the images in the PDF. You'll notice that the image's binary representation, its bounding box (which indicates the coordinates of the image in the PDF), and certain other properties (image_mode, image_size etc.) are returned back. You can then process this JSON however you'd like for further analysis. In the notebook, we use the Pillow Image module from python to display the extracted image on its own.
+Below, we show an `Image` element that contains the information about the first
+schematic image in the file. You see key properties of the image, including its bounding box 
+(which indicates the coordinates of the image in the page) and 
+a base64 encoded binary representation of the image.
+
+```json image_output.json
+{
+   "type":"Image",
+   "bbox":[
+      0.07296839545754825,
+      0.11070712002840909,
+      0.3344818833295037,
+      0.44303000710227275
+   ],
+   "properties":{
+      "score":0.8690586090087891,
+      "image_size":[
+         465,
+         751
+      ],
+      "image_mode":"RGB",
+      "image_format":"None",
+      "page_number":1
+   },
+   "binary_representation": ...
+}
+```
+
+## Output Image
+
+
+You can then process this JSON however you'd like for further analysis. For example, let's use the 
+Pillow Image module from python to display the extracted image on its own.
 
 ```python image_output.py
 ## extract all the images from the JSON and print out the JSON representation of the first image
 images = [e for e in partitioned_file['elements'] if e['type'] == 'Image']
-first_image = images[0]
+first_image = images[1]
 
 ## read in the image and display it
 image_width = first_image['properties']['image_size'][0]
@@ -113,28 +135,24 @@ image = Image.frombytes(image_mode,  (image_width, image_height), base64.b64deco
 image 
 ```
 
-## Output Image
-
-Here's the output image after extraction. As you can see, the image has been successfully extracted from the PDF with clarity.
-
 <Frame>
   <img src="/images/board.png" />
 </Frame>
 
+As you can see, the image has been successfully extracted from the PDF with clarity.
 
 ## Captions
 
-If you want to associate captions with the images, you can set the `associate_captions` parameter to `True`.
+If you want to associate captions with the images, you can reprocess the file with the `associate_captions` parameter within `image_extraction_options` set to `True`.
 
 ```python
-partitioned_file = partition_file(file, aryn_api_key, extract_images=True, image_extraction_options={'associate_captions': True})
+with open(file_name, 'rb') as file:
+  partitioned_file_caption = partition_file(file, aryn_api_key=aryn_api_key,
+                                            extract_images=True,
+                                            table_mode="standard",
+                                            text_mode="inline",
+                                            image_extraction_options={"associate_captions": True})
 ```
-
-Here's the output of the image with the caption separated.
-
-<Frame>
-  <img src="/images/caption_output.png" />
-</Frame>
 
 After enabling the `associate_captions` parameter, you'll notice that the image is now associated with a caption, as seen below.
 
@@ -142,26 +160,42 @@ After enabling the `associate_captions` parameter, you'll notice that the image 
   <img src="/images/image_with_caption.png" />
 </Frame>
 
-The caption is also returned in the `caption` field of the image or table element.
+The caption is also returned in the `caption` field of the element.
 
 ```json image_output.json
-{'type': 'Image',
-   'bbox': [0.5138835951861214,
-    0.09537044178355823,
-    0.8832426183363971,
-    0.2254865195534446],
-   'properties': {'score': 0.8971611857414246,
-    'image_size': None,
-    'image_mode': None,
-    'image_format': None,
-    'caption': {'type': 'Caption',
-     'bbox': [0.5880948414522059,
-      0.21432253750887784,
-      0.8085399672564338,
-      0.2254865195534446],
-     'properties': {'score': 0.9146057963371277,
-      '_element_index': 10,
-      'font_size': 9.251028571428524},
-     'text_representation': 'Figure 1: Example of an RL system.'},
-    'page_number': 2}}
+{
+   "type":"Image",
+   "bbox":[
+      0.07296839545754825,
+      0.11070712002840909,
+      0.3344818833295037,
+      0.44303000710227275
+   ],
+   "properties":{
+      "score":0.8690586090087891,
+      "image_size":[
+         465,
+         751
+      ],
+      "image_mode":"RGB",
+      "image_format":"None",
+      "caption":{
+         "type":"Caption",
+         "bbox":[
+            0.07958163990693934,
+            0.418170859596946,
+            0.32795234231387865,
+            0.44303000710227275
+         ],
+         "properties":{
+            "score":0.4383608400821686,
+            "_element_index":19,
+            "font_size":8.04000000000002
+         },
+         "text_representation":"Install Fuse and Connect Main Service Conductors"
+      },
+      "page_number":1
+   },
+   "binary_representation": ...
+}
 ```
