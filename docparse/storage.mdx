@@ -69,17 +69,44 @@ You can query your parsed documents using Aryn's Deep Analytics query engine. Fo
 
 You can easily search over your documents and the associated metadata by using Aryn's search API. Once you have added documents to a docset and extracted properties, you can simply use the [Search UI](aryn-platform/querying-data/search/using_search_ui).
 
-Or, you can use the search API as follows: 
+Here is an example of how to use the search API:
 
 ```python
-
-from aryn_sdk.client.client import Client, SearchRequest
+from aryn_sdk.client import Client
+from aryn_sdk.types.search import SearchRequest
 
 myClient = Client()
-results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+client_response = myClient.search(
+    docset_id="aryn:ds-031ppkfhkzq42baiunmr8yh",
+    query=SearchRequest(
+        query="weather",
+        properties_filter="""(properties.entity.aircraft like "Cessna") and (properties.entity.operator <> "n/a") and (properties.entity.lowestCloudCondition = "Clear")""",
+        query_type="hybrid",
+        return_type="element",
+    ),
+)
+
+search_results = client_response.value.results
+
+for result in search_results:
+    print(result)
 ```
 
-this will return a SearchResponse object as follows:
+This follows the general form:
+
+```python
+results = myClient.search(
+    docset_id=[your-docset-ID],
+    query=SearchRequest(
+        query=[your-query-phrase],
+        properties_filter=[your-boolean-filter],
+        query_type=[KEYWORD | VECTOR | HYBRID | LEXICAL],
+        return_type=[DOC | ELEMENT],
+    ),
+)
+```
+
+which will return a SearchResponse object as follows:
 
 ```
 SearchResponse(results=[], query_embedding=[your-query-embedded], next_page_token=None)
