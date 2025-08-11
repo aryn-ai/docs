@@ -56,9 +56,10 @@ and `maximize_within_limit`. The default and recommended chunker is `context_ric
     the chunking option `merge_across_pages` is set to `False`.
 
 ### output_format
-A string controlling the output representation. `Default: "json"`, which yields an array called `elements` which
+A string controlling the output representation. Options are `json`, `markdown`, and `html`. `Default: "json"`, which yields an array called `elements` which
 contains the partitioned elements, represented in JSON.  If set to `markdown` the service response will instead include
-a field called `markdown` that contains a string representing the entire document in Markdown format.
+a field called `markdown` that contains a string representing the entire document in Markdown format. If set to `html` the service response will instead include
+a field called `html` that contains a string representing the entire document in HTML format.
 
 ### summarize_images (PAYG Only)
 A boolean that, when `True`, generates a summary of the images in the document and returns it as the
