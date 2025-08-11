@@ -28,10 +28,24 @@ Search over a docset and get back documents or elements that match your search c
 
 <Accordion title="Example">
 ```python
-from aryn_sdk.client.client import Client, SearchRequest
+from aryn_sdk.client import Client
+from aryn_sdk.types.search import SearchRequest
 
-results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter=[your-filter-string], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+myClient = Client()
+client_response = myClient.search(
+    docset_id="aryn:ds-031ppkfhkzq42baiunmr8yh",
+    query=SearchRequest(
+        query="weather",
+        properties_filter="""(properties.entity.aircraft like "Cessna") and (properties.entity.operator <> "n/a") and (properties.entity.lowestCloudCondition = "Clear")""",
+        query_type="hybrid",
+        return_type="element",
+    ),
+)
 
+search_results = client_response.value.results
+
+for result in search_results:
+    print(result)
 ```
 </Accordion>
 <Accordion title="Return Value">
