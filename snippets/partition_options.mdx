@@ -75,10 +75,11 @@ option is present, and default options are chosen when `chunking_options` is spe
     - `merge_across_pages`: A `boolean` that when `True` the selected chunker will attempt to merge chunks across page
     boundaries. Does not apply to the `mixed_multi_column` merger, which never merges across pages. Defaults to
     `True`.
-- `output_format`: A string controlling the output representation. Options are `json`, `markdown`, and `html`. Defaults to `json` which yields an array called
-`elements` which contains the partitioned elements, represented in JSON. If set to `markdown` the service response will
-instead include a field called `markdown` that contains a string representing the entire document in Markdown format. If set to `html` the service response will instead include
-a field called `html` that contains a string representing the entire document in HTML format.
+- `output_format`: A string controlling the output representation. Options are:
+    - `json` (default): yields an array called `elements` containing the partitioned elements, represented in JSON.
+    - `markdown`: the service response will include a field called `markdown` containing a string representing the entire document in Markdown format.
+    - `html`: the service response will include a field called `html` containing a string representing the entire document in HTML format.
+
 - `output_label_options`: A dictionary of options to specify which heuristic to apply to enforce certain label outputs. If this option is not specified, no heuristic is applied. The options the dictionary supports are listed below.
     - `promote_title`: A boolean that specifies whether to promote an element to title if there's no title in the output.
     - `title_candidate_elements`: A list of strings that are candidate elements to be promoted to title.
