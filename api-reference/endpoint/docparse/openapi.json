@@ -698,7 +698,7 @@
                       "inline",
                       "ocr_standard",
                       "ocr_vision",
-                      "inline_fallback_to_ocr",
+                      "inline_fallback_to_ocr"
                     ],
                     "default": "inline_fallback_to_ocr"
                   },
@@ -906,7 +906,8 @@
                 "type": "string",
                 "enum": [
                   "json",
-                  "markdown"
+                  "markdown",
+                  "html"
                 ],
                 "title": "Output Format",
                 "default": "json",
