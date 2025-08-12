@@ -4,24 +4,40 @@ description: 'Using the Aryn SDK for searching DocSets'
 icon: 'magnifying-glass-arrow-right'
 ---
 
+import SearchExample from '/snippets/search_example.mdx';
+
 Outside of using Aryn's agentic query engine, you can run direct search queries on your DocSet. Aryn is built on OpenSearch, and leverages its keyword and vector indexing for this feature set. 
 
-You can easily add search capabilities to your application using the Aryn SDK. To learn more about using the Aryn UI for ad hoc searches, [click here](aryn-platform/querying-data/search/using_search_ui). 
+You can easily add search capabilities to your application using the Aryn SDK. To learn more about using the Aryn UI for ad hoc searches, [click here](/aryn-platform/querying-data/search/using_search_ui).
 
 
-### Running a search query
+# Running a search query
 
-You can use the [search](https://docs.aryn.ai/sdk-reference/query#example) function in the Aryn SDK to run a search query on your DocSet:
+You can use the [search](/sdk-reference/query#search) function in the Aryn SDK to run a search query on your DocSet:
 
+<SearchExample />
 
-```
-from aryn_sdk.client.client import Client, SearchRequest
+It follows the general form:
+
+```python
+from aryn_sdk.client import Client
+from aryn_sdk.types.search import SearchRequest
 
 myClient = Client()
-results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[query-type], return_type=[DOC|ELEMENT], k=[num-results-to-return]))
+results = myClient.search(
+    docset_id=[your-docset-ID],
+    query=SearchRequest(
+        query=[your-query-phrase],
+        properties_filter=[your-boolean-filter],
+        query_type=[KEYWORD | VECTOR | HYBRID | LEXICAL],
+        return_type=[DOC | ELEMENT],
+    ),
+)
 ```
 
-**Query Type**
+You can specify a properties filter, a query, or both.
+
+## Query Type
 
 You can choose different ways to search your DocSet:
 
@@ -31,16 +47,29 @@ You can choose different ways to search your DocSet:
 * Keyword: The search call will perform a substring match and return results that contain strings that contain the query term specified.
 
 
-**Properties Filter**
+## Properties Filter
 
-You can filter your search results using your DocSet's Properties. The filter is a boolean expression, specifying the condition to use. It is a string consisting of conditions separated by the AND/OR keywords. The following are a few examples:
+You can filter your search results using your DocSet's Properties. The filter is a boolean expression, specifying the condition to use. It is a string consisting of conditions separated by AND keywords. The following are a few examples:
 
+```python
+"""(properties.entity.company_name = "Microsoft") AND (properties.entity.year = "2024")"""
+"""(properties.entity.company_ticker = "AMZN") AND (properties.entity.year = "2023") AND (properties.entity.quarter = "Q2")"""
+"""(properties.path = "report-9999.pdf")"""  # Where the file was loaded from
+"""(properties.entity.aircraft like "Cessna")"""
 ```
-“(company_name=‘Microsoft’ AND year=‘2024’)”
-“(company_ticker=‘AMZN’ AND year=‘2023’) AND (quarter=‘Q2’ OR quarter=‘Q4’)”
-```
 
-**Return Type**
+### Operators
+
+The following operators are supported:
+
+* `=`
+* `>`
+* `>=`
+* `<`
+* `<=`
+* `<>` (not equal to)
+* `like`
+
+## Return Type
 
 You can return Document chunks (elements) with ```element``` or full documents with ```doc```.
-

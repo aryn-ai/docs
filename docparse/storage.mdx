@@ -4,6 +4,8 @@ description: 'Storage and search for your parsed documents.'
 icon: 'database'
 ---
 
+import SearchExample from '/snippets/search_example.mdx';
+
 DocParse includes storage, search, and metadata enrichment for your parsed documents using DocSets in the Aryn Platform. DocParse will send the parsed output to a DocSet in the Aryn Platform, where you can use the features in the platform on this data.
 
 You can view the bounding boxes (segmentation) and extracted elements from your documents in the [Aryn Platform DocSets UI](https://app.aryn.ai/docsets). You can also use GenAI to extract metadata from your documents, or download the parsed document. You can also search your stored documents with vector (semantic) or keyword search using the Aryn Platform UI or API.
@@ -69,23 +71,31 @@ You can query your parsed documents using Aryn's Deep Analytics query engine. Fo
 
 You can easily search over your documents and the associated metadata by using Aryn's search API. Once you have added documents to a docset and extracted properties, you can simply use the [Search UI](aryn-platform/querying-data/search/using_search_ui).
 
-Or, you can use the search API as follows: 
+Here is an example of how to use the search API:
+
+<SearchExample />
+
+This follows the general form:
 
 ```python
-
-from aryn_sdk.client.client import Client, SearchRequest
-
-myClient = Client()
-results = myClient.search(docset_id = [your-docset-ID], query = SearchRequest(query=[your-query-phrase], properties_filter = [your-boolean-filter], query_type=[KEYWORD|VECTOR], return_type=[DOC|ELEMENT]))
+results = myClient.search(
+    docset_id=[your-docset-ID],
+    query=SearchRequest(
+        query=[your-query-phrase],
+        properties_filter=[your-boolean-filter],
+        query_type=[KEYWORD | VECTOR | HYBRID | LEXICAL],
+        return_type=[DOC | ELEMENT],
+    ),
+)
 ```
 
-this will return a SearchResponse object as follows:
+This will return a SearchResponse object as follows:
 
 ```
 SearchResponse(results=[], query_embedding=[your-query-embedded], next_page_token=None)
 ```
 
-the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](../sdk-reference/query.mdx).
+the results parameter will be a list of either elements or documents that match the search query. To learn more about the search API please reference the sdk documentation [here](/sdk-reference/query#search).
 
 ### Filtering docs on the DocSet page
 
