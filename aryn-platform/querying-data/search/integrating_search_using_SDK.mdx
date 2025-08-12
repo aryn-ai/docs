@@ -4,6 +4,8 @@ description: 'Using the Aryn SDK for searching DocSets'
 icon: 'magnifying-glass-arrow-right'
 ---
 
+import SearchExample from '/snippets/search_example.mdx';
+
 Outside of using Aryn's agentic query engine, you can run direct search queries on your DocSet. Aryn is built on OpenSearch, and leverages its keyword and vector indexing for this feature set. 
 
 You can easily add search capabilities to your application using the Aryn SDK. To learn more about using the Aryn UI for ad hoc searches, [click here](/aryn-platform/querying-data/search/using_search_ui).
@@ -13,26 +15,7 @@ You can easily add search capabilities to your application using the Aryn SDK. T
 
 You can use the [search](/sdk-reference/query#search) function in the Aryn SDK to run a search query on your DocSet:
 
-```python
-from aryn_sdk.client import Client
-from aryn_sdk.types.search import SearchRequest
-
-myClient = Client()
-client_response = myClient.search(
-    docset_id="aryn:ds-031ppkfhkzq42baiunmr8yh",
-    query=SearchRequest(
-        query="weather",
-        properties_filter="""(properties.entity.aircraft like "Cessna") and (properties.entity.operator <> "n/a") and (properties.entity.lowestCloudCondition = "Clear")""",
-        query_type="hybrid",
-        return_type="element",
-    ),
-)
-
-search_results = client_response.value.results
-
-for result in search_results:
-    print(result)
-```
+<SearchExample />
 
 It follows the general form:
 

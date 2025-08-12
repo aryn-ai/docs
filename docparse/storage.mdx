@@ -4,6 +4,8 @@ description: 'Storage and search for your parsed documents.'
 icon: 'database'
 ---
 
+import SearchExample from '/snippets/search_example.mdx';
+
 DocParse includes storage, search, and metadata enrichment for your parsed documents using DocSets in the Aryn Platform. DocParse will send the parsed output to a DocSet in the Aryn Platform, where you can use the features in the platform on this data.
 
 You can view the bounding boxes (segmentation) and extracted elements from your documents in the [Aryn Platform DocSets UI](https://app.aryn.ai/docsets). You can also use GenAI to extract metadata from your documents, or download the parsed document. You can also search your stored documents with vector (semantic) or keyword search using the Aryn Platform UI or API.
@@ -71,26 +73,7 @@ You can easily search over your documents and the associated metadata by using A
 
 Here is an example of how to use the search API:
 
-```python
-from aryn_sdk.client import Client
-from aryn_sdk.types.search import SearchRequest
-
-myClient = Client()
-client_response = myClient.search(
-    docset_id="aryn:ds-031ppkfhkzq42baiunmr8yh",
-    query=SearchRequest(
-        query="weather",
-        properties_filter="""(properties.entity.aircraft like "Cessna") and (properties.entity.operator <> "n/a") and (properties.entity.lowestCloudCondition = "Clear")""",
-        query_type="hybrid",
-        return_type="element",
-    ),
-)
-
-search_results = client_response.value.results
-
-for result in search_results:
-    print(result)
-```
+<SearchExample />
 
 This follows the general form:
 
