@@ -219,6 +219,15 @@
   "seo": {
     "indexing": "all"
   },
+  "api": {
+   "playground": {
+     "display": "simple"
+   },
+   "examples": {
+     "languages": ["curl", "python", "javascript"],
+     "defaults": "required"
+   }
+  },
   "footer": {
     "socials": {
       "x": "https://x.com/ArynInc",
