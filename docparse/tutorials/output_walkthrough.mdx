@@ -23,7 +23,7 @@ with open(file_name, 'rb') as file:
 ```
 We use the `partition_file` function from `aryn_sdk.partition` to extract text and images from the document. The
 `aryn_api_key` is your API key from Aryn. In this example, we set `text_mode` to `auto` to use
-an optimal combination of OCR and embedded text, and set `extract_images` and `extract_table_structure`
+an optimal combination of OCR and inline text, and set `extract_images` and `extract_table_structure`
 to `True` to extract images and tables. We use `selected_pages=[2]` to focus on page 2. This document is also be added
 to [your storage](http://app.aryn.ai/storage/), where you can visualize the labeled bounding boxes and extracted
 elements.
