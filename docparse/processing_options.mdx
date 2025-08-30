@@ -19,9 +19,9 @@ All of the available options are listed below, and are optional unless specified
 ## General
 
 ### text_mode
-A string that specifies the mode to use for text extraction. `Default: "inline_fallback_to_ocr"`. Valid options are
-`inline`, `inline_fallback_to_ocr`, `ocr_standard`, and `ocr_vision`.
-- `inline` extracts the embedded text
+A string that specifies the mode to use for text extraction. `Default: "auto"`. Valid options are
+`auto`, `inline_fallback_to_ocr`, `ocr_standard`, and `ocr_vision`.
+- `auto` intelligently uses the best combination of OCR and embedded text.
 - `inline_fallback_to_ocr` extract the embedded text elementwise when present and falls back to performing OCR otherwise
 - `ocr_standard` uses the classical OCR pipeline
 - `ocr_vision` uses a vision model for OCR. Note that `ocr_vision` is only available for PAYG users.
