@@ -126,6 +126,7 @@ Gets the results of an asynchronous partitioning task by `task_id`. Meant to be 
 <Accordion title="Parameters">
 - `task_id`: Required. A string of the task id to poll and attempt to get the result for.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`.
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
@@ -194,6 +195,7 @@ Cancels the task associated with the task_id specified.
 <Accordion title="Parameters">
 - `task_id`: Required. A string of the task id to cancel.
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`.
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
@@ -248,6 +250,7 @@ Lists all the partition_file tasks still running in your account.
 <AccordionGroup>
 <Accordion title="Parameters">
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`.
 - `aryn_config`: An ArynConfig object (defined in
 [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
 an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
