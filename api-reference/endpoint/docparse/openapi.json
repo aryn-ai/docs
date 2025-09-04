@@ -8,6 +8,25 @@
   "servers": [
     {
       "url": "https://api.aryn.cloud"
+    },
+    {
+      "url": "https://api.aryn.ai"
+    },
+    {
+      "url": "https://api.eu.aryn.cloud",
+      "description": "EU Region"
+    },
+    {
+      "url": "https://api.eu.aryn.ai",
+      "description": "EU Region"
+    },
+    {
+      "url": "https://api.us.aryn.ai",
+      "description": "US Region"
+    },
+    {
+      "url": "https://api.us.aryn.cloud",
+      "description": "US Region"
     }
   ],
   "paths": {
