@@ -6,10 +6,12 @@
   },
   "servers": [
     {
-      "url": "https://api.aryn.cloud"
+      "url": "https://api.aryn.cloud",
+      "description": "US Region"
     },
     {
-      "url": "https://api.aryn.ai"
+      "url": "https://api.aryn.ai",
+      "description": "US Region"
     },
     {
       "url": "https://api.eu.aryn.cloud",
