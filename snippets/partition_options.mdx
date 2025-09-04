@@ -96,7 +96,7 @@ an api key. If aryn_api_key is set it will override this. The default ArynConfig
 and then in the file ~/.aryn/config.yaml. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
 environment variables, and then in ~/.aryn/config.yaml).
 - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
-- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`.
+- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`, which uses the US region.
 - `extract_image_format` (deprecated out of `image_extraction_options`): A string indicating in which format extracted images should be returned. Must be one of `ppm`, `png`, or `jpeg`. In all cases, the result will be base64 encoded before being returned. Default: `ppm`. 
 - `use_ocr` (deprecated): Use `text_mode` instead. A boolean value that, when set to `True`, causes DocParse to extract text using an OCR model. This is
 useful when the text is not directly extractable from the PDF, such as when the text is part of an image or when the
