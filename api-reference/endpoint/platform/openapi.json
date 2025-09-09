@@ -1,9 +1,35 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "FastAPI",
+    "title": "Aryn Platform API",
     "version": "0.1.0"
   },
+  "servers": [
+    {
+      "url": "https://api.aryn.cloud",
+      "description": "US Region"
+    },
+    {
+      "url": "https://api.aryn.ai",
+      "description": "US Region"
+    },
+    {
+      "url": "https://api.eu.aryn.cloud",
+      "description": "EU Region"
+    },
+    {
+      "url": "https://api.eu.aryn.ai",
+      "description": "EU Region"
+    },
+    {
+      "url": "https://api.us.aryn.cloud",
+      "description": "US Region"
+    },
+    {
+      "url": "https://api.us.aryn.ai",
+      "description": "US Region"
+    }
+  ],
   "paths": {
     "/v1/storage/docsets/{docset_id}/docs": {
       "post": {
