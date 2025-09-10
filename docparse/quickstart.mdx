@@ -69,6 +69,24 @@ export ARYN_API_KEY="PUT API KEY HERE"
 curl -s -N -D headers "https://api.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file_url=https://www.example.com/document.pdf" | tee document.json
 ```
 
+## Switching Regions
+
+You can switch the region of the DocParse server by modifying the base URL of the DocParse server.
+
+```bash
+export ARYN_API_KEY="PUT API KEY HERE"
+curl -s -N -D headers "https://api.eu.aryn.cloud/v1/document/partition" -H "Authorization: Bearer $ARYN_API_KEY" -F "file=@document.pdf" | tee document.json
+```
+
+Via the SDK, you can specify the region through a `region` parameter.
+
+```python
+from aryn_sdk.partition import partition_file
+data = partition_file("https://www.example.com/document.pdf", region="EU")
+```
+
+Via the UI, you can switch the region by clicking on the `Region` dropdown in the settings menu.
+
 ## Next steps
 
 * To load your parsed documents into a vector database, use [Sycamore](https://github.com/aryn-ai/sycamore) to create a document ETL pipeline in Python for additional processing and loading. Sycamore is a scalable, open source document ETL library that integrates with DocParse. You can check out an example notebook [here](https://github.com/aryn-ai/sycamore/blob/main/notebooks/pinecone-writer.ipynb).
