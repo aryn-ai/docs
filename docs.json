@@ -20,6 +20,7 @@
               "docparse/introduction",
               "docparse/quickstart",
               "docparse/aryn_sdk",
+              "docparse/aryn_mcp",
               "docparse/processing_options",
               "docparse/output_structure",
               "docparse/chunking_strategies",
