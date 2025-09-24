@@ -1,0 +1,193 @@
+---
+title: 'Tutorial: Getting Started with Aryn MCP Server'
+description: 'Step-by-step guide to installing and using the Aryn MCP Server with Claude Desktop'
+icon: 'play'
+---
+
+This tutorial walks you through installing the Aryn MCP Server extension and using it to process documents directly in Claude Desktop.
+
+## What You'll Learn
+
+By the end of this tutorial, you'll be able to:
+- Install the Aryn MCP Server extension in Claude Desktop
+- Configure your API key and settings
+- List your Aryn DocSets through natural conversation
+- Partition and process PDF documents using file paths
+
+---
+
+## Step 1: Download the Extension
+
+First, download the appropriate `.dxt` extension file for your system:
+
+<CardGroup cols={2}>
+  <Card title="macOS" icon="apple" href="https://github.com/aryn-ai/mcp-server/releases/latest/download/mcp-server-macos-latest.dxt">
+    Download for macOS systems
+  </Card>
+  <Card title="Linux" icon="linux" href="https://github.com/aryn-ai/mcp-server/releases/latest/download/mcp-server-ubuntu-latest.dxt">
+    Download for Ubuntu/Linux systems
+  </Card>
+</CardGroup>
+
+<Note>
+The `.dxt` file is a Claude Desktop extension that automatically configures the MCP server for you.
+</Note>
+
+---
+
+## Step 2: Install the Extension
+
+1. **Locate the downloaded file** in your Downloads folder (usually named `mcp-server-macos-latest.dxt` or `mcp-server-ubuntu-latest.dxt`)
+
+2. **Double-click the `.dxt` file** to begin installation
+
+3. **Follow the installation prompts** - the extension will automatically configure itself
+
+4. **Restart Claude Desktop** when prompted
+
+<Warning>
+Make sure Claude Desktop is completely closed before installing the extension. You may need to quit it from the menu bar or dock.
+</Warning>
+
+---
+
+## Step 3: Configure Your API Key
+
+After restarting Claude Desktop:
+
+1. **Open Claude Desktop Settings**
+   - On macOS: `Claude Desktop → Preferences` or `Cmd + ,`
+   - On Linux: `File → Preferences` or `Ctrl + ,`
+
+2. **Navigate to the MCP Servers section**
+
+3. **Find "Aryn Local MCP Server"** in the list of installed servers
+
+4. **Add your API key**:
+   - Click the settings/edit button next to the Aryn MCP Server
+   - Enter your Aryn API key in the `ARYN_API_KEY` field
+   - If you don't have an API key, [get one free here](https://app.aryn.ai/sign-in)
+
+5. **Set output directory** (optional):
+   - Set `ARYN_MCP_OUTPUT_DIR` to your preferred download location
+   - Default is usually your Downloads folder
+
+6. **Enable the server** by toggling the switch to "On"
+
+7. **Save and restart Claude Desktop**
+
+<Tip>
+Your API key should look like: `ey1234567890abcdef...` and start with `ey`
+</Tip>
+
+---
+
+## Step 4: Verify Installation
+
+Let's test that everything is working properly:
+
+1. **Start a new conversation** in Claude Desktop
+
+2. **Ask Claude to list your DocSets**:
+   ```
+   Can you list my Aryn DocSets?
+   ```
+
+3. **Expected response**: Claude should use the MCP server to call the `list_aryn_docsets` function and show you any existing DocSets, or indicate that you don't have any yet.
+
+<Info>
+If this is your first time using Aryn, you might not have any DocSets yet - that's perfectly normal!
+</Info>
+
+---
+
+## Step 5: Process Your First Document
+
+Now let's partition a PDF document. For this example, we'll use a sample document path:
+
+1. **Prepare a PDF file** on your computer (or use any existing PDF)
+
+2. **Ask Claude to partition the document**:
+   ```
+   Please partition this PDF file: /Users/yourname/Documents/sample-report.pdf
+   ```
+   <Note>
+   Replace `/Users/yourname/Documents/sample-report.pdf` with the actual path to your PDF file.
+   </Note>
+
+3. **Claude will process the document** using the `partition_pdf` function and return:
+   - Structured text content
+   - Tables (if any)
+   - Images (if any)
+   - Metadata about the document
+
+4. **Review the results** - you'll see the extracted content organized by type (text, tables, images)
+
+---
+
+## Step 6: Advanced Usage
+
+Now that you have the basics working, try these more advanced features:
+
+### Create a DocSet
+```
+Create a new DocSet called "financial-reports" for storing my quarterly reports
+```
+
+### Add Documents to DocSets
+```
+Add the document /Users/yourname/Documents/q3-report.pdf to my financial-reports DocSet
+```
+
+### Search Across Documents
+```
+Search my financial-reports DocSet for information about "quarterly revenue"
+```
+
+### Extract Custom Properties
+```
+Extract revenue and profit margin data from all documents in my financial-reports DocSet
+```
+
+---
+
+## Troubleshooting
+
+<AccordionGroup>
+<Accordion title="Extension won't install">
+- Make sure Claude Desktop is completely closed
+- Try downloading the extension again
+- Check that you're using the correct version for your operating system
+</Accordion>
+
+<Accordion title="API key errors">
+- Verify your API key is valid at [app.aryn.ai](https://app.aryn.ai/)
+- Make sure the key starts with `ak-`
+- Check there are no extra spaces before or after the key
+</Accordion>
+
+<Accordion title="File path issues">
+- Use absolute file paths (start with `/Users/` on macOS or `/home/` on Linux)
+- Make sure the file exists and is readable
+- Ensure the file is a supported format (PDF, DOCX, etc.)
+</Accordion>
+
+<Accordion title="MCP server not responding">
+- Restart Claude Desktop
+- Check that the server is enabled in settings
+- Try disabling and re-enabling the server
+</Accordion>
+</AccordionGroup>
+
+---
+
+## Next Steps
+
+🎉 **Congratulations!** You've successfully set up and used the Aryn MCP Server. 
+
+**What to try next:**
+- Explore more [document processing options](/docparse/processing_options)
+- Learn about [DocSet management](/aryn-platform/core_concepts)
+- Check out the [full MCP server documentation](/mcp-server/aryn_mcp)
+
+**Need help?** Join our [Slack community](https://join.slack.com/t/aryn-community/shared_invite/zt-36vhennsx-mN3UsqD6PT2vxVZxpqdHsw) or reach out at [info@aryn.ai](mailto:info@aryn.ai).

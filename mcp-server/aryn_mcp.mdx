@@ -23,7 +23,7 @@ For the fastest setup, use the one-click extension:
 
 - Python 3.12 or higher - [Install here](https://www.python.org/downloads/)
 - [uv](https://github.com/astral-sh/uv) - Fast Python package installer
-- Aryn API key - [Get one free here](https://app.aryn.ai/)
+- Aryn API key - [Get one free here](https://app.aryn.ai/sign-in)
 - MCP client like [Claude Desktop](https://claude.ai/download) (recommended)
 
 ### Manual Installation
@@ -61,34 +61,13 @@ The Aryn MCP server works best with a filesystem MCP server for automatic file p
 
 ## Key Features
 
-### Document Processing
-```python
-# Partition PDFs and extract structured data
-partition_pdf("/path/to/document.pdf")
+### Quick Tutorial
 
-# Extract tables, images, and text with bounding boxes
-get_boxes_drawn_on_pdf("/path/to/document.pdf")
-```
+New to the Aryn MCP Server? Follow our step-by-step tutorial to get started:
 
-### DocSet Management
-```python
-# Create and manage document collections
-create_aryn_docset("my-docset", "Financial Documents")
-add_aryn_document("my-docset", "/path/to/report.pdf")
-
-# Search across your documents
-search_aryn_docset("my-docset", "quarterly earnings")
-query_aryn_docset("my-docset", "What were the key financial highlights?")
-```
-
-### Property Extraction
-```python
-# Extract custom properties from documents
-extract_aryn_docset_properties("my-docset", [
-    {"name": "revenue", "description": "Annual revenue figures"},
-    {"name": "profit_margin", "description": "Profit margin percentages"}
-])
-```
+<Card title="Getting Started Tutorial" icon="play" href="/mcp-server/tutorial">
+  Learn how to install the extension, configure your API key, and process your first document
+</Card>
 
 ## Available Tools
 
