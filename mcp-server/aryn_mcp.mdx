@@ -1,0 +1,114 @@
+---
+title: 'Using the Aryn Local MCP Server'
+description: 'Document processing with the Aryn MCP Server for Claude Desktop and other MCP clients'
+icon: 'server'
+---
+
+The Aryn Local MCP Server provides powerful document processing capabilities directly within your MCP-compatible applications like Claude Desktop. It enables document partitioning, property extraction, DocSet management, and intelligent search functionality.
+
+## Quick Start
+
+### One-Click Install (Claude Desktop)
+
+For the fastest setup, use the one-click extension:
+
+1. **Download the extension**: Get the `.dxt` file for [macOS](https://github.com/aryn-ai/mcp-server/releases/latest/download/mcp-server-macos-latest.dxt) or [Linux](https://github.com/aryn-ai/mcp-server/releases/latest/download/mcp-server-ubuntu-latest.dxt)
+2. **Install**: Double-click the downloaded file and follow the prompts
+3. **Configure**: Add your Aryn API key when prompted
+4. **Restart Claude Desktop**
+
+## Installation
+
+### Prerequisites
+
+- Python 3.12 or higher - [Install here](https://www.python.org/downloads/)
+- [uv](https://github.com/astral-sh/uv) - Fast Python package installer
+- Aryn API key - [Get one free here](https://app.aryn.ai/sign-in)
+- MCP client like [Claude Desktop](https://claude.ai/download) (recommended)
+
+### Manual Installation
+
+Install `uv` first:
+```bash
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Add this configuration to your MCP client config file:
+
+```json
+{
+  "mcpServers": {
+    "Aryn Local MCP Server": {
+      "command": "uvx",
+      "args": ["aryn-mcp-server"],
+      "env": {
+        "ARYN_API_KEY": "YOUR_ARYN_API_KEY",
+        "ARYN_MCP_OUTPUT_DIR": "/Users/username/Downloads"
+      }
+    }
+  }
+}
+```
+
+For client-specific configs:
+- [Claude Desktop](https://docs.anthropic.com/en/docs/claude-code/mcp#use-mcp-prompts-as-slash-commands)
+- [Cursor](https://docs.cursor.com/en/context/mcp)
+
+### Filesystem MCP (Recommended)
+
+The Aryn MCP server works best with a filesystem MCP server for automatic file path management. Install the [filesystem MCP server](https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem) alongside Aryn MCP for the best experience.
+
+## Key Features
+
+### Quick Tutorial
+
+New to the Aryn MCP Server? Follow our step-by-step tutorial to get started:
+
+<Card title="Getting Started Tutorial" icon="play" href="/mcp-server/tutorial">
+  Learn how to install the extension, configure your API key, and process your first document
+</Card>
+
+## Available Tools
+
+The MCP server provides these tools:
+
+**Document Processing:**
+- `partition_pdf` - Extract structured data from PDFs
+- `get_boxes_drawn_on_pdf` - Visualize detected elements
+
+**DocSet Management:**
+- `create_aryn_docset` - Create document collections
+- `list_aryn_docsets` - View all DocSets
+- `delete_aryn_docset` - Remove DocSets
+
+**Document Operations:**
+- `add_aryn_document` - Add documents to DocSets
+- `get_aryn_document_elements` - Get document structure
+- `get_aryn_document_tables` - Extract table data
+- `delete_aryn_document` - Remove documents
+
+**Search & Query:**
+- `search_aryn_docset` - Semantic search
+- `query_aryn_docset` - Natural language queries
+- `extract_aryn_docset_properties` - Custom property extraction
+
+## Troubleshooting
+
+**`spawn uvx ENOENT` errors:**
+1. Verify installation: `which uvx`
+2. Use full path: `"command": "/full/path/to/uvx"`
+
+**API Key Issues:**
+- Ensure your API key is valid at [app.aryn.ai](https://app.aryn.ai/)
+- Check the `ARYN_API_KEY` environment variable is set correctly
+
+**File Path Problems:**
+- Use absolute paths for document inputs
+- Ensure the `ARYN_MCP_OUTPUT_DIR` exists and is writable
+
+## More Information
+
+- GitHub Repository: [aryn-ai/mcp-server](https://github.com/aryn-ai/mcp-server)
+- Aryn SDK Documentation: [Using the Aryn SDK](../docparse/aryn_sdk)
+- Processing Options: [Document Processing Options](../docparse/processing_options)

@@ -41,7 +41,7 @@
         ]
       },
       {
-        "tab": "Deep Analytics and Search",
+        "tab": "Deep Analytics (Preview)",
         "groups": [
           {
             "group": "Get Started",
@@ -148,6 +148,18 @@
               "release_notes"
             ]
       }]
+    },
+    {
+      "tab": "Model Context Protocol (MCP) Server",
+      "groups": [
+        {
+          "group": "MCP Server",
+          "pages": [
+            "mcp-server/aryn_mcp",
+            "mcp-server/tutorial"
+          ]
+        }
+      ]
     }
     ],
     "global": {
