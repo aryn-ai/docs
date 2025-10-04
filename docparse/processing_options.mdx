@@ -34,8 +34,14 @@ A string specifying table structure extraction mode. `Default: "standard"`. Vali
 - `vision` will use a vision model to extract table structure. Note that `vision` is only available for PAYG users.
 - `custom` will use the custom expression described by the model_selection parameter in the table_extraction_options
 
+### property_extraction_options
+This is a dictionary of options for extracting properties (key-value pairs) from documents such as invoices, purchase
+orders, contracts, etc.  Currently, the only option allowed is `schema` which describes properties in the document
+being processed that you want DocParse to extract, e.g. the total dollar amount in an invoice.
+- `schema` is a list of `properties` each of which describes a specific occurrence of information appearing in the
+document.
 
-### chunking_options.strategy
+### chunking_options
 `chunking_options` is a dictionary of options for specifying chunking behavior. Chunking is only performed when this
 option is present, and default options are chosen when `chunking_options` is specified as `{}`. Specify the chunking
 strategy using the `strategy` key.
@@ -124,6 +130,95 @@ A boolean that specifies whether to remove line breaks from the text. `Default: 
 
 #### text_extraction_options.ocr_text_mode (Deprecated)
 Use `text_mode` instead.<br />A string that specifies the mode to use for OCR text extraction. `Default: "standard"`, which uses the conventional classical OCR pipeline to process documents. The other option is `vision`, which uses a vision model for OCR. Note that `vision` is only available for PAYG users only.
+
+## Property extraction
+
+### schema
+A schema consists of properties that map to specific parts of interest in a document such as names, places, quantities, etc.
+Often, documents of the same type would have a common schema which can be shared when processing those documents for property extraction.
+A property is a dictionary of `name` and `type`.
+- `name` is the name of a property, e.g. "address", "first_name".
+- `type` is a dictionary of key value pairs describing the property which consists of:
+    - `type`: the type of the property.  A simple type can be "int", "float", "date", "string", "bool", "choice".  A nested type of "array" can consist of properties of simple types.
+    - `description`: a description of the property.
+    - `examples`: an array of examples.
+    - `is_derived`: ???
+    - `validators`: a validator is a way to perform a data quality check on the extracted value.  You can use a regex to ensure a string property conforms to a specific format, e.g. "(123) 456 - 7890".
+
+#### Example 1: string with a regex validator
+```json
+{
+    "name": "state",
+    "type": {
+        "type": "string",
+        "description": "State where the property is located (two-letter code)",
+        "examples": ["IL", "TX", "CA"],
+        "validators": [
+          {
+            "type": "regex",
+            "regex": "^[A-Z]{2}$"
+          }
+        ]
+    }
+}
+```
+
+#### Example 2: int
+```json
+{
+      "name": "number_of_units",
+      "type": {
+        "type": "int",
+        "description": "Total number of rental units (for multifamily properties), if not applicable, return null",
+        "examples": [150, 85, 300],
+      }
+}
+```
+
+#### Example 3: choice
+```json
+{
+      "name": "offering_type",
+      "type": {
+        "type": "choice",
+        "description": "Type of securities offering",
+        "examples": ["Regulation D", "Private Placement", "506(b)", "506(c)"],
+        "choices": ["Regulation D", "Private Placement", "506(b)", "506(c)", "Regulation A", "Other"]
+      }
+}
+```
+
+#### Example 4: array
+```json
+{
+      "name": "line_items",
+      "type": {
+        "type": "array",
+        "description": "Array of individual line items on the invoice",
+        "item_type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "description",
+              "type": {
+                "type": "string",
+                "description": "Description of the product or service",
+                "examples": ["Software Development - 40 hours", "Office Supplies", "Consulting Services"],
+              }
+            },
+            {
+              "name": "quantity",
+              "type": {
+                "type": "float",
+                "description": "Quantity of items or hours",
+                "examples": [1.0, 40.0, 2.5],
+              }
+            }
+          ]
+        }
+    }
+}
+```
 
 
 ## Chunking
