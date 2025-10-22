@@ -1,0 +1,271 @@
+---
+title: 'Tutorial: Property Extraction'
+description: 'Using the Aryn SDK to extract properties from a document'
+icon: 'arrow-up-triangle-square'
+---
+
+## Introduction
+
+In this [example](fix-link), we'll use the Aryn SDK to extract properties from a document.
+
+By the end of this tutorial, you will be able to extract fields from a document as complicated as the one below:
+
+<Frame>
+    <img src="/images/manifest.png" />
+</Frame>
+
+And turn it into JSON like this (some content omitted for brevity):
+
+```json
+{
+    ...
+    "properties": {
+        ...
+    }
+}
+```
+
+Let's start simple and build up to more complex use cases. 
+
+### Step 0: Get Ready
+
+1. Get your free Aryn API key by signing up on the Aryn Console at [app.aryn.ai](https://app.aryn.ai).
+
+2. Open up the follow-along Colab notebook and copy in your API key by clicking the key icon on the leftmost side of the screen.
+
+   Then, click the "+ Add new secret" button in blue on the left hand side of your screen.
+
+   Finally, add your Aryn API key in the value field under the name "ARYN_API_KEY".
+
+   Alternatively, you can set the API key as an environment variable if you are doing this locally instead.
+
+3. Download the sample document here or have your own handy.
+
+### Step 1: String Field Extraction
+
+#### Billing Address Extraction
+
+Below, we extract the "Billing Address" field from the document. Follow along in the Colab notebook.
+
+```python
+import json
+from aryn_sdk.partition import partition_file
+
+billing_address_property = {
+    "name": "Billing Address",
+    "type": {
+        "type": "string",
+        "description": "What is the billing address of the customer?",
+    },
+}
+
+data = partition_file(
+    "manifest.pdf", 
+    property_extraction_options={
+        "schema": {
+            "properties": [
+                billing_address_property
+            ]
+        }
+    },
+)
+
+print(json.dumps(data, indent=4))
+```
+
+The output should look like this:
+
+```json
+{
+    ...
+    "properties": {
+        "entity": {
+            "Billing Address": "123 Wise St. Mountain View, CA 94041"
+        }
+    }
+}
+```
+
+#### Phone Number Extraction
+
+Now let's extract the "Phone Number" field for the shipment origin from the document.
+
+```python
+import json
+from aryn_sdk.partition import partition_file
+
+billing_address_property = {
+    "name": "Billing Address",
+    "type": {
+        "type": "string",
+        "description": "What is the billing address of the customer?",
+    },
+}
+
+origin_phone_number_property = {
+    "name": "Origin Phone Number",
+    "type": {
+        "type": "string",
+        "description": "What is the phone number of the shipment origin?",
+    },
+}
+
+data = partition_file(
+    "manifest.pdf", 
+    property_extraction_options={
+        "schema": {
+            "properties": [
+                billing_address_property,
+                origin_phone_number_property
+            ]
+        }
+    },
+)
+
+print(json.dumps(data, indent=4))
+```
+
+The output should look like this:
+
+```json
+{
+    ...
+    "properties": {
+        "entity": {
+            "Billing Address": "123 Wise St. Mountain View, CA 94041",
+            "Origin Phone Number": "555-278-3727"
+        }
+    }
+}
+```
+
+#### Validation
+
+Every property must have a name, and optionally a description and/or validatior.
+
+```python
+# TODO add validator example
+```
+
+
+
+### Step 2: Array Extraction
+
+#### Extracting SKU Numbers
+
+Now let's extract the shipment items array from the document. Let's start simple by only extracting the bar code number.
+
+Since we are dealing with a table, we will need to set the `table_mode` parameter as we learned in the [table extraction tutorial](../tutorials/tables).
+
+```python
+import json
+from aryn_sdk.partition import partition_file
+
+
+shipment_items_property = {
+    "name": "Shipment Items",
+    "type": {
+        "type": "array",
+        "item_type": {
+            "type": "object",
+            "properties": [
+                {
+                    "name": "Bar Code",
+                    "type": {
+                        "type": "int"
+                    }
+                }
+            ]
+        }
+    }
+}
+
+data = partition_file(
+    "manifest.pdf",
+    table_mode="standard",
+    property_extraction_options={
+        "schema": {
+            "properties": [
+                shipment_items_property,
+            ]
+        }
+    },
+)
+
+print(json.dumps(data, indent=4))
+```
+
+Now, let's also extract the destination for each item.
+
+```python
+import json
+from aryn_sdk.partition import partition_file
+
+shipment_items_property = {
+    "name": "Shipment Items",
+    "type": {
+        "type": "array",
+        "item_type": {
+            "type": "object",
+            "properties": [
+                {
+                    "name": "Bar Code",
+                    "type": {
+                        "type": "int"
+                    }
+                },
+                {
+                    "name": "Destination",
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            ]
+        }
+    }
+}
+
+data = partition_file(
+    "manifest.pdf",
+    table_mode="standard",
+    property_extraction_options={
+        "schema": {
+            "properties": [
+                shipment_items_property,
+            ]
+        }
+    },
+)
+
+print(json.dumps(data, indent=4))
+```
+
+The output should look like this:
+
+```json
+{
+    ...
+    "properties": {
+        "entity": {
+            "Shipment Items": [
+                {
+                    "Bar Code": 1234567890,
+                    "Destination": "Loading Dock"
+                },
+                {
+                    "Bar Code": 1234567891,
+                    "Destination": "Second Floor"
+                },
+                {
+                    "Bar Code": 1234567892,
+                    "Destination": "Loading Dock"
+                },
+                {
+                    "Bar Code": 1234567893,
+                    "Destination": "Loading Dock"
+                }
+            ]
+        }
+    }
+}
+```

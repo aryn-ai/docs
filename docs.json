@@ -33,7 +33,8 @@
                   "docparse/tutorials/images",
                   "docparse/tutorials/chunking_tutorial",
                   "docparse/tutorials/async_requests_tutorial",
-                  "docparse/tutorials/output_walkthrough"
+                  "docparse/tutorials/output_walkthrough",
+                  "docparse/tutorials/extraction_tutorial"
                 ]
               }
             ]
