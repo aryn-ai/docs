@@ -87,9 +87,9 @@ The output should look like this:
 
 ```
 
-#### Placement Info Website Extraction
+#### Submission Contact Email Extraction
 
-Now let's also extract the website property from the document.  As mentioned in the [table extraction tutorial](../tutorials/tables), we can use the `table_mode` parameter to extract tables.
+Now let's also extract the submission contact email property from the document.  For reference, this document has contact info at the end of the last page.  As mentioned in the [table extraction tutorial](../tutorials/tables), we can use the `table_mode` parameter to extract tables.
 
 ```python
 import json
@@ -103,11 +103,11 @@ submission_date_property = {
     },
 }
 
-placement_info_website_property = {
-    "name": "Placement Info Website",
+submission_contact_email_property = {
+    "name": "Submission Contact Email",
     "type": {
         "type": "string",
-        "description": "The placement info website",
+        "description": "The submission contact email",
     },
 }
 
@@ -118,7 +118,7 @@ data = partition_file(
         "schema": {
             "properties": [
                 submission_date_property,
-                placement_info_website_property
+                submission_contact_email_property
             ]
         }
     },
@@ -135,7 +135,7 @@ The output should look like this:
     "properties": {
         "entity": {
             "Submission Date": "2026-09-15T00:00:00",
-            "Placement Info Website": "https://www.apexlogisticsdemo.com/"
+            "Submission Contact Email": "jane.doe@globalre-demo.com"
         }
     }
 }
@@ -145,7 +145,7 @@ The output should look like this:
 
 Every property must have a name, and optionally a description and/or validatior.
 
-Here's an example of a property with a regex validator to check the format of the website is not unreasonable.  Currently, only regex validators are supported.
+Here's an example of a property with a regex validator to check the format of the submission contact email is not unreasonable.  Currently, only regex validators are supported.
 
 ```python
 import json
@@ -159,18 +159,18 @@ submission_date_property = {
     },
 }
 
-placement_info_website_property = {
-    "name": "Placement Info Website",
+submission_contact_email_property = {
+    "name": "Submission Contact Email",
     "type": {
         "type": "string",
-        "description": "The placement info website",
+        "description": "The submission contact email",
+        "validators": [
+            {
+                "type": "regex",
+                "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+            }
+        ],
     },
-    "validators": [
-        {
-            "type": "regex",
-            "regex": "^(https?://)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-        }
-    ],
 }
 
 data = partition_file(
@@ -180,7 +180,7 @@ data = partition_file(
         "schema": {
             "properties": [
                 submission_date_property,
-                placement_info_website_property
+                submission_contact_email_property
             ]
         }
     },
