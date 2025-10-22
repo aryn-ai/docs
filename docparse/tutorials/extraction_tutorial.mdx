@@ -80,43 +80,45 @@ The output should look like this:
     ...
     "properties": {
         "entity": {
-            "Billing Address": "123 Wise St. Mountain View, CA 94041"
+            "Submission Date": "2025-09-15T00:00:00"
         }
     }
 }
+
 ```
 
-#### Phone Number Extraction
+#### Placement Info Website Extraction
 
-Now let's extract the "Phone Number" field for the shipment origin from the document.
+Now let's also extract the website property from the document.  As mentioned in the [table extraction tutorial](../tutorials/tables), we can use the `table_mode` parameter to extract tables.
 
 ```python
 import json
 from aryn_sdk.partition import partition_file
 
-billing_address_property = {
-    "name": "Billing Address",
+submission_date_property = {
+    "name": "Submission Date",
     "type": {
-        "type": "string",
-        "description": "What is the billing address of the customer?",
+        "type": "datetime",
+        "description": "The submission date of the claim",
     },
 }
 
-origin_phone_number_property = {
-    "name": "Origin Phone Number",
+placement_info_website_property = {
+    "name": "Placement Info Website",
     "type": {
         "type": "string",
-        "description": "What is the phone number of the shipment origin?",
+        "description": "The placement info website",
     },
 }
 
 data = partition_file(
-    "manifest.pdf", 
+    "insurecorp.pdf",
+    table_mode="standard",
     property_extraction_options={
         "schema": {
             "properties": [
-                billing_address_property,
-                origin_phone_number_property
+                submission_date_property,
+                placement_info_website_property
             ]
         }
     },
@@ -132,8 +134,8 @@ The output should look like this:
     ...
     "properties": {
         "entity": {
-            "Billing Address": "123 Wise St. Mountain View, CA 94041",
-            "Origin Phone Number": "555-278-3727"
+            "Submission Date": "2025-09-15T00:00:00",
+            "Placement Info Website": "https://www.globallogisticsdemo.com/"
         }
     }
 }
