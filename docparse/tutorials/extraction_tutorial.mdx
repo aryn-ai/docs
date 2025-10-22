@@ -41,30 +41,30 @@ Let's start simple and build up to more complex use cases.
 
 3. Download the sample document here or have your own handy.
 
-### Step 1: String Field Extraction
+### Step 1: String Property Extraction
 
-#### Billing Address Extraction
+#### Submission Date Extraction
 
-Below, we extract the "Billing Address" field from the document. Follow along in the Colab notebook.
+Below, we extract the "Submission Date" property from the document. Follow along in the Colab notebook.
 
 ```python
 import json
 from aryn_sdk.partition import partition_file
 
-billing_address_property = {
-    "name": "Billing Address",
+submission_date_property = {
+    "name": "Submission Date",
     "type": {
-        "type": "string",
-        "description": "What is the billing address of the customer?",
+        "type": "datetime",
+        "description": "The submission date of the claim",
     },
 }
 
 data = partition_file(
-    "manifest.pdf", 
+    "insurecorp.pdf",
     property_extraction_options={
         "schema": {
             "properties": [
-                billing_address_property
+                submission_date_property
             ]
         }
     },
