@@ -20,7 +20,42 @@ And turn it into JSON like this (some content omitted for brevity):
 {
     ...
     "properties": {
-        ...
+        "entity": {
+            "Submission Date": "2026-09-15T00:00:00",
+            "Submission Contact Email": "jane.doe@globalre-demo.com",
+            ...
+            "Current Exposure Info": {
+                "Rating Basis": "Payroll",
+                "Exposure Premium": "Manual / Standard",
+                "Exposure Amount": 215750000,
+                "Exposure Amount Currency": "USD",
+                "Exposure Modification": "Yes (NCCI Mod: 0.92)",
+                "Current Exposure Information": [
+                    {
+                        "State": "CA",
+                        "Class Code": "7219",
+                        "Payroll": 45000000,
+                        "Manual Premium": 1890000,
+                        "Modified Premium": 1738800
+                    },
+                    {
+                        "State": "TX",
+                        "Class Code": "7219",
+                        "Payroll": 32500000,
+                        "Manual Premium": 910000,
+                        "Modified Premium": 837200
+                    },
+                    {
+                        "State": "IL",
+                        "Class Code": "7380",
+                        "Payroll": 28000000,
+                        "Manual Premium": 812000,
+                        "Modified Premium": 747040
+                    },
+                    ...
+                ]
+            }
+        }
     }
 }
 ```
