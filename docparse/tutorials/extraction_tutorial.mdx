@@ -193,6 +193,50 @@ The output should look the same as before.
 
 ### Step 2: Object Extraction
 
+Now that we know how to extract properties, let's extract properties structured within an object. Let's extract the current exposure information from the document. This is found in the middle of page 2.
+
+```python
+current_exposure_info = {
+    "name": "Current Exposure Info",
+    "type": {
+        "type": "object",
+        "properties": [
+            {"name": "Rating Basis", "type": {"type": "string"}},
+            {"name": "Exposure Premium", "type": {"type": "string"}},
+            {"name": "Exposure Amount", "type": {"type": "int"}},
+            {"name": "Exposure Amount Currency", "type": {"type": "string"}},
+            {"name": "Exposure Modification", "type": {"type": "string"}},
+        ],
+    },
+}
+
+data = partition_file(
+    "gri.pdf",
+    table_mode="standard",
+    property_extraction_options={"schema": {"properties": [current_exposure_info]}},
+)
+
+print(json.dumps(data, indent=4))
+```
+
+The output should look like this:
+
+```json
+{
+    ...
+    "properties": {
+        "entity": {
+            "Current Exposure Info": {
+                "Rating Basis": "Payroll",
+                "Exposure Premium": "Manual / Standard",
+                "Exposure Amount": 215750000,
+                "Exposure Amount Currency": "USD",
+                "Exposure Modification": "Yes (NCCI Mod: 0.92)"
+            }
+        }
+    }
+}
+```
 
 ### Step 3: Array Extraction
 
