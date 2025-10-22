@@ -145,38 +145,42 @@ The output should look like this:
 
 Every property must have a name, and optionally a description and/or validatior.
 
-Here's an example of a property with a regex validator expecting phone numbers from the US. Currently, only regex validators are supported.
+Here's an example of a property with a regex validator to check the format of the website is not unreasonable.  Currently, only regex validators are supported.
 
 ```python
-billing_address_property = {
-    "name": "Billing Address",
+import json
+from aryn_sdk.partition import partition_file
+
+submission_date_property = {
+    "name": "Submission Date",
     "type": {
-        "type": "string",
-        "description": "The billing address of the customer",
+        "type": "datetime",
+        "description": "The submission date of the claim",
     },
 }
 
-origin_phone_number_property = {
-    "name": "Origin Phone Number",
+placement_info_website_property = {
+    "name": "Placement Info Website",
     "type": {
         "type": "string",
-        "description": "The phone number of the shipment origin",
-        "validators": [
-            {
-                "type": "regex",
-                "regex": "^\\(\\d{3}\\) \\d{3}-\\d{4}$"
-            }
-        ],
+        "description": "The placement info website",
     },
+    "validators": [
+        {
+            "type": "regex",
+            "regex": "^(https?://)?[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+        }
+    ],
 }
 
 data = partition_file(
-    "manifest.pdf",
+    "insurecorp.pdf",
+    table_mode="standard",
     property_extraction_options={
         "schema": {
             "properties": [
-                billing_address_property,
-                origin_phone_number_property
+                submission_date_property,
+                placement_info_website_property
             ]
         }
     },
@@ -185,9 +189,14 @@ data = partition_file(
 print(json.dumps(data, indent=4))
 ```
 
-Try adding an email validator to extract the dev
+The output should look the same as before.
 
-### Step 2: Array Extraction
+### Step 2: Object Extraction
+
+
+### Step 3: Array Extraction
+
+Now that we know how to extract objects, let's extract an array of them.
 
 #### Extracting SKU Numbers
 
