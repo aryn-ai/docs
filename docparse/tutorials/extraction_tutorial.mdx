@@ -6,7 +6,7 @@ icon: 'arrow-up-triangle-square'
 
 ## Introduction
 
-In this [example](fix-link), we'll use the Aryn SDK to extract properties from a document.
+In this [example](fix-link), we'll use the Aryn SDK to extract properties from a [document](https://aryn-public.s3.us-east-1.amazonaws.com/extraction-tutorial/gri.pdf).
 
 By the end of this tutorial, you will be able to extract fields from a document as complicated as the one below:
 
@@ -74,7 +74,7 @@ Let's start simple and build up to more complex use cases.
 
    Alternatively, you can set the API key as an environment variable if you are doing this locally instead.
 
-3. Download the sample document here or have your own handy.
+3. Download the [sample document](https://aryn-public.s3.us-east-1.amazonaws.com/extraction-tutorial/gri.pdf) or have your own handy.
 
 ## Step 1: String Property Extraction
 
@@ -231,6 +231,9 @@ The output should look the same as before.
 Now that we know how to extract properties, let's extract properties structured within an object. Let's extract the current exposure information from the document. This is found in the middle of page 2.
 
 ```python
+import json
+from aryn_sdk.partition import partition_file
+
 current_exposure_info = {
     "name": "Current Exposure Info",
     "type": {
@@ -280,6 +283,9 @@ Some suggested types to use are # TODO.
 Now that we know how to extract objects, let's extract an array of them. Looking at the table in the middle of page 2, we see exposure broken down by US State.
 
 ```python
+import json
+from aryn_sdk.partition import partition_file
+
 current_exposure_info = {
     "name": "Current Exposure Info",
     "type": {
