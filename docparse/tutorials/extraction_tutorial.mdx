@@ -143,11 +143,47 @@ The output should look like this:
 
 Every property must have a name, and optionally a description and/or validatior.
 
+Here's an example of a property with a regex validator expecting phone numbers from the US. Currently, only regex validators are supported.
+
 ```python
-# TODO add validator example
+billing_address_property = {
+    "name": "Billing Address",
+    "type": {
+        "type": "string",
+        "description": "The billing address of the customer",
+    },
+}
+
+origin_phone_number_property = {
+    "name": "Origin Phone Number",
+    "type": {
+        "type": "string",
+        "description": "The phone number of the shipment origin",
+        "validators": [
+            {
+                "type": "regex",
+                "regex": "^\\(\\d{3}\\) \\d{3}-\\d{4}$"
+            }
+        ],
+    },
+}
+
+data = partition_file(
+    "manifest.pdf",
+    property_extraction_options={
+        "schema": {
+            "properties": [
+                billing_address_property,
+                origin_phone_number_property
+            ]
+        }
+    },
+)
+
+print(json.dumps(data, indent=4))
 ```
 
-
+Try adding an email validator to extract the dev
 
 ### Step 2: Array Extraction
 
@@ -160,7 +196,6 @@ Since we are dealing with a table, we will need to set the `table_mode` paramete
 ```python
 import json
 from aryn_sdk.partition import partition_file
-
 
 shipment_items_property = {
     "name": "Shipment Items",
