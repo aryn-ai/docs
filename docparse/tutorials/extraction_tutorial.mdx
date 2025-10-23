@@ -72,7 +72,7 @@ Let's start simple and build up to more complex use cases.
 
    Finally, add your Aryn API key in the value field under the name "ARYN_API_KEY".
 
-   Alternatively, you can set the API key as an environment variable if you are doing this locally instead.
+   Alternatively, you can set the API key as an environment variable if you are doing this locally instead of on Colab.
 
 3. Download the [sample document](https://aryn-public.s3.us-east-1.amazonaws.com/extraction-tutorial/gri.pdf) or have your own handy.
 
@@ -124,7 +124,7 @@ The output should look like this:
 
 ### Submission Contact Email Extraction
 
-Now let's also extract the submission contact email property from the document.  For reference, this document has contact info at the end of the last page.  As mentioned in the [table extraction tutorial](../tutorials/tables), we can use the `table_mode` parameter to extract tables.
+Now let's also extract the submission contact email property from the document.  For reference, this document has contact info in a table at the end of the last page.  As mentioned in the [table extraction tutorial](../tutorials/tables), we can use the `table_mode` parameter to extract table structure. Since the information is in a table, let's set `table_mode="standard"` to extract the table structure.
 
 ```python
 import json
