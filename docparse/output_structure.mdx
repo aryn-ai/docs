@@ -203,7 +203,7 @@ If `image_extraction_options: {'associate_captions': True}` is passed in the req
 For an image, the `binary_representation` tag contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes: `image_size`, which represents [`width`, `height`] of the image, and `image_mode`, which represents the color mode of the image.
 
 ## Properties Format
-If `property_extraction_options: {'schema': [{...}]}` is passed in the request, the output will contain a top-level `properties` element which will contain `entity` which is a dictionary of key value pairs where each key maps to a property in the schema and its value is the result of extraction from the document.
+If `property_extraction_options: {'schema': [{...}]}` is passed in the request, the output will contain a top-level `properties` element which will contain a dictionary of key value pairs where each key maps to a property in the schema and its value is the result of extraction from the document.
 
 ### Example schema
 ```json
@@ -293,7 +293,6 @@ If `property_extraction_options: {'schema': [{...}]}` is passed in the request, 
 ```json
 {
   "properties": {
-    "entity": {
       "invoice_number": {
         "name": "invoice_number",
         "type": "string",
@@ -346,7 +345,6 @@ If `property_extraction_options: {'schema': [{...}]}` is passed in the request, 
           }
         ]
       }
-    }
   }
 }
 
