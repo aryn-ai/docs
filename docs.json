@@ -28,6 +28,7 @@
               "docparse/output_label_options_walkthrough",
               {
                 "group": "Tutorials",
+                "expanded": true,
                 "pages": [
                   "docparse/tutorials/tables",
                   "docparse/tutorials/images",
