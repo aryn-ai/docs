@@ -131,12 +131,11 @@ In the output, you will see a separate top-level key "properties" that contains 
 
 ```
 
-## Step 2: Extracting Nested Data
+## Step 2: Extracting Nested Data with Arrays
 
 It's common to want to extract multiple records from a single document, each of which has a similar schema. For example, in the sample document, the current exposure information is broken out by state in a table on page 2. You can extract all of these entries with DocParse by specifying a schema containing an array of objects, like the following:
 
 ```python
-
 state_exposure = make_property(
     type=DataType.OBJECT,
     properties=[
