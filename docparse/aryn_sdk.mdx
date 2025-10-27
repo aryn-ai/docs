@@ -23,6 +23,31 @@ with open("mydocument.pdf", "rb") as f:
 
 ``partition_file`` takes the same options as curl, except as keyword arguments. You can find a list of options [here](./processing_options).
 
+## Extract properties from a document
+Provide a `schema` in `property_extraction_options` like so:
+```python
+from aryn_sdk.partition import partition_file
+
+property_email = {
+      "name": "vendor_email",
+      "type": {
+        "type": "string",
+        "description": "Vendor's email address, if not provided, return null",
+        "examples": ["billing@abcservices.com", "john@consulting.com"],
+        "validators": [
+          {
+            "type": "regex",
+            "regex": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+          }
+        ]
+      }
+    }
+schema = {"properties": [property_email]}
+
+with open("my_invoice.pdf", "rb") as f:
+   data = partition_file(f, property_extraction_options={"schema": schema})
+```
+
 ## Key management
 
 By default, ``aryn-sdk`` looks for Aryn API keys first in the environment variable ``ARYN_API_KEY``, and then in ``~/.aryn/config.yaml``. You can override this behavior by specifying a key directly or a different path to the Aryn config file:

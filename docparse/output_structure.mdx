@@ -10,9 +10,12 @@ icon: 'brackets-curly'
 The default output format of Aryn DocParse is JSON.
 
 ```text
-{ "status": in-progress updates,
+{
+  "status": in-progress updates,
   "error": any errors encountered,
-  "elements": a list of elements }
+  "elements": a list of elements,
+  "properties": a list of extracted properties
+}
 ```
 
 ### Markdown Format
@@ -207,5 +210,153 @@ If `image_extraction_options: {'associate_captions': True}` is passed in the req
 ```
 
 For an image, the `binary_representation` tag contains a `base64` encoded `ppm` image file of the pdf cropped to the bounds of the detected image. The properties contain extra attributes: `image_size`, which represents [`width`, `height`] of the image, and `image_mode`, which represents the color mode of the image.
+
+## Properties Format
+If `property_extraction_options: {'schema': [{...}]}` is passed in the request, the output will contain a top-level `properties` element which will contain a dictionary of key value pairs where each key maps to a property in the schema and its value is the result of extraction from the document.
+
+### Example schema
+```json
+{
+  "schema": [
+    {
+      "name": "invoice_number",
+      "type": {
+        "type": "string",
+        "description": "Unique invoice identifier",
+        "examples": ["INV-2024-001", "00123", "A-4567"],
+        "validators": [
+          {
+            "type": "boolean_exp",
+            "expression": "len() > 0"
+          }
+        ]
+      }
+    },
+    {
+      "name": "invoice_date",
+      "type": {
+        "type": "date",
+        "description": "Date the invoice was issued, if not provided, return null",
+        "examples": ["2024-01-15", "2024-03-22"]
+      }
+    },
+    {
+      "name": "subtotal",
+      "type": {
+        "type": "float",
+        "description": "Subtotal amount before taxes and fees",
+        "examples": [1250.00, 89.99, 2500.50],
+        "validators": [
+          {
+            "type": "boolean_exp",
+            "expression": ">= 0"
+          }
+        ]
+      }
+    },
+    {
+      "name": "line_items",
+      "type": {
+        "type": "array",
+        "description": "Array of individual line items on the invoice",
+        "item_type": {
+          "type": "object",
+          "properties": [
+            {
+              "name": "description",
+              "type": {
+                "type": "string",
+                "description": "Description of the product or service",
+                "examples": ["Software Development - 40 hours", "Office Supplies", "Consulting Services"],
+                "validators": [
+                  {
+                    "type": "boolean_exp",
+                    "expression": "len() > 0"
+                  }
+                ]
+              }
+            },
+            {
+              "name": "quantity",
+              "type": {
+                "type": "float",
+                "description": "Quantity of items or hours",
+                "examples": [1.0, 40.0, 2.5],
+                "validators": [
+                  {
+                    "type": "boolean_exp",
+                    "expression": "> 0"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+```
+
+### Example output
+```json
+{
+  "properties": {
+      "invoice_number": {
+        "name": "invoice_number",
+        "type": "string",
+        "value": "2631",
+        "pages": [
+          1
+        ]
+      },
+      "invoice_date": {
+        "name": "invoice_date",
+        "type": "string",
+        "value": "2023-03-02",
+        "pages": [
+          1
+        ]
+      },
+      "subtotal": {
+        "name": "subtotal",
+        "type": "float",
+        "value": 1398.00,
+        "pages": [
+          1
+        ]
+      },
+      "line_items": {
+        "name": "line_items",
+        "type": "array",
+        "value": [
+          {
+              "name": null,
+              "type": "object",
+              "value": {
+                "description": {
+                  "name": "description",
+                  "type": "string",
+                  "value": "Appliance:XRS18GGABB CROSLEY 18 TM REF GLASS BL Textured Door",
+                  "pages": [
+                    1
+                  ]
+                },
+                "quantity": {
+                  "name": "quantity",
+                  "type": "float",
+                  "value": 2.0,
+                  "pages": [
+                    1
+                  ]
+                }
+              }
+          }
+        ]
+      }
+  }
+}
+
+```
 
 For a tutorial on how to use the output of Aryn DocParse, see the [output walkthrough](./tutorials/output_walkthrough) page.
