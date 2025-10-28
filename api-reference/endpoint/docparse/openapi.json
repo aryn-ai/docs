@@ -686,6 +686,83 @@
                   }
                 }
               },
+              "property_extraction_options": {
+                "type": "object",
+                "title": "Property Extraction Options",
+                "description": "Options for extracting properties (key-value pairs) from documents such as invoices, purchase orders, contracts, etc.\\n",
+                "properties": {
+                  "schema": {
+                    "type": "array",
+                    "title": "Schema",
+                    "description": "A list of properties each of which describes a specific occurrence of information appearing in the document.\\n",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Name",
+                          "description": "The name of a property, e.g. 'address', 'first_name'.\\n"
+                        },
+                        "type": {
+                          "type": "object",
+                          "title": "Type",
+                          "description": "A dictionary describing the property.\\n",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "title": "Type",
+                              "enum": ["int", "float", "date", "string", "bool", "choice", "array"],
+                              "description": "The type of the property. Simple types can be 'int', 'float', 'date', 'string', 'bool', 'choice'. A nested type of 'array' can consist of properties of simple types.\\n"
+                            },
+                            "description": {
+                              "type": "string",
+                              "title": "Description",
+                              "description": "A description of the property.\\n"
+                            },
+                            "examples": {
+                              "type": "array",
+                              "title": "Examples",
+                              "description": "An array of examples.\\n"
+                            },
+                            "validators": {
+                              "type": "array",
+                              "title": "Validators",
+                              "description": "A validator is a way to perform a data quality check on the extracted value.\\n",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "type": {
+                                    "type": "string",
+                                    "enum": ["regex"]
+                                  },
+                                  "regex": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            },
+                            "choices": {
+                              "type": "array",
+                              "title": "Choices",
+                              "description": "Valid choices for a 'choice' type property.\\n",
+                              "items": {
+                                "type": "string"
+                              }
+                            },
+                            "item_type": {
+                              "type": "object",
+                              "title": "Item Type",
+                              "description": "The type of items in an 'array' type property.\\n"
+                            }
+                          },
+                          "required": ["type"]
+                        }
+                      },
+                      "required": ["name", "type"]
+                    }
+                  }
+                }
+              },
               "table_extraction_options": {
                 "type": "object",
                 "title": "Table Extraction Options",
