@@ -21,7 +21,7 @@ set the threshold manually, we recommend starting with a value of `0.32`.
     - `schema`: A list of `properties` each of which describes a specific occurrence of information appearing in the document. Each property is a dictionary with `name` and `type` keys.
         - `name`: The name of a property, e.g. "address", "first_name".
         - `type`: A dictionary describing the property which consists of:
-            - `type`: The type of the property. Simple types can be "int", "float", "date", "string", "bool", "choice". A nested type of "array" can consist of properties of simple types.
+            - `type`: The type of the property. Simple types can be "int", "float", "date", "object", "string", "bool", "choice". A nested type of "array" can consist of properties of simple types.
             - `description`: A description of the property.
             - `examples`: An array of examples.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)

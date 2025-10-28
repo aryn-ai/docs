@@ -711,7 +711,7 @@
                             "type": {
                               "type": "string",
                               "title": "Type",
-                              "enum": ["int", "float", "date", "string", "bool", "choice", "array"],
+                              "enum": ["int", "float", "date", "string", "bool", "object", "choice", "array"],
                               "description": "The type of the property. Simple types can be 'int', 'float', 'date', 'string', 'bool', 'choice'. A nested type of 'array' can consist of properties of simple types.\n"
                             },
                             "description": {
