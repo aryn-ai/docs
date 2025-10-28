@@ -1,0 +1,14 @@
+## Client Options
+
+<AccordionGroup>
+<Accordion title="Parameters">
+- `region`: A string that specifies the region to use for the DocParse server. Valid values are `US`, `EU`, and `None`. Default is `None`.
+- `timeout`: A float that specifies the timeout in seconds for the client. Default is `240.0`.
+</Accordion>
+<Accordion title="Example">
+```python
+from aryn_sdk.client import Client
+client = Client(region="EU", timeout=240.0)
+```
+</Accordion>
+</AccordionGroup>
