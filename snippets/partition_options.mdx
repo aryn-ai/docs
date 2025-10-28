@@ -24,7 +24,6 @@ set the threshold manually, we recommend starting with a value of `0.32`.
             - `type`: The type of the property. Simple types can be "int", "float", "date", "string", "bool", "choice". A nested type of "array" can consist of properties of simple types.
             - `description`: A description of the property.
             - `examples`: An array of examples.
-            - `validators`: A validator is a way to perform a data quality check on the extracted value. You can use a regex to ensure a string property conforms to a specific format.
 - `table_extraction_options`: A map with string keys specifying options for table extraction. Only applied when `extract_table_structure` is `True`. Default is empty (`{}`)
   - `include_additional_text`: Boolean. When `True`, DocParse will attempt to enhance the table structure by merging in tokens from text extraction. This can be useful for working with tables that have missing or misaligned text. Default is `True`
   - `model_selection`: String. An expression to instruct DocParse how to select the table model to use for extraction. Default is `"pixels > 500 -> deformable_detr; table_transformer"`, which means "if the largest dimension of the table is more than 500 pixels, use deformable_detr; otherwise use table_transformer." To use only deformable_detr or table_transformer, set `model_selection="deformable_detr"` or `model_selection="table_transformer"`. Selection expressions are of the form
