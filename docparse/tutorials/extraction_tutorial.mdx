@@ -1,5 +1,5 @@
 ---
-title: 'Tutorial: Property Extraction'
+title: 'Tutorial: Property Extraction with the Aryn SDK'
 description: 'Using the Aryn SDK to extract properties from a document'
 icon: 'arrow-up-triangle-square'
 ---
@@ -62,9 +62,9 @@ Let's start simple and build up to more complex use cases.
 
 1. Get your free Aryn API key by signing up on the Aryn Console at [app.aryn.ai](https://app.aryn.ai).
 
-2. Open up the [follow-along Colab notebook] and copy in your API key by clicking the key icon on the leftmost side of the screen.
+2. Open up the [follow-along Colab notebook](https://colab.research.google.com/drive/18Pw_jHSpIv9vt6wMBZaIe561CPBAxaaK?usp=sharing) and copy in your API key by clicking the key icon on the leftmost side of the screen.
 
-   Then, click the "+ Add new secret" button in blue on the left hand side of your screen.
+   Then, click the ``+ Add new secret'' button in blue on the left hand side of your screen.
 
    Finally, add your Aryn API key in the value field under the name "ARYN_API_KEY".
 
@@ -118,7 +118,7 @@ print(json.dumps(data, indent=4))
 
 Note here that we set the `table_mode` to `standard`. This ensures that we can extract properties that are present in tables, such as the Submission Contact Email. 
 
-In the output, you will see a separate top-level key "properties" that contains the extracted properties. For this document, you should see something like the following: 
+In the output, you will see a separate top-level key ``properties'' that contains the extracted properties. For this document, you should see something like the following: 
 
 ```json
 {
@@ -167,7 +167,7 @@ data = partition_file(
 print(json.dumps(data, indent=4))
 ```
 
-The "current_exposure" property is of type `ARRAY`, and you specify the type of each element in the Array as the `item_type`. In this case, the item type is an object with the fields you want to extract for the individual exposure records. The result of running this script is the following:
+The ``current_exposure'' property is of type `ARRAY`, and you specify the type of each element in the Array as the `item_type`. In this case, the item type is an object with the fields you want to extract for the individual exposure records. The result of running this script is the following:
 
 ```json
 {
@@ -229,6 +229,8 @@ The "current_exposure" property is of type `ARRAY`, and you specify the type of 
 ```
 Notice that each entry in the Current Exposures table is extracted as a separate array element in the returned JSON. 
 
+
+{/* We can uncomment this once validators are launched. */}
 
 {/* ### Validation */}
 
