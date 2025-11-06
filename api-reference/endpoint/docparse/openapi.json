@@ -689,7 +689,7 @@
               "property_extraction_options": {
                 "type": "object",
                 "title": "Property Extraction Options",
-                "description": "Options for extracting properties (key-value pairs) from documents such as invoices, purchase orders, contracts, etc.\n",
+                "description": "(PAYG Only) Options for extracting properties (key-value pairs) from documents such as invoices, purchase orders, contracts, etc.\n",
                 "properties": {
                   "schema": {
                     "type": "array",
@@ -743,6 +743,17 @@
                       },
                       "required": ["name", "type"]
                     }
+                  },
+                  "suggest_properties": {
+                    "type": "boolean",
+                    "title": "Suggest Properties",
+                    "default": false,
+                    "description": "Infer the schema of the submitted document."
+                  },
+                  "suggest_properties_instructions": {
+                    "type": "string",
+                    "title": "Suggest Properties Instructions",
+                    "description": "Additional instructions to DocParse for recognizing important properties for the schema."
                   }
                 }
               },

@@ -36,10 +36,17 @@ A string specifying table structure extraction mode. `Default: "standard"`. Vali
 
 ### property_extraction_options
 This is a dictionary of options for extracting properties (key-value pairs) from documents such as invoices, purchase
-orders, contracts, etc.  Currently, the only option allowed is `schema` which describes properties in the document
-being processed that you want DocParse to extract, e.g. the total dollar amount in an invoice.
+orders, contracts, etc.  You can either provide a `schema` object which describes properties in the document
+being processed that you want DocParse to extract, e.g. the total dollar amount in an invoice or ask DocParse to suggest
+ a schema which you can then use to extract properties.
 - `schema` is a list of `properties` each of which describes a specific occurrence of information appearing in the
 document.
+- `suggest_properties` is a boolean option that tells DocParse to analyze the document and suggest an appropriate schema for it.
+- `suggest_properties_instructions` is a `string` option that you can use to provide additional instructions to ensure
+that the schema DocParse infers from your document contains properties that you are interested in,
+e.g. "Make sure to include the full address of the vendor on the invoice".
+
+The `property_extraction_options` dictionary must contain at least one of `schema` or `suggest_properties`.
 
 ### chunking_options
 `chunking_options` is a dictionary of options for specifying chunking behavior. Chunking is only performed when this
