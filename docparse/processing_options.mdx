@@ -48,6 +48,8 @@ e.g. "Make sure to include the full address of the vendor on the invoice".
 
 The `property_extraction_options` dictionary must contain exactly one of `schema` or `suggest_properties`.
 
+**Note: `suggest_properties` only uses the first 20 pages of the processed document to infer the schema for the document.**
+
 ### chunking_options
 `chunking_options` is a dictionary of options for specifying chunking behavior. Chunking is only performed when this
 option is present, and default options are chosen when `chunking_options` is specified as `{}`. Specify the chunking
