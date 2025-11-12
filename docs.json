@@ -36,7 +36,9 @@
                   "docparse/tutorials/async_requests_tutorial",
                   "docparse/tutorials/output_walkthrough",
                   "docparse/tutorials/extraction_tutorial_ui",
-                  "docparse/tutorials/extraction_tutorial"
+                  "docparse/tutorials/extraction_tutorial",
+                  "docparse/tutorials/suggestion_tutorial_ui",
+                  "docparse/tutorials/suggestion_tutorial"
                 ]
               }
             ]
