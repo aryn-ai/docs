@@ -18,55 +18,53 @@ By the end of this tutorial, you will be able to generate a schema with properti
 
 ```json
 {
-  "properties": [
-    {
-      "name": "submission_date",
-      "type": {
-        "type": "date",
-        "required": false,
-        "description": "The date the submission was made",
-        "default": null,
-        "extraction_instructions": null,
-        "examples": [
-          "2026-09-15"
-        ],
-        "source": null,
-        "validators": [],
-        "format": "YYYY-MM-DD"
-      }
-    },
-    {
-      "name": "umr",
-      "type": {
-        "type": "string",
-        "required": false,
-        "description": "Unique Market Reference for the submission",
-        "default": null,
-        "extraction_instructions": null,
-        "examples": [
-          "G240915X8E3451"
-        ],
-        "source": null,
-        "validators": []
-      }
-    },
-    {
-      "name": "reinsured_status",
-      "type": {
-        "type": "choice",
-        "required": false,
-        "description": "Indicates if the reinsurance is new or a renewal",
-        "default": null,
-        "extraction_instructions": null,
-        "examples": [
-          "renewal"
-        ],
-        "source": null,
-        "validators": [],
-        "choices": [
-          "new",
-          "renewal"
-        ]
+    "schema": {
+        "properties": [
+            {
+                "name": "submission_date",
+                "type": {
+                    "type": "date",
+                    "required": false,
+                    "description": "The date the submission was made",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        "2026-09-15"
+                    ],
+                    "source": null,
+                    "validators": [],
+                    "format": "YYYY-MM-DD"
+                }
+            },
+            {
+                "name": "umr",
+                "type": {
+                    "type": "string",
+                    "required": false,
+                    "description": "Unique Market Reference for the submission",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        "G240915X8E3451"
+                    ],
+                    "source": null,
+                    "validators": []
+                }
+            },
+            {
+                "name": "reinsured",
+                "type": {
+                    "type": "object",
+                    "required": false,
+                    "description": "Information about the reinsured company",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        {
+                            "address": "123 Summit Way, Denver, CO 80202, UNITED STATES",
+                            "name": "Pinnacle National Insurance Co."
+                        }
+                    ],
 ...
 ```
 
