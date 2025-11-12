@@ -6,10 +6,191 @@ icon: 'lightbulb-on'
 
 ## Introduction
 
-In this tutorial, we will walk through an example of using DocParse to suggest properties for a document. This is useful when you have a document with a lot of properties, and you want to suggest some of the properties to the user.
+In this tutorial, we will walk through an example of using DocParse to suggest properties for a document. This is useful when you want to either pick properties to extract automatically or have some properties to start with when using a human-in-the-loop approach.
+
+We will be working with a [sample insurance document](https://aryn-public.s3.us-east-1.amazonaws.com/extraction-tutorial/gri.pdf) that contains a workers compensation reinsurance submission.
+
+<Frame>
+    <img src="/images/gri.png" />
+</Frame>
+
+By the end of this tutorial, you will be able to generate a schema with properties like the one below for a document using the Aryn SDK.
+
+```json
+{
+  "properties": [
+    {
+      "name": "submission_date",
+      "type": {
+        "type": "date",
+        "required": false,
+        "description": "The date the submission was made",
+        "default": null,
+        "extraction_instructions": null,
+        "examples": [
+          "2026-09-15"
+        ],
+        "source": null,
+        "validators": [],
+        "format": "YYYY-MM-DD"
+      }
+    },
+    {
+      "name": "umr",
+      "type": {
+        "type": "string",
+        "required": false,
+        "description": "Unique Market Reference for the submission",
+        "default": null,
+        "extraction_instructions": null,
+        "examples": [
+          "G240915X8E3451"
+        ],
+        "source": null,
+        "validators": []
+      }
+    },
+    {
+      "name": "reinsured_status",
+      "type": {
+        "type": "choice",
+        "required": false,
+        "description": "Indicates if the reinsurance is new or a renewal",
+        "default": null,
+        "extraction_instructions": null,
+        "examples": [
+          "renewal"
+        ],
+        "source": null,
+        "validators": [],
+        "choices": [
+          "new",
+          "renewal"
+        ]
+...
+```
 
 ## Prerequisites
 
 1. Get your free Aryn API key by signing up on the Aryn Console at [app.aryn.ai](https://app.aryn.ai).
 
-2. Open up the [follow-along Colab notebook](https://colab.research.google.com/drive/18Pw_jHSpIv9vt6wMBZaIe561CPBAxaaK?usp=sharing) and copy in your API key by clicking the key icon on the leftmost side of the screen.
+2. Download the [sample document](https://aryn-public.s3.us-east-1.amazonaws.com/extraction-tutorial/gri.pdf) or have your own handy.
+
+## Extracting a Schema with Suggest Properties
+
+To extract a schema with suggested properties, you can use the `suggest_properties` field of the `property_extraction_options` dictionary in the `partition_file` function, like so:
+
+```python
+from aryn_sdk.partition import partition_file
+import json
+
+data = partition_file(
+    "gri.pdf",
+    property_extraction_options={"suggest_properties": True}
+)
+
+print(json.dumps(data, indent=4))
+```
+
+Running this will return a dictionary with the elements and suggested properties.
+
+```json
+{
+    "status": [...],
+    "status_code": 200,
+    "elements": [...],
+    "schema": {
+        "properties": [
+            {
+                "name": "submission_date",
+                "type": {
+                    "type": "date",
+                    "required": false,
+                    "description": "The date the submission was made",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        "2026-09-15"
+                    ],
+                    "source": null,
+                    "validators": [],
+                    "format": "YYYY-MM-DD"
+                }
+            },
+            {
+                "name": "umr",
+                "type": {
+                    "type": "string",
+                    "required": false,
+                    "description": "Unique Market Reference for the submission",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        "G240915X8E3451"
+                    ],
+                    "source": null,
+                    "validators": []
+                }
+            },
+            {
+                "name": "reinsured",
+                "type": {
+                    "type": "object",
+                    "required": false,
+                    "description": "Information about the reinsured company",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        {
+                            "address": "123 Summit Way, Denver, CO 80202, UNITED STATES",
+                            "name": "Pinnacle National Insurance Co."
+                        }
+                    ],
+                    "source": null,
+                    "validators": [],
+                    "properties": [
+                        {
+                            "name": "name",
+                            "type": {
+                                "type": "string",
+                                "required": false,
+                                "description": "Name of the reinsured company",
+                                "default": null,
+                                "extraction_instructions": null,
+                                "examples": null,
+                                "source": null,
+                                "validators": []
+                            }
+                        },
+                        {
+                            "name": "address",
+                            "type": {
+                                "type": "string",
+                                "required": false,
+                                "description": "Address of the reinsured company",
+                                "default": null,
+                                "extraction_instructions": null,
+                                "examples": null,
+                                "source": null,
+                                "validators": []
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "original_insured",
+                "type": {
+                    "type": "object",
+                    "required": false,
+                    "description": "Information about the original insured company",
+                    "default": null,
+                    "extraction_instructions": null,
+                    "examples": [
+                        {
+                            "address": "4500 Industrial Blvd, Chicago, IL 60632",
+                            "name": "Apex Logistics & Distribution"
+      ...
+    },
+}
+```
