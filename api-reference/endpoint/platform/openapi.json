@@ -194,6 +194,467 @@
         }
       }
     },
+    "/v1/async/submit/storage/docsets/{docset_id}/docs": {
+      "post": {
+        "summary": "Submit Document for Async Add Doc",
+        "tags": [
+          "Document"
+        ],
+        "operationId": "_async_add_doc_submit_v1",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "docset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique identifier of the docset to which to add the doc.",
+              "title": "Docset Id"
+            },
+            "description": "The unique identifier of the docset to which to add the doc."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_add_doc_v1_storage_docsets__docset_id__docs_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "task_id": {
+                      "type": "string",
+                      "title": "Task ID",
+                      "description": "The ID of the async task.\n",
+                      "examples": [
+                        "aryn:t-47gpd3604e5tz79z1jro5fc"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "Not authenticated."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "Too many requests"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/async/result/{task_id}": {
+      "get": {
+        "summary": "Get Async Task Status",
+        "tags": [
+          "Document"
+        ],
+        "operationId": "_async_add_doc_status_v1",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task ID"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "path_filter",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "^/v1/storage/docsets/{docset_id}/docs$"
+              ],
+              "title": "Path Filter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentMetadata"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Task is pending",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "Task is pending."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "No Aryn API key provided."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such task.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "No such task."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "examples": [
+                    "Internal Server Error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/async/cancel/{task_id}": {
+      "post": {
+        "summary": "Cancel Async Task for Add Doc",
+        "tags": [
+          "Document"
+        ],
+        "operationId": "_async_add_doc_cancel_v1",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "task_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Task ID"
+            }
+          },
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "path_filter",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "^/v1/storage/docsets/{docset_id}/docs$"
+              ],
+              "title": "Path Filter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Task Cancelled Successfully"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "No Aryn API key provided."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such task.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "Task not found."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "examples": [
+                    "Internal Server Error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/async/list": {
+      "get": {
+        "summary": "List Async Tasks for Add Doc",
+        "tags": [
+          "Document"
+        ],
+        "operationId": "_async_add_doc_list_v1",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "User-Agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User-Agent"
+            }
+          },
+          {
+            "name": "path_filter",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "^/v1/storage/docsets/{docset_id}/docs$"
+              ],
+              "title": "Path Filter"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tasks": {
+                      "type": "object",
+                      "description": "A map of task ids to task details.",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "action": {
+                            "type": "string",
+                            "description": "The action of the Aryn API the async task was submitted to.",
+                            "examples": [
+                              "/v1/storage/docsets/{docset_id}/docs"
+                            ]
+                          },
+                          "task_status": {
+                            "type": "string",
+                            "description": "The state of the async task.",
+                            "enum": [
+                              "done",
+                              "abort",
+                              "cancel",
+                              "run",
+                              "queue"
+                            ]
+                          }
+                        }
+                      },
+                      "examples": [
+                        {
+                          "aryn:t-47gpd3604e5tz79z1jro5fc": {
+                            "action": "/v1/storage/docsets/{docset_id}/docs",
+                            "task_status": "done"
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "tasks"
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "detail": {
+                      "type": "string",
+                      "examples": [
+                        "No Aryn API key provided."
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string",
+                  "examples": [
+                    "Internal Server Error"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/storage/docsets/{docset_id}/docs/{doc_id}": {
       "get": {
         "tags": [
