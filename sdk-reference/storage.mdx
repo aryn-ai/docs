@@ -341,6 +341,244 @@ The binary content of the document
 </Accordion>
 </AccordionGroup>
 
+
+## Asynchronous Document Functions
+
+### add_doc_async
+Submit a document for asynchronous add_doc and get its `task_id`. The results of the task will remain available in the system for 48 hours. Meant to be used with `get_async_result`.
+Note: sending multiple asynchronous add_doc tasks at the same time does not guarantee that they will run simultaneously.
+<AccordionGroup>
+    <Accordion title="Parameters">
+        <ParamField body="file" type="BinaryIO | str | PathLike" required>
+            A `file` opened in binary mode or a path specified as either a `str` or `PathLike` instance, or an HTTP URL indicating the document to add. The path can either be a local path or an Amazon S3 url starting with `s3://`. The URL can start with either `https://` or `http://`. In the latter case, you must have boto3 installed and AWS credentials set up in your environment.
+        </ParamField>
+
+        <ParamField path="docset_id" type="str" required>
+            The id of the DocSet into which to add the document.
+        </ParamField>
+
+        <ParamField body="options" type="str">
+            DocParse options to use for partitioning the specified document. You can find more about specific options [here](/sdk-reference/partition#parameters)
+        </ParamField>
+    </Accordion>
+    <Accordion title="Example">
+        ```python
+        with open("my-favorite-pdf.pdf", "rb") as f:
+            res = client.add_doc_async(file=f, docset_id="your-docset-id")
+            print(f"Task ID: {res.task_id}")
+            doc_metadata = res.result().value
+            print(f"Document ID: {doc_metadata.doc_id}")
+        ```
+    </Accordion>
+    <Accordion title="Return Value">
+        A dict containing the `task_id` of the submitted request.
+
+        ```json
+        {
+            "task_id": "aryn:t-47gpd3604e5tz79z1jro5fc"
+        }
+        ```
+    </Accordion>
+    <Accordion title="Exceptions">
+
+        User errors:
+        - ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
+        - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+        - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
+        - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
+        - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+        - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+        - ```HTTPError: Error:status_code 429```. Reason: `"Too many requests"`
+        - Fix: Please try again after some time. Each account is allowed 1000 tasks to run at a time.
+
+
+        Other errors:
+        - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+    </Accordion>
+</AccordionGroup>
+
+
+
+
+### get_async_result
+Gets the results of an asynchronous add_doc task by `task_id`. Meant to be used with `add_doc_async`.
+<AccordionGroup>
+    <Accordion title="Parameters">
+        - `task_id`: Required. A string of the task id to poll and attempt to get the result for.
+        - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+        - `region`: A string that specifies the region to use for the DocParse server. Valid values are `US` and `None`. Default is `None`, which uses the US region. Via the API, you can specify the region by modifying the base URL of the DocParse server.
+        - `aryn_config`: An ArynConfig object (defined in
+        [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+        an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+        and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+        environment variables, and then in `~/.aryn/config.yaml`).
+        - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+        ssl_verify is `True` by default, enforcing SSL verification.
+    </Accordion>
+
+    <Accordion title="Example">
+        ```python
+        import time
+
+        with open("/path/to/pdf", "rb") as f:
+            res = client.add_doc_async(file=f, docset_id=docset_id)
+            task_id = res.task_id
+
+        while True:
+            result = client.get_async_result(task_id)
+            if result.status_code == 202:
+                print("Task still pending...")
+            else:
+                print(f"Task completed with status code: {result.status_code}")
+                print(f"Result: {result.value}")
+                break
+            time.sleep(1)
+        ```
+    </Accordion>
+
+    <Accordion title="Return Value">
+        A dict like the one in the example below containing "task_status". When "task_status" is "done", the returned
+        dict also contains "result" which contains what would have been returned had `add_doc` been called directly. If there is an error with ingesting the file itself, then the "task_status" will still be "done" but the
+        "result" will contain an "error" field indicating what went wrong.
+
+        "task_status" can be "done" or "pending". <br />
+        ```json
+        {
+            "task_status":"done",
+            "result": ...
+        }
+        ```
+    </Accordion>
+
+    <Accordion title="Exceptions">
+
+        User errors:
+        - ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
+        - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+        - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
+        - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
+        - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+        - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+        - ```aryn_sdk.partition.partition.PartitionTaskNotFoundError```. Reason: `"No such task"`
+        - Fix: Check to make sure the task_id specified is correct.
+
+
+        Other errors:
+        - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+
+    </Accordion>
+
+</AccordionGroup>
+
+### cancel_async_task
+Cancels the task associated with the task_id specified.
+<AccordionGroup>
+    <Accordion title="Parameters">
+        - `task_id`: Required. A string of the task id to cancel.
+        - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+        - `region`: A string that specifies the region to use for the DocParse server. Valid values are `US` and `None`. Default is `None`, which uses the US region. Via the API, you can specify the region by modifying the base URL of the DocParse server.
+        - `aryn_config`: An ArynConfig object (defined in
+        [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+        an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+        and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+        environment variables, and then in `~/.aryn/config.yaml`).
+        - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+        ssl_verify is `True` by default, enforcing SSL verification.
+    </Accordion>
+    <Accordion title="Example">
+        ```python
+        with open("/path/to/pdf", "rb") as f:
+            task = client.add_doc_async(file=f, docset_id=docset_id)
+            task_id = task.task_id
+            print(f"Cancelling task {task_id}")
+            res = client.cancel_async_task(task)
+            if res.status_code == 200:
+                print("Cancel successful.")
+        ```
+    </Accordion>
+    <Accordion title="Return Value">
+        No return value. Asynchronous tasks may only be successfully cancelled once. Once a task has been
+        cancelled, any `get_async_result` calls using that task's id will throw an exception.
+    </Accordion>
+
+    <Accordion title="Exceptions">
+
+        User errors:
+        - ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
+        - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+        - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
+        - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
+        - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+        - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+        - ```aryn_sdk.partition.partition.PartitionTaskNotFoundError```. Reason: `"No such task"`
+        - Fix: Check to make sure the task_id specified is correct.
+
+        Other errors:
+        - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+
+    </Accordion>
+</AccordionGroup>
+
+### list_async_tasks
+Lists all the add_doc tasks still running in your account.
+<AccordionGroup>
+    <Accordion title="Parameters">
+        - `aryn_api_key`: An Aryn API key, provided as a string. You can get one for free at [aryn.ai/get-started](https://www.aryn.ai/get-started). Default is `None` (If not provided, the sdk will check for it in the environment variable `ARYN_API_KEY` or will look in aryn_config as specified above).
+        - `region`: A string that specifies the region to use for the DocParse server. Valid values are `US` and `None`. Default is `None`, which uses the US region. Via the API, you can specify the region by modifying the base URL of the DocParse server.
+        - `aryn_config`: An ArynConfig object (defined in
+        [aryn_sdk/config.py](https://github.com/aryn-ai/sycamore/blob/main/lib/aryn-sdk/aryn_sdk/config.py)), used for finding
+        an api key. If `aryn_api_key` is set it will override this. The default ArynConfig looks in the env var `ARYN_API_KEY`
+        and then in the file `~/.aryn/config.yaml`. Default is None (aryn-sdk will look in the aryn_api_key parameter, in your
+        environment variables, and then in `~/.aryn/config.yaml`).
+        - `ssl_verify`: A `bool` that controls whether the client verifies the SSL certificate of the chosen DocParse server.
+        ssl_verify is `True` by default, enforcing SSL verification.
+    </Accordion>
+    <Accordion title="Example">
+        ```python
+        tasks = client.list_async_tasks().value
+        print(tasks.tasks)
+        ```
+    </Accordion>
+    <Accordion title="Return Value">
+        A dict like the one below which maps task_ids to a dict containing details of the respective task.
+        ```json
+        {
+            "aryn:t-sc0v0lglkauo774pioflp4l": {
+            "task_status": "pending"
+        },
+            "aryn:t-b9xp7ny0eejvqvbazjhg8rn": {
+            "task_status": "pending"
+        }
+        }
+        ```
+    </Accordion>
+
+    <Accordion title="Exceptions">
+
+        User errors:
+        - ```HTTPError: Error:status_code 403```. Reason: `"This async action requires you to upgrade your account plan"`
+        - Fix: Please upgrade your account [here](https://console.aryn.ai/billing)
+        - ```HTTPError: Error:status_code 403```. Reason: `"No Aryn API Key provided"`
+        - Fix: Please provide an API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Invalid Aryn API key"`
+        - Fix: Please provide a valid API key either as a parameter or specify it in the environment variable `ARYN_API_KEY`.
+        - ```HTTPError: Error:status_code 403```. Reason: `"Expired Aryn API key"`
+        - Fix: Please get a new API key [here](https://console.aryn.ai/api-keys).
+
+
+        Other errors:
+        - ```HTTPError: Error:status_code 5xx```. Reason: `Internal Server Error`
+
+    </Accordion>
+</AccordionGroup>
+
+
 ## Properties Functions
 Functions for managing document properties.
 
