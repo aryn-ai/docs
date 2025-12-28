@@ -24,7 +24,8 @@ with open("mydocument.pdf", "rb") as f:
 ``partition_file`` takes the same options as curl, except as keyword arguments. You can find a list of options [here](./processing_options).
 
 ## Extract properties from a document
-Provide a `schema` in `property_extraction_options` like so:
+
+Create a schema by hand, or get help from DocParse [Suggest Properties](docparse/tutorials/suggestion_tutorial). Provide the `schema` in `property_extraction_options` like so:
 ```python
 from aryn_sdk.partition import partition_file
 

@@ -3,9 +3,9 @@ title: 'Quickstart'
 description: 'Getting Started with Aryn DocParse'
 ---
 
-You can use Aryn DocParse to easily chunk and extract data from complex documents, and return a structured output in JSON or Markdown. DocParse can process 30+ document formats, including PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](docparse/formats_supported).
+You can use Aryn DocParse to easily chunk and extract data from complex documents, and return structured output in JSON, Markdown or HTML. It can extract properties from documents and even suggest a schema of properties. DocParse can process 30+ document formats, including PDF, Microsoft Word (.docx and .doc), Microsoft PowerPoint (.pptx and .ppt) and [more](docparse/formats_supported).
 
-We show you how to get started with DocParse through the DocParse UI, the Python ``aryn-sdk`` client, or ``curl``. For building multi-stage document ETL pipelines that use DocParse for parsing, visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).
+We show you how to get started with DocParse through the DocParse UI, the Python ``aryn-sdk`` client, or ``curl``. For building multi-stage document ETL pipelines that use DocParse for parsing, visit the [Sycamore documentation](https://sycamore.readthedocs.io/en/stable/).  For tutorials on suggesting schemas and extracting properties, visit [Suggest Properties](docparse/tutorials/suggestion_tutorial) and [Property Extraction](docparse/tutorials/extraction_tutorial).
 
 For this Quickstart, you will need an Aryn account. You can get one and use for free [here](https://console.aryn.ai/signup/). 
 
@@ -15,7 +15,7 @@ After you sign-up, go to the [Aryn UI](http://app.aryn.ai/) and click on the Doc
 
 Next, select a document to parse, and choose the options for DocParse (e.g. OCR). Click on "Chunk document," and DocParse will process the first 25 pages of your PDF. If you have a larger document, use the ``aryn-sdk`` (the UI is limited to 25 pages per document).
 
-Once the document is processed, you will see a visualized document segmentation with labeled bounding boxes. You can choose to download and check out the structured JSON output, which is the output of DocParse. Additionally, you can download the visual of the segmented PDF. If you prefer markdown output, please use the ``aryn-sdk``.
+Once the document is processed, you will see a visualized document segmentation with labeled bounding boxes. You can choose to download and check out the structured JSON output, which is the output of DocParse. Additionally, you can download the visual of the segmented PDF. If you prefer markdown or HTML output, please use the ``aryn-sdk``.
 
 Now that you have seen how DocParse can segment complex documents, extract tables, and more, you can use the ``aryn-sdk`` to leverage DocParse in your application or the [Sycamore document ETL library](https://github.com/aryn-ai/sycamore) to load the output into vector databases. 
 
@@ -27,7 +27,7 @@ The DocParse ``aryn-sdk`` client is a thin python library that calls Aryn DocPar
 
 You will need to use the API key for your account with the Aryn SDK. To retrieve it, click on the API key tab in the left nav in the Aryn UI.
 
-For more information, see the [Aryn SDK documentation](/docparse/aryn_sdk) or [API reference](/api-reference/endpoint/docparse).
+For more information, see the [Aryn SDK documentation](/docparse/aryn_sdk) or [API reference](/api-reference/endpoint/docparse/partition).
 
 
 ## Using ``curl``
@@ -96,5 +96,7 @@ Via the UI, you can switch the region by clicking on the `Region` dropdown in th
 * To extract tables from your documents and run analytics on them, visit [here](docparse/tutorials/tables).
 
 * To extract images from your documents and process them directly, visit [here](docparse/tutorials/images).
+
+* To extract properties from your documents, visit [here](docparse/tutorials/extraction_tutorial) and [here](docparse/tutorials/suggestion_tutorial)
 
 * If you're interested in building an end-to-end system to query and search your documents, [learn more about the Aryn Platform](aryn-platform/core_concepts). It uses DocParse under the hood for parsing and processing your documents when ingesting them.
