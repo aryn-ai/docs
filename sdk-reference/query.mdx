@@ -20,9 +20,9 @@ Search over a docset and get back documents or elements that match your search c
   * When `keyword` is specified, the search call will perform a substring match and return results that contain strings that contain the query term specified.
   * When `vector` is specified, the search call will internally embed the query with the embedding function associated with the docset you are querying on and perform a k-nearest neighbor search to retrieve the results.
   * When `lexical` is specified, the search call will perform an exact string match and return results where the query string shows up as a standalone word. 
-- `properties_filter`: A string that specifies a boolean expression. This expression specifies the condition to use when extracting documents or elements from the docset. The boolean expression is a string consisting of conditions separated by the AND/OR keywords. The following are a few examples:
-  * "(company_name='Microsoft' AND year='2024')"
-  * "(company_ticker='AMZN' AND year='2023') AND (quarter='Q2' or quarter='Q4')"
+- `properties_filter`: A string that specifies a boolean expression. This expression specifies the condition to use when extracting documents or elements from the docset. The boolean expression is a string consisting of conditions separated by the AND keywords. The following are a few examples:
+  * `(properties.entity.company_name="Microsoft") AND (properties.entity.year="2024")`
+  * `(properties.entity.company_ticker="AMZN") AND (properties.entity.year="2023") AND (properties.entity.quarter="Q2")`
 - `k`: The number of records to return back.
 - `return_type`: An enum that an be either `doc` or `element`. When `doc` is specified, documents that match the search criteria are retuned. When `element` is specified, specific sections of the document (i.e. elements) are returned.
 - `page_token`:   A string used for pagination purposes. If provided, this will indicate to the server where to begin the next set of records to return. Valid for 24 hours.  
