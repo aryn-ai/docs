@@ -45,6 +45,8 @@ document.
 - `suggest_properties_instructions` is a `string` option that you can use to provide additional instructions to ensure
 that the schema DocParse infers from your document contains properties that you are interested in,
 e.g. "Make sure to include the full address of the vendor on the invoice".
+- `voting` is a boolean option. When `True`, DocParse performs property extraction with three LLMs and returns a voted response. 
+Additional metadata about all of the responses will be present in the `properties_metadata` field in the response. `Default: False`.
 
 The `property_extraction_options` dictionary must contain exactly one of `schema` or `suggest_properties`.
 

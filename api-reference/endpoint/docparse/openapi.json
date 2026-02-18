@@ -736,6 +736,12 @@
                       "required": ["name", "type"]
                     }
                   },
+                  "voting": {
+                    "type": "boolean",
+                    "title": "Enable Voting",
+                    "default": false,
+                    "description": "Vote across three different LLMs from different providers to improve the accuracy of property extraction. Only applicable when schema is provided.\n"
+                  },
                   "suggest_properties": {
                     "type": "boolean",
                     "title": "Suggest Properties",
