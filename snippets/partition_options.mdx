@@ -1,5 +1,8 @@
 - `file`: Required. A `file` opened in binary mode to parse or a path expressed as a `str` or a `PathLike` object
 specifying where the file to parse is.
+- `pipeline`: A string that specifies the parsing pipeline to use. Default: `standard`
+    - `standard` will use the existing DocParse pipeline and honor all of the existing configuration parameters.
+    - `vision` will use a VLM, currently PaddleOCR-VL-1.5 to perform parsing and table extraction. When `vision` is selected, values for `threshold`, `text_mode`, `table_mode`, `text_extraction_options`, `table_extraction_options`, and `extract_images` will be ignored. 
 - `threshold`: A `float` between `0.0` and `1.0`, inclusive, which serves as a cutoff to determine which bounding boxes for the file are returned or a string `auto` (the default) where the service uses a processing method to find the best prediction for each possible bounding box.
 Only bounding boxes that the model predicts with a confidence score higher than the threshold specified will be returned. A lower value will
 include more objects but may have overlaps, while a higher value will reduce the number of overlaps but may miss legitimate objects. If you do

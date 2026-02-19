@@ -780,6 +780,16 @@
                 "default": false,
                 "description": "(PAYG Only) A boolean value indicating whether to summarize images detected in the document and return them as the text representation of the image elements.\n"
               },
+              "pipeline": {
+                "type": "string",
+                "enum": [
+                    "standard",
+                    "vision",
+                  ],
+                "default": "standard",
+                "title": "Pipeline",
+                "description": "The parsing pipeline to use in DocParse. Defaults to `standard`, which keeps existing behavior. When set to `vision`, DocParse will use a VLM to parse the provided document and will ignore the values of the `threshold`, `text_mode`, `table_mode`, `text_extraction_options`, `table_extraction_options`, and `extract_images` parameters.\n"
+              },
               "text_mode": {
                 "oneOf": [
                   {
