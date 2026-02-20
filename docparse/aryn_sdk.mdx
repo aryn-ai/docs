@@ -49,6 +49,8 @@ with open("my_invoice.pdf", "rb") as f:
    data = partition_file(f, property_extraction_options={"schema": schema})
 ```
 
+You can add `"voting": True` to the `property_extraction_options` dictionary to enable to enable voting across multiple LLMs. 
+
 ## Key management
 
 By default, ``aryn-sdk`` looks for Aryn API keys first in the environment variable ``ARYN_API_KEY``, and then in ``~/.aryn/config.yaml``. You can override this behavior by specifying a key directly or a different path to the Aryn config file:
