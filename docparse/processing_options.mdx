@@ -18,6 +18,11 @@ All of the available options are listed below, and are optional unless specified
 
 ## General
 
+### pipeline
+The pipeline is a string that overrides the parsing pipeline to allow the use of alternative parsing models. Currently the only supported values are `standard` and `vision`. `Default: "standard"`. 
+- `standard` will use the existing DocParse pipeline and honor all of the existing configuration parameters.
+- `vision` will use a VLM, currently PaddleOCR-VL-1.5 to perform parsing and table extraction. When `vision` is selected, values for `threshold`, `text_mode`, `table_mode`, `text_extraction_options`, `table_extraction_options`, and `extract_images` will be ignored. 
+
 ### text_mode
 A string that specifies the mode to use for text extraction. `Default: "auto"`. Valid options are
 `auto`, `inline_fallback_to_ocr`, `ocr_standard`, and `ocr_vision`.
